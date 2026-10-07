@@ -7,6 +7,10 @@ PC와 스마트폰에서 로봇을 원격으로 조작할 수 있으며, 실시�
 
 ---
 
+<img width="790" height="420" alt="사진" src="https://github.com/user-attachments/assets/4ff310de-af1b-4499-ba27-9cf3f5353d58" />
+
+---
+
 ## 🔵 주요 기능
 
 ### 로봇 주행
