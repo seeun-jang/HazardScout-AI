@@ -1,0 +1,19 @@
+# YOLO 모델 가중치
+*.pt
+*.pth
+*.onnx
+
+# 학습 데이터
+dataset/images/
+dataset/labels/
+
+# 학습 결과
+results/
+runs/
+
+# Python
+__pycache__/
+
+/dataset/fire_extinguisher_v1/
+/dataset/safety_helmet_v1/
+/dataset/hazard_3class/

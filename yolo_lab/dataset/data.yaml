@@ -1,0 +1,13 @@
+# SAMPLE ONLY - class indices must match your bounding-box label .txt files.
+# No 'path:' field needed; train_yolo.py resolves dataset folder automatically.
+train: images/train
+val: images/val
+names:
+  0: person
+  1: chair
+  2: backpack
+  3: bottle
+  4: fire_extinguisher
+  5: safety_helmet
+  6: traffic_cone
+# This is not a complete COCO dataset: existing classes are NOT preserved automatically.
