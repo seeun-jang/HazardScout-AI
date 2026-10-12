@@ -31,6 +31,11 @@ ultralytics 설정의 `weights_dir`을 `yolo_lab/models`로 맞춰야 이 경로
 .venv/bin/yolo settings weights_dir="$PWD/models"
 ```
 
+## 로봇(라즈베리파이)에 넣기
+
+**[ROBOT_DEPLOY.md](ROBOT_DEPLOY.md)를 보세요.** 노트북에서 `prepare_robot.py`로 zip을 만들고, 파이에 복사해서
+`pi_check.py`로 확인한 뒤 팀 서버에 몇 줄 추가하는 순서입니다. 파이용 `pi` 프리셋은 CLIP 없이 동작합니다.
+
 ## 사용법
 
 ```bash
@@ -47,6 +52,7 @@ ultralytics 설정의 `weights_dir`을 `yolo_lab/models`로 맞춰야 이 경로
 | `fast` | yolo26n | ~30ms | 라즈베리파이, 실시간 |
 | `balanced` | yolo26x + 위험물 모델 + 어두운 화면 보정 | ~0.2초 | 노트북 실시간 카메라 |
 | `max` | yolo26x + yolo11x 앙상블 + TTA + 위험물 모델 + 어두운 화면 보정 | ~0.6초~1초 | 사진·녹화 영상 정밀 분석 |
+| `pi` | yolo26n(416) + 작은 위험물 모델 + 어두운 화면 보정 | 파이에서 측정 필요 | **로봇 탑재용** ([ROBOT_DEPLOY.md](ROBOT_DEPLOY.md)) |
 
 옵션: `--tile`(멀리 있는 작은 물체, 9배 느림), `--no-low-light`(어두운 화면 보정 끄기, balanced/max는 기본으로 켜져 있음), `--conf 0.15`(더 많이 잡지만 오탐 증가), `--no-world`(위험물 모델 끔).
 

@@ -46,6 +46,10 @@ CONFIGS = {
     "x640_tta":  ("yolo26x @640 + TTA", dict(preset="balanced", tta=True, world="none", low_light=False)),
     "x640_light": ("balanced preset as shipped: yolo26x + low-light boost", dict(preset="balanced", world="none")),
     "max_light": ("max preset as shipped: ensemble + TTA + low-light boost", dict(preset="max", world="none")),
+    # 라즈베리파이용 (입력 크기별 비교)
+    "pi":        ("pi preset as shipped: yolo26n @416 + low-light boost", dict(preset="pi", world="none")),
+    "pi320":     ("yolo26n @320 + low-light boost", dict(preset="pi", world="none", imgsz=320)),
+    "pi640":     ("yolo26n @640 + low-light boost", dict(preset="pi", world="none", imgsz=640)),
 }
 DEFAULT_SUITE = ["team", "fast", "x640", "ens", "ens_tta"]  # 옵션 없이 실행하면 돌리는 구성
 

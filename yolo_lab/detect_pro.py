@@ -15,6 +15,8 @@
   fast      yolo26n 하나만                    프레임당 ~0.01초 (맥 기준)   라즈베리파이, 실시간
   balanced  yolo26x + 위험물 모델 + 보정      프레임당 ~0.16초             노트북 실시간 카메라
   max       yolo26x + yolo11x + TTA + 위험물  프레임당 ~0.45초             사진/녹화 영상 정밀 분석
+  pi        yolo26n(416) + 작은 위험물 모델(320)                           라즈베리파이 4 (로봇 탑재용)
+            -> 로봇에 넣는 방법은 ROBOT_DEPLOY.md 참고
 
 실행 방법 (yolo_lab/ 폴더에서):
   python detect_pro.py --source 사진.jpg
@@ -75,7 +77,6 @@ HAZARD_PROMPTS = {
     "box": None, "door": None, "hat": None, "shirt": None, "jacket": None, "pole": None,
     "trash can": None,
 }
-HAZARD_CLASSES = sorted({v for v in HAZARD_PROMPTS.values() if v})  # 위험물 클래스 이름 목록
 
 # 위험물 클래스별 최소 신뢰도. 이 점수보다 낮으면 화면에 안 띄웁니다.
 # YOLO-World 점수는 일반 YOLO와 기준이 달라서(대체로 낮음) 클래스마다 따로 정했습니다.
@@ -87,6 +88,43 @@ CLASS_CONF = {
     "first_aid_kit": 0.30, "fire": 0.40, "smoke": 0.40,
 }
 
+# 라즈베리파이용 작은 위험물 모델(yolov8s-worldv2) 설정.
+# 큰 모델과 성격이 달라서 따로 튜닝했습니다 (eval_hazard.py, 입력 320, 평균 F1 0.742).
+#  - 작은 모델은 입력 320이 640보다 좋았음 (파이에서 빠르기도 함)
+#  - "fire"를 넣으면 교통 콘을 불로 잘못 잡아서 불/연기는 뺐음
+#  - 결과로 나오는 위험물: 소화기, 안전모, 교통 콘, 안전조끼, 구급상자(미검증)
+HAZARD_PROMPTS_SMALL = {
+    "extinguisher": "fire_extinguisher",
+    "red extinguisher": "fire_extinguisher",
+    "helmet": "safety_helmet",
+    "traffic cone": "traffic_cone",
+    # 가스통: 작은 모델에서는 오탐만 많고 진짜는 못 찾아서(clean 0/3, 오탐 1~2) 결과에서 뺌.
+    # 문구는 미끼로 남겨서 병/통 같은 물체를 흡수하게 함 (문구 목록이 바뀌면 모델을 다시 만들어야 해서 유지)
+    "gas cylinders": None,
+    "gas tank": None,
+    "first aid kit": "first_aid_kit",
+    "hi-vis vest": "safety_vest",
+    # 미끼 문구
+    "person": None, "bottle": None, "chair": None, "car": None, "book": None, "sign": None,
+    "box": None, "door": None, "hat": None, "shirt": None, "jacket": None, "pole": None,
+    "trash can": None,
+}
+# 작은 모델의 클래스별 기준 점수 (test_images/ 28장 기준이라 실제 로봇 카메라로 재확인 필요)
+# 안전모 0.02는 매우 낮은 값입니다. 오탐이 보이면 0.05~0.1로 올려보세요.
+CLASS_CONF_SMALL = {
+    "fire_extinguisher": 0.45, "safety_helmet": 0.02, "traffic_cone": 0.13,
+    "safety_vest": 0.50, "first_aid_kit": 0.30,
+}
+
+# 위험물 모델 종류별 묶음: 문구, 기준 점수, 입력 크기
+HAZARD_PROFILES = {
+    "x": dict(prompts=HAZARD_PROMPTS, class_conf=CLASS_CONF, imgsz=640),              # 노트북용 큰 모델
+    "s": dict(prompts=HAZARD_PROMPTS_SMALL, class_conf=CLASS_CONF_SMALL, imgsz=320),  # 파이용 작은 모델
+}
+
+HAZARD_CLASSES = sorted({v for prof in HAZARD_PROFILES.values()
+                         for v in prof["prompts"].values() if v})  # 위험물 클래스 이름 목록
+
 # =============================================================================
 # 프리셋
 # =============================================================================
@@ -97,13 +135,18 @@ CLASS_CONF = {
 # world    : 위험물 모델. None이면 위험물 탐지 안 함
 # conf     : 화면에 띄울 최소 신뢰도 (일반 물체 기준)
 # low_light: 어두운 화면 보정
+# hazard   : 위험물 모델 종류 ("x" = 큰 모델용 설정, "s" = 파이용 작은 모델 설정)
 PRESETS = {
     "fast": dict(models=["yolo26n.pt"], imgsz=640, tile=False, tta=False, world=None,
-                 conf=0.25, low_light=False),
+                 conf=0.25, low_light=False, hazard="x"),
+    # 라즈베리파이 4용: 작은 모델 + 문구를 미리 넣어둔 작은 위험물 모델 (CLIP 없이 동작)
+    # hazard_world_s.pt는 prepare_robot.py가 만들어 줌
+    "pi": dict(models=["yolo26n.pt"], imgsz=416, tile=False, tta=False, world="hazard_world_s.pt",
+               conf=0.25, low_light=True, hazard="s"),
     "balanced": dict(models=["yolo26x.pt"], imgsz=640, tile=False, tta=False,
-                     world="yolov8x-worldv2.pt", conf=0.25, low_light=True),
+                     world="yolov8x-worldv2.pt", conf=0.25, low_light=True, hazard="x"),
     "max": dict(models=["yolo26x.pt", "yolo11x.pt"], imgsz=640, tile=False, tta=True,
-                world="yolov8x-worldv2.pt", conf=0.25, low_light=True),
+                world="yolov8x-worldv2.pt", conf=0.25, low_light=True, hazard="x"),
 }
 
 
@@ -139,9 +182,9 @@ def pick_device():
 def resolve_weights(name):
     """모델 파일 경로 찾기. 없으면 models/ 경로를 돌려주고, ultralytics가 거기로 자동 다운로드함."""
     path = Path(name)
-    if path.is_file():
+    if path.exists():  # 파일 또는 NCNN 모델 폴더
         return str(path)
-    if (MODELS / name).is_file():
+    if (MODELS / name).exists():
         return str(MODELS / name)
     MODELS.mkdir(parents=True, exist_ok=True)
     return str(MODELS / name)
@@ -273,13 +316,13 @@ class ProDetector:
       wbf_iou      : 이 IoU보다 많이 겹치면 같은 물체로 봄
       tile_weight  : 타일에서만 찾은 박스의 점수 배율 (전체 이미지보다 덜 믿음)
       skip_penalty : 앙상블에서 일부 모델만 찾았을 때 깎는 정도
-      world_imgsz  : 위험물 모델 입력 크기 (실험상 640이 960보다 좋았음)
+      world_imgsz  : 위험물 모델 입력 크기. None이면 위험물 설정(hazard)의 값 사용
     """
 
     def __init__(self, preset="balanced", models=None, imgsz=None, tile=None, tta=None,
                  world=None, conf=None, low_light=None, tile_size=640, tile_overlap=0.25,
                  candidate_conf=0.05, wbf_iou=0.55, tile_weight=0.9, skip_penalty=0.5, device=None,
-                 world_prompts=None, world_imgsz=640, verbose=True):
+                 world_prompts=None, world_imgsz=None, verbose=True):
         # 프리셋 값을 기본으로 두고, None이 아닌 인자만 덮어씀
         cfg = dict(PRESETS[preset])
         for k, v in dict(models=models, imgsz=imgsz, tile=tile, tta=tta, world=world, conf=conf,
@@ -295,7 +338,9 @@ class ProDetector:
         self.tile_overlap = tile_overlap
         self.candidate_conf = candidate_conf
         self.wbf_iou = wbf_iou
-        self.world_imgsz = world_imgsz
+        profile = HAZARD_PROFILES[cfg.get("hazard", "x")]
+        self.world_imgsz = world_imgsz or profile["imgsz"]
+        self.class_conf = dict(profile["class_conf"])
         self.tile_weight = tile_weight
         self.skip_penalty = skip_penalty
         self.device = device or pick_device()
@@ -307,14 +352,19 @@ class ProDetector:
             self.log(f"[ProDetector] loading {name}")
             self.models.append((Path(name).stem, YOLO(resolve_weights(name))))
 
-        # 위험물 모델 로딩. set_classes()로 문구를 등록함 (이때 CLIP 텍스트 모델이 필요)
+        # 위험물 모델 로딩
         self.world = None
         self.world_names = []
         if cfg["world"]:
-            prompts = world_prompts or HAZARD_PROMPTS
+            prompts = world_prompts or profile["prompts"]
             self.log(f"[ProDetector] loading {cfg['world']} with {len(prompts)} hazard prompts")
-            self.world = YOLOWorld(resolve_weights(cfg["world"]))
-            self.world.set_classes(list(prompts))
+            path = resolve_weights(cfg["world"])
+            self.world = YOLO(path) if Path(path).is_file() else None
+            if self.world is None or list(self.world.names.values()) != list(prompts):
+                # 문구가 아직 안 들어 있는 모델이면 set_classes()로 등록 (CLIP 텍스트 모델 필요, 338MB)
+                # 문구를 미리 넣어 저장한 모델(hazard_world_s.pt)이면 이 단계를 건너뛰어 CLIP이 필요 없음
+                self.world = YOLOWorld(path)
+                self.world.set_classes(list(prompts))
             self.world_names = [prompts[p] for p in prompts]  # 문구 번호 -> 클래스 이름 (미끼는 None)
 
         # WBF 투표에서 "전체 모델 수". 모델 하나가 한 표.
@@ -412,7 +462,7 @@ class ProDetector:
                                names_override=self.world_names)
             # 미끼 문구(name=None)는 버리고, 클래스별 기준 점수를 넘는 것만 남김
             hazards = [h for h in weighted_boxes_fusion([d for d in wd if d.name], 1, self.wbf_iou, 0.0)
-                       if h.conf >= CLASS_CONF.get(h.name, self.cfg["conf"])]
+                       if h.conf >= self.class_conf.get(h.name, self.cfg["conf"])]
             if hazards:
                 # 같은 물체에 일반 박스와 위험물 박스가 겹치면 위험물 쪽을 남김
                 # (소화기를 일반 모델은 "bottle", 가스통을 "vase"로 잡는 경우)
@@ -424,7 +474,7 @@ class ProDetector:
         fused = suppress_fragments(fused)
         out = []
         for d in fused:
-            if d.conf < CLASS_CONF.get(d.name, self.cfg["conf"]):
+            if d.conf < self.class_conf.get(d.name, self.cfg["conf"]):
                 continue
             d.x1, d.x2 = float(np.clip(d.x1, 0, w)), float(np.clip(d.x2, 0, w))
             d.y1, d.y2 = float(np.clip(d.y1, 0, h)), float(np.clip(d.y2, 0, h))
@@ -435,15 +485,14 @@ class ProDetector:
     def detect_raw(self, img_bgr):
         """최종 기준 점수로 거르지 않은 모든 후보를 돌려줌.
         정확도(mAP) 측정은 낮은 점수 후보까지 다 있어야 해서 benchmark.py에서만 씀."""
-        saved = self.cfg["conf"], dict(CLASS_CONF)
+        saved = self.cfg["conf"], self.class_conf
         self.cfg["conf"] = self.candidate_conf
-        CLASS_CONF.clear()
+        self.class_conf = {}
         try:
             return self.detect(img_bgr)
         finally:
             # 측정이 끝나면 원래 기준으로 복구
-            self.cfg["conf"] = saved[0]
-            CLASS_CONF.update(saved[1])
+            self.cfg["conf"], self.class_conf = saved
 
     # -- 그리기 ------------------------------------------------------------------
     @staticmethod

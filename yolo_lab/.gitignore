@@ -22,3 +22,7 @@ __pycache__/
 .venv/
 datasets/
 models/
+
+# prepare_robot.py 결과물 (모델이 들어 있어서 git에 안 올림)
+robot_package/
+robot_package.zip
