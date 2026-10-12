@@ -1,0 +1,7 @@
+이미지 출처 (Wikimedia Commons · CC BY-SA 4.0)
+- 이과_수학칠판.jpg : File:Example absolute value.jpg
+- 문과_책장.jpg : File:Old-books-on-the-open-access-shelves.jpg
+- 이과_화학실험.jpg : File:Chemistry Experiment 3D.JPG
+- 문과_도서관.jpg : File:Halki Seminary library old books Heybeliada 2024.jpg
+https://commons.wikimedia.org/
+bus.jpg, zidane.jpg : Ultralytics sample assets (AGPL-3.0)
