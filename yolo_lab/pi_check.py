@@ -8,7 +8,8 @@
   2) 모델 파일이 있는지
   3) 확인용 사진 3장 탐지 -> results/pi_check/ 에 박스 그린 사진 저장
   4) 속도: 입력 크기와 위험물 탐지 on/off 조합별로 프레임당 시간 측정
-  5) (--camera) 파이 카메라로 직접 찍어서 탐지
+  5) 서버에 넣었을 때 영상이 얼마나 끊기는지 (기존 방식 vs 백그라운드 탐지)
+  6) (--camera) 파이 카메라로 직접 찍어서 탐지
 
 실행 (robot_package/ 폴더에서, 라즈베리파이에서):
   python3 pi_check.py
@@ -110,8 +111,24 @@ def main():
         print(f"  {label:38s} {ms:7.0f} ms  (매 프레임 {1000 / ms:4.1f} FPS, 3프레임마다 탐지 시 영상 최대 {every3:4.1f} FPS)")
     print("  -> 팀 서버는 3프레임마다 탐지합니다 (YOLO_DETECT_EVERY_N_FRAMES = 3).")
 
+    print("\n=== 5. 서버에 넣었을 때 영상 끊김 (카메라 30fps 흉내, 5초) ===")
+    from detect_pro import ProYOLODetector
+    for label, bg in [("기존 방식 (3프레임마다 탐지하며 기다림)", False), ("백그라운드 탐지 (추천)", True)]:
+        y = ProYOLODetector(preset="pi", imgsz=320, device="cpu", background=bg, verbose=False)
+        y.detect_and_draw(frame)
+        time.sleep(2)  # 예열
+        t0, n, worst = time.perf_counter(), 0, 0.0
+        while time.perf_counter() - t0 < 5:
+            t = time.perf_counter()
+            y.detect_and_draw(frame)
+            worst = max(worst, time.perf_counter() - t)
+            n += 1
+            time.sleep(1 / 30)
+        print(f"  {label:32s} 영상 {n / 5:4.1f} FPS, 가장 오래 멈춘 프레임 {worst * 1000:5.0f} ms")
+    print("  -> 백그라운드는 영상이 안 멈추는 대신, 박스가 탐지 시간만큼 늦게 따라옵니다.")
+
     if args.camera:
-        print("\n=== 5. 파이 카메라 ===")
+        print("\n=== 6. 파이 카메라 ===")
         from picamera2 import Picamera2
         cam = Picamera2()
         cam.configure(cam.create_preview_configuration(main={"size": (640, 480), "format": "RGB888"}))

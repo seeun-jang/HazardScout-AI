@@ -7,7 +7,7 @@ PC와 폰으로 보냅니다. 그래서 탐지기도 파이에 넣어야 합니�
 
 | | 팀 현재 | `pi` 프리셋 |
 |---|---|---|
-| 일반 물체 모델 | yolov8n, 입력 320 | yolo26n, 입력 416 |
+| 일반 물체 모델 | yolov8n, 입력 320 | yolo26n, 입력 416 (서버에서는 320 추천) |
 | 위험물 탐지 | 없음 | 소화기, 안전모, 교통 콘, 안전조끼 |
 | 어두운 화면 보정 | 없음 | 있음 |
 | 모델 크기 | 6MB | 5MB + 26MB |
@@ -102,7 +102,7 @@ from YOLO_detector import YOLODetector
 
 # ---- detect_pro (위험물 탐지) 연결 ----
 import sys
-sys.path.insert(0, "/home/pi/robot_package")   # robot_package 압축 푼 경로
+sys.path.insert(0, "/home/pi/robot_package")   # detect_pro.py가 있는 폴더 경로
 USE_PRO_DETECTOR = True                         # False로 바꾸면 기존 탐지기로 돌아감
 try:
     from detect_pro import ProYOLODetector
@@ -130,7 +130,8 @@ except Exception as e:
         if USE_PRO_DETECTOR and ProYOLODetector is not None:
             yolo_detector = ProYOLODetector(
                 preset="pi",
-                detect_every_n_frames=YOLO_DETECT_EVERY_N_FRAMES,
+                imgsz=320,          # 파이 실측: 416보다 빠름 (0.87초 vs 1.02초)
+                background=True,    # 탐지를 별도 스레드로 -> 영상이 안 멈춤
             )
         else:
             yolo_detector = YOLODetector(
@@ -144,16 +145,25 @@ except Exception as e:
 `except` 부분과 카메라 루프의 `yolo_detector.detect_and_draw(frame_bgr)`는 **그대로 둡니다.**
 `ProYOLODetector`는 기존 `YOLODetector`와 사용법이 같습니다(`detect_and_draw`, `last_detections`).
 
-### 속도가 느리면 (3단계 `pi_check.py` 결과를 보고 고르기)
+**`background=True`가 중요합니다.** 파이에서 위험물까지 탐지하면 한 번에 약 0.9초가 걸립니다.
+기존 방식은 탐지가 끝날 때까지 영상을 안 보내서 3프레임마다 0.9초씩 멈춥니다.
+백그라운드 모드는 영상은 바로 보내고, 박스만 탐지가 끝날 때마다(약 1초마다) 바뀝니다.
+대신 로봇이 움직이면 박스가 약 1초 늦게 따라옵니다. 위험물 앞에서 멈춘 뒤 확인하는 시나리오가 좋습니다.
+
+### 경로 주의
+압축을 폴더 안에서 한 번 더 풀면 `/home/pi/robot_package/robot_package/`처럼 한 단계 깊어집니다.
+`pi_check.py` 결과에 나오는 "박스 그린 사진:" 경로에서 `/results/pi_check`를 뺀 부분이 실제 경로입니다.
+그 경로를 `sys.path.insert(0, "...")`에 넣으세요.
+
+### 다른 설정 (상황에 따라)
 
 ```python
-ProYOLODetector(preset="pi", imgsz=320, detect_every_n_frames=...)        # 일반 물체 입력을 320으로
-ProYOLODetector(preset="pi", world="none", detect_every_n_frames=...)     # 위험물 탐지 끔 (일반 물체만)
-ProYOLODetector(preset="pi", models=["/home/pi/robot_package/models/yolo26n_ncnn_model"],
-                detect_every_n_frames=...)                                # NCNN 변환본 사용
+ProYOLODetector(preset="pi", background=True)                # 일반 물체 416: 조금 더 정확, 박스 갱신 약 1초
+ProYOLODetector(preset="pi", imgsz=320, world="none", background=True)
+                                                             # 위험물 끔: 박스 갱신 약 0.26초 (팀 현재와 비슷)
 ```
 
-`YOLO_DETECT_EVERY_N_FRAMES`를 3에서 5로 늘리면 영상은 부드러워지고, 박스 갱신이 조금 늦어집니다.
+NCNN 변환본은 파이에서 측정해 보니 거의 빨라지지 않아서(0.92초 vs 1.02초) 쓰지 않습니다.
 
 ## 5. 실행과 확인
 
@@ -170,9 +180,21 @@ PC GUI나 폰 화면에서 **위험물은 빨간 박스, 일반 물체는 초록
 `USE_PRO_DETECTOR = False`로 바꾸고 서버를 다시 실행하면 됩니다.
 `detect_pro`를 불러오다 실패해도 서버는 기존 탐지기로 계속 돌아갑니다.
 
-## 성능 (노트북에서 측정)
+## 성능
 
-**파이에서의 속도는 아직 재지 않았습니다.** 3단계 `pi_check.py` 결과를 여기에 채워 주세요.
+### 팀 파이에서 실측 속도 (10월 15일, `pi_check.py`, 640x480 프레임 1장 탐지 시간)
+
+| 구성 | 탐지 1회 | 비고 |
+|---|---|---|
+| 일반 416 + 위험물 320 (`pi` 기본) | 1.02초 | |
+| **일반 320 + 위험물 320** | **0.87초** | **서버 추천 설정 (+ background=True)** |
+| 일반 416만 (위험물 끔) | 0.39초 | |
+| 일반 320만 (위험물 끔) | 0.26초 | 팀 현재 설정과 비슷한 무게 |
+| NCNN 일반 416 + 위험물 320 | 0.92초 | 효과 거의 없음 |
+
+위험물 모델이 시간의 대부분(약 0.6초)을 씁니다. 파이 카메라 사진 3장에서는 사람, 가방을 정상적으로 찾았습니다.
+
+### 정확도 (노트북에서 측정)
 
 일반 물체 (COCO128 128장, mAP50-95):
 

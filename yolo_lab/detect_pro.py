@@ -35,6 +35,7 @@
 import argparse
 import csv
 import json
+import threading
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -529,28 +530,50 @@ class ProYOLODetector:
         frame = detector.detect_and_draw(frame)
 
     - detect_every_n_frames: N프레임마다 한 번만 탐지하고, 그 사이에는 마지막 박스를 다시 그림
+    - background=True: 탐지를 별도 스레드에서 돌림 (라즈베리파이 추천)
+        탐지가 1초 걸려도 영상은 기다리지 않고 바로 나가고, 박스만 탐지가 끝날 때마다 바뀜.
+        이 모드에서는 detect_every_n_frames를 쓰지 않음 (이전 탐지가 끝나면 바로 다음 프레임으로 시작).
+        단점: 박스가 최대 탐지 시간(약 1초)만큼 늦게 따라옴. 로봇이 멈춰 있을 때 가장 정확함.
     - self.last_detections: 기존과 같은 형식 [(x1, y1, x2, y2, 클래스이름, 신뢰도), ...]
-    - balanced/max는 노트북 GPU용입니다. 라즈베리파이 4에서는 preset="fast"를 쓰세요.
+    - balanced/max는 노트북 GPU용입니다. 라즈베리파이에서는 preset="pi"를 쓰세요.
     """
 
-    def __init__(self, preset="balanced", detect_every_n_frames=3, **kwargs):
+    def __init__(self, preset="balanced", detect_every_n_frames=3, background=False, **kwargs):
         self.detector = ProDetector(preset=preset, **kwargs)
         self.detect_every_n_frames = max(1, int(detect_every_n_frames))
+        self.background = background
         self.frame_count = 0
         self.last = []             # 마지막 탐지 결과 (Detection 객체)
         self.last_detections = []  # 기존 YOLODetector와 같은 튜플 형식
+        self._lock = threading.Lock()  # 탐지 스레드와 영상 스레드가 결과를 동시에 건드리지 않게
+        self._busy = False             # 백그라운드 탐지가 진행 중인지
+
+    def _detect(self, frame_bgr):
+        try:
+            result = self.detector.detect(frame_bgr)
+            with self._lock:
+                self.last = result
+                self.last_detections = [(int(d.x1), int(d.y1), int(d.x2), int(d.y2), d.name, d.conf)
+                                        for d in result]
+        except Exception as e:
+            # 탐지가 실패해도 영상은 계속 나가도록 에러만 출력
+            print("[ProYOLO] detection error:", repr(e))
+        finally:
+            self._busy = False
 
     def detect_and_draw(self, frame_bgr):
         self.frame_count += 1
-        if self.frame_count == 1 or self.frame_count % self.detect_every_n_frames == 0:
-            try:
-                self.last = self.detector.detect(frame_bgr)
-                self.last_detections = [(int(d.x1), int(d.y1), int(d.x2), int(d.y2), d.name, d.conf)
-                                        for d in self.last]
-            except Exception as e:
-                # 탐지가 실패해도 영상은 계속 나가도록 에러만 출력
-                print("[ProYOLO] detection error:", repr(e))
-        return ProDetector.draw(frame_bgr, self.last, f"YOLO Objects: {len(self.last)}")
+        if self.background:
+            # 쉬고 있으면 이번 프레임 복사본으로 탐지 시작. 진행 중이면 그냥 넘어감 (영상은 안 기다림)
+            if not self._busy:
+                self._busy = True
+                threading.Thread(target=self._detect, args=(frame_bgr.copy(),), daemon=True).start()
+        elif self.frame_count == 1 or self.frame_count % self.detect_every_n_frames == 0:
+            self._busy = True
+            self._detect(frame_bgr)
+        with self._lock:
+            last = list(self.last)
+        return ProDetector.draw(frame_bgr, last, f"YOLO Objects: {len(last)}")
 
 
 # =============================================================================
