@@ -150,6 +150,43 @@ except Exception as e:
 백그라운드 모드는 영상은 바로 보내고, 박스만 탐지가 끝날 때마다(약 1초마다) 바뀝니다.
 대신 로봇이 움직이면 박스가 약 1초 늦게 따라옵니다. 위험물 앞에서 멈춘 뒤 확인하는 시나리오가 좋습니다.
 
+### 서버 파일에 `AsyncYOLO`가 있는 경우 (10월 15일 파이 버전)
+
+파이에 있는 최신 `GUIServer_custom.py`는 팀원이 만든 `AsyncYOLO`로 탐지를 이미 백그라운드에서 돌립니다.
+이때는 `AsyncYOLO`는 그대로 두고, **탐지기를 만드는 부분만** 바꿉니다. `ProYOLODetector`는
+`AsyncYOLO`가 부르는 `_run_inference()`, `_draw_detections()`를 갖고 있어서 그대로 끼워집니다.
+
+기존 (1560번째 줄 근처):
+```python
+        yolo_detector = (
+            YOLODetector(
+                model_path=
+                    YOLO_MODEL_PATH,
+                ...
+                detect_every_n_frames=
+                    1
+            )
+        )
+```
+
+변경:
+```python
+        if USE_PRO_DETECTOR and ProYOLODetector is not None:
+            yolo_detector = ProYOLODetector(preset="pi", imgsz=320)
+        else:
+            yolo_detector = (
+                YOLODetector(
+                    model_path=
+                        YOLO_MODEL_PATH,
+                    ...
+                    detect_every_n_frames=
+                        1
+                )
+            )
+```
+
+`background=True`는 **넣지 않습니다**(`AsyncYOLO`가 이미 그 역할을 함). 그 아래 `async_yolo = AsyncYOLO(yolo_detector)`는 그대로 둡니다.
+
 ### 경로 주의
 압축을 폴더 안에서 한 번 더 풀면 `/home/pi/robot_package/robot_package/`처럼 한 단계 깊어집니다.
 `pi_check.py` 결과에 나오는 "박스 그린 사진:" 경로에서 `/results/pi_check`를 뺀 부분이 실제 경로입니다.

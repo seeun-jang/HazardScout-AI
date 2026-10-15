@@ -575,6 +575,20 @@ class ProYOLODetector:
             last = list(self.last)
         return ProDetector.draw(frame_bgr, last, f"YOLO Objects: {len(last)}")
 
+    # -- 팀 서버의 AsyncYOLO 호환용 ------------------------------------------------
+    # 파이의 GUIServer_custom.py는 AsyncYOLO(탐지기)로 감싸서 쓰고, AsyncYOLO는 탐지기의
+    # _run_inference(frame)와 _draw_detections(frame, detections)를 부름 (기존 YOLODetector 방식).
+    # 같은 이름과 같은 형식으로 맞춰서 AsyncYOLO(ProYOLODetector(...))로 그대로 쓸 수 있게 함.
+    def _run_inference(self, frame_bgr):
+        """탐지만 하고 [(x1, y1, x2, y2, 클래스이름, 신뢰도), ...]를 돌려줌."""
+        return [(int(d.x1), int(d.y1), int(d.x2), int(d.y2), d.name, d.conf)
+                for d in self.detector.detect(frame_bgr)]
+
+    def _draw_detections(self, frame_bgr, detections):
+        """_run_inference 결과(튜플 목록)를 받아 박스를 그린 이미지를 돌려줌."""
+        dets = [Detection(x1, y1, x2, y2, name, conf) for x1, y1, x2, y2, name, conf in detections]
+        return ProDetector.draw(frame_bgr, dets, f"YOLO Objects: {len(dets)}")
+
 
 # =============================================================================
 # 명령줄 실행 (python detect_pro.py ...)
