@@ -1,0 +1,22 @@
+{
+  "_설명": {
+    "좌표계": "x는 오른쪽(동, E)으로 증가, y는 아래쪽(남, S)으로 증가. (0,0)은 지도의 왼쪽 위 칸",
+    "cell": "바코드가 붙은 '막힌 칸' 좌표",
+    "robot_heading": "로봇이 바코드를 읽을 때 바라보는 방향 (N/E/S/W). 로봇은 cell 바로 앞 칸에 있다고 판단",
+    "action": "left(왼쪽으로) / right(오른쪽으로) / back(돌아가기) / stop(정지)",
+    "바코드 ID": "숫자 4자리 권장 (Code128 숫자 모드라 바코드가 짧아져 멀리서도 읽힘)"
+  },
+
+  "cell_size_m": 0.3,
+  "grid_w": 12,
+  "grid_h": 8,
+  "start_cell": [1, 6],
+  "start_heading": "N",
+
+  "markers": {
+    "1100": {"cell": [1, 1], "robot_heading": "N", "action": "right", "note": "복도 끝 막힘"},
+    "1101": {"cell": [8, 2], "robot_heading": "E", "action": "right", "note": "창고 앞 막힘"},
+    "1102": {"cell": [7, 6], "robot_heading": "S", "action": "back",  "note": "막다른 길"},
+    "1103": {"cell": [4, 4], "robot_heading": "W", "action": "left",  "note": "낙하물 구역"}
+  }
+}
