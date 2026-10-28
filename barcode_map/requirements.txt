@@ -1,4 +1,4 @@
-# 라즈베리파이 (팀 서버 가상환경에 설치)
+# 라즈베리파이: ~/picar-yolo/bin/pip install zxing-cpp  (팀 서버 가상환경에 설치)
 zxing-cpp
 
 # 라벨 만들 때만 필요 (노트북에서 만들어도 됨)

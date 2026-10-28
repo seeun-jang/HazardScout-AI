@@ -15,7 +15,7 @@ barcode_map.py
   x 는 오른쪽(E)으로, y 는 아래쪽(S)으로 증가. (0,0) 은 지도 왼쪽 위 칸.
 
 바코드 인식 라이브러리 (위에서부터 있는 것을 사용):
-  1) zxing-cpp  : pip3 install zxing-cpp      (권장, Code128/QR 모두 지원)
+  1) zxing-cpp  : ~/picar-yolo/bin/pip install zxing-cpp   (권장, Code128/QR 모두 지원)
   2) pyzbar     : sudo apt install libzbar0 && pip3 install pyzbar
   3) OpenCV QR  : 추가 설치 없음, QR 코드만 지원
 """

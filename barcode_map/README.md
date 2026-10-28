@@ -20,6 +20,7 @@
 | `barcode_nav.py` | 팀 서버에 붙이는 연결 모듈 (위 두 개를 묶음) |
 | `make_barcodes.py` | 인쇄용 라벨 PNG 생성 |
 | `test_barcode_map.py` | 로봇 없이 노트북에서 돌려보는 시뮬레이션 |
+| `pi_check_barcode.py` | 라즈베리파이에서 설치, 라벨 인식, 카메라 인식 확인 |
 
 ## 좌표 정하는 법
 
@@ -63,17 +64,60 @@ python3 test_barcode_map.py     # 시뮬레이션, 마지막 줄에 "통과"가 
 - 시뮬레이션 기준으로 약 0.7m 거리부터 인식됩니다. 실제 카메라에서는 더 가까이 가야 할 수 있습니다.
 - 무광 용지를 쓰세요. 조명이 반사되면 인식이 안 됩니다.
 
-## 3. 라즈베리파이에 복사
+## 3. 라즈베리파이에 넣기
 
+팀 파이 환경 기준입니다.
+
+| 항목 | 값 |
+|---|---|
+| 접속 | PuTTY, 사용자 `pi`, IP `192.168.25.112` (aisw 와이파이) |
+| OS / Python | Debian 12 (bookworm) / Python 3.11.2 |
+| 가상환경 | `~/picar-yolo` (서버는 `sudo ~/picar-yolo/bin/python`으로 실행) |
+| 서버 폴더 | `~/Adeept_PiCar-Pro/Server` |
+| 바코드 폴더 | `~/barcode_map` (이 폴더를 통째로 복사) |
+
+### (1) 노트북에서 파이로 복사
+
+라벨(`labels/`)을 먼저 만들어 두면 파이에서 인식 확인할 때 같이 씁니다.
+
+맥:
 ```bash
-scp -r ~/IdeaProjects/HazardScout-AI/barcode_map pi@192.168.0.10:~/
+scp -r ~/IdeaProjects/HazardScout-AI/barcode_map pi@192.168.25.112:~/
 ```
 
-파이에서 **팀 서버를 돌리는 가상환경을 켠 상태로** 설치합니다.
+윈도우 (PuTTY와 같이 설치되는 `pscp`, 명령 프롬프트에서):
+```bat
+pscp -r C:\Users\내이름\IdeaProjects\HazardScout-AI\barcode_map pi@192.168.25.112:/home/pi/
+```
+
+WinSCP를 쓴다면 `barcode_map` 폴더를 `/home/pi/`에 끌어다 놓으면 됩니다.
+
+### (2) PuTTY에서 설치
 
 ```bash
-pip install zxing-cpp
+~/picar-yolo/bin/pip install zxing-cpp
 ```
+
+- 서버가 쓰는 `~/picar-yolo` 가상환경에 설치해야 합니다. 그냥 `pip install`로 설치하면 서버에서 못 찾습니다.
+- zxing-cpp는 다른 패키지를 같이 설치하지 않습니다. 맞춰둔 torch, numpy 버전은 바뀌지 않습니다.
+- `python-barcode`(라벨 만들기)는 노트북에서만 필요합니다. 파이에는 설치하지 않아도 됩니다.
+
+### (3) PuTTY에서 확인
+
+```bash
+cd ~/barcode_map
+~/picar-yolo/bin/python pi_check_barcode.py
+```
+
+버전, `markers.json` 오류, 라벨 인식을 확인합니다. 마지막에 `4/4 인식`처럼 나오면 정상입니다.
+
+실제 카메라로 확인하려면 **팀 서버를 끈 상태에서**(카메라는 한 프로그램만 쓸 수 있음) 실행합니다.
+
+```bash
+~/picar-yolo/bin/python pi_check_barcode.py --camera
+```
+
+20초 동안 바코드를 읽으면서 `1100: 폭 180px -> 회피 실행`처럼 출력합니다. 라벨을 들고 앞뒤로 움직여 보면, 몇 cm 거리부터 로봇이 반응하는지 알 수 있습니다.
 
 ## 4. 팀 서버에 연결
 
@@ -129,6 +173,20 @@ barcode_nav = None
 ```
 
 서버에 `AsyncYOLO`가 있는 버전(10월 15일 파이 버전)도 마찬가지로, **박스를 그린 프레임을 JPEG로 압축하기 직전**에 이 두 줄을 넣으면 됩니다.
+
+### 서버 실행 (기존과 같음)
+
+PuTTY에서 평소처럼 실행합니다. 서버를 켤 때 `[바코드] 인식 엔진: zxing-cpp`가 나오면 연결된 것입니다.
+
+```bash
+cd ~/Adeept_PiCar-Pro/Server
+sudo ~/picar-yolo/bin/python GUIServer_custom.py     # PC GUI
+sudo ~/picar-yolo/bin/python GUIServer_mobile.py     # 모바일 (http://192.168.25.112:5000)
+```
+
+- `[지도] barcode_nav 불러오기 실패`가 나오면 (1)의 경로가 `/home/pi/barcode_map`인지 확인합니다. `sudo`로 실행하면 `~`가 `/root`가 되므로 경로는 꼭 `/home/pi/...`로 적습니다.
+- `zxing  : 없음`이나 `인식 엔진: opencv-qr`이 나오면 3-(2)의 설치를 `~/picar-yolo/bin/pip`로 했는지 확인합니다.
+- 바코드를 읽을 때마다 `/home/pi/barcode_map/map_state.json`이 저장됩니다. `sudo`로 실행했기 때문에 이 파일의 소유자는 root입니다.
 
 ### (4) 수동 조작 시 회피 중단 (선택)
 
