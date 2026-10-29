@@ -1,0 +1,169 @@
+﻿미래내일 일경험 - 운영체제 및 개발환경 (2026-10-29 갱신)
+======================================================================
+기준 장비 : Raspberry Pi 4 Model B (8GB) / Adeept PiCar-Pro
+기준 서버 : GUIServer_mobile_final.py
+확인 범위 : 기존 2026-10-07 환경 기록 + 2026-10-29 통합 테스트 결과
+
+1. 운영체제·하드웨어·개발환경
+----------------------------------------------------------------------
+항목                         환경 / 설명
+하드웨어                     Raspberry Pi 4 Model B (8GB)
+로봇                         Adeept PiCar-Pro
+운영체제                     Debian GNU/Linux 12 (bookworm)
+Python                       3.11.2 (기존 환경 기록 기준)
+AI 가상환경                  /home/pi/picar-yolo/ (~/picar-yolo/)
+AI Python 실행기             ~/picar-yolo/bin/python
+AI 추론 장치                 PyTorch CPU / CUDA=False
+원격 접속                    PuTTY / SSH / pi 사용자
+파일 수정                    PuTTY + vi 편집기
+PC GUI                       Tkinter / VNC / 별도 서버(GUIServer_custom.py)
+모바일 GUI                   Python HTTP 서버 + HTML/CSS/JavaScript
+모바일 웹 포트               TCP 5000 (HTTP)
+로봇 서버 경로               /home/pi/Adeept_PiCar-Pro/Server
+소스 관리                    팀 GitHub HazardScout-AI / mj 브랜치
+공유 코드 위치               picar_mobile_github/
+
+2. 모델 및 카메라 (기존 대비 변경점)
+----------------------------------------------------------------------
+[초기 환경]
+- YOLOv8n 사전학습 가중치: yolov8n.pt
+- COCO 기반 80개 클래스 모델 로드·추론 확인.
+
+[현재 모바일 최종 서버]
+- 실제 사용 가중치: /home/pi/Adeept_PiCar-Pro/Server/models/hazard_3class_v1.pt
+- 확인된 학습 클래스 수: 3개.
+- YOLO 추론 크기(imgsz): 224
+- 추론 스케줄: 8프레임 간격 설정
+- 학습 모델의 소화기 사진 인식 정상 확인.
+- 카메라: libcamera/Picamera2를 통해 연결된 USB/UVC 카메라 로그 확인.
+- 영상 설정: 640 x 480, 목표 12FPS(실시간 실제 평균 FPS를 확정한 수치는 아님).
+- 초기 첫 YOLO 추론 시간: 4720.3ms(모델 초기 실행 포함).
+- 이후 대표 추론 시간: 319.4ms, 247.9ms, 258.7ms.
+- 탐지 결과는 웹 영상에 상자/라벨로 표시.
+
+3. I2C / PWM / OLED 최종 설정 (신규 반영)
+----------------------------------------------------------------------
+항목                          값 / 설명
+I2C 버스                     1 (/dev/i2c-1)
+OLED 종류                    SSD1306
+OLED 주소                    0x3C
+서보 드라이버                 PCA9685
+PCA9685 주소                 0x5F
+PWM 주파수                   50Hz
+I2C 부팅 속도                400000 baud (400kHz)
+설정 파일                    /boot/firmware/config.txt
+적용 항목                    dtparam=i2c_arm=on,i2c_arm_baudrate=400000
+설정 변경 전 백업            /boot/firmware/config.txt.before_i2c400k
+OLED 전체 화면 전송 전       평균 94.63ms (기존 설정)
+OLED 전체 화면 전송 후       평균 24.80ms (400kHz)
+성능 차이                    약 73.8% 감소, 약 3.8배 빠름
+
+[서보 채널]
+채널 0 : 앞바퀴 조향 (기존 PWM 출력 방식)
+채널 1 : 목 A 좌우 (PWM 객체 재사용)
+채널 2 : 목 B 상하 (PWM 객체 재사용)
+채널 3 : 목 A 상하 (PWM 객체 재사용)
+채널 4 : 집게 (기존 PWM 출력 방식)
+
+[최종 목 움직임]
+A 좌우(a_pan) : 초기 기준 위치에서 -25° ~ +25°, 조작 방향 반전 보정
+A 상하(a_tilt): 초기 기준 위치에서 -12° ~ +12°, 기존 설정 유지
+B 상하(b_tilt): 초기 기준 위치에서 -20° ~ +12°, 아래로만 추가 확장
+
+[목/OLED 제어]
+- 목 1/2/3번 PCA9685 객체 재사용으로 제어 객체 생성 비용 감소.
+- 목 서보는 기존 단계별 이동 주기(약 55ms)를 유지.
+- OLED 화면 체크 간격 약 80ms.
+- 변경된 화면만 실제 OLED 전송, 중복 화면 생략.
+- 목·집게를 조작하는 동안 OLED 갱신을 보류함.
+- 서보 정지 후 약 0.2초부터 OLED 갱신 재개.
+- 눈동자 방향/깜빡임 유지, 미세 애니메이션 전송은 약 0.5초 예산.
+
+4. Python 패키지 버전 (기존 10-07 기록을 보존)
+----------------------------------------------------------------------
+패키지                   버전                  역할
+PyTorch(torch)           2.2.1                 YOLO CPU 추론
+TorchVision              0.17.1                이미지 관련 PyTorch 모듈
+ultralytics              8.4.174               YOLO 실행
+numpy                    1.24.2                영상 배열 처리
+opencv-python            5.0.0.93              이전 기록의 패키지 표기
+cv2                      5.0.0                 이전 기록의 import 버전 표기
+picamera2                0.3.31                카메라 인터페이스
+simplejpeg               1.8.1                 JPEG 처리
+Pillow                   9.4.0                 OLED 그래픽/이미지
+luma.oled                3.10.0                OLED 장치 제어
+luma.core                2.4.0                 OLED I2C 통신
+pyzmq                    27.2.0                PC 영상 전송 용도
+RPi.GPIO                 0.7.1                 GPIO 제어
+gpiozero                 2.0.1                 LED 등 GPIO 제어
+
+※ 위 패키지 버전은 원래의 환경 기록에서 옮긴 값이며, 2026-10-29에
+   각 모듈의 설치 버전을 전부 재조회한 결과는 아님.
+※ 기존 OpenCV 패키지/모듈 버전 표기는 시스템 apt 패키지 버전과 다를 수 있음.
+※ torch 2.2.1 + torchvision 0.17.1 조합에서 초기 YOLO CPU 추론 성공 확인.
+
+5. Debian 시스템 패키지 (기존 기록 보존)
+----------------------------------------------------------------------
+python3-libcamera       0.5.2+rpt20250903-1~bpo12+1
+python3-numpy           1:1.24.2-1+deb12u1
+python3-opencv:arm64    4.6.0+dfsg-12
+python3-picamera2       0.3.31-1
+python3-simplejpeg      1.8.1-1
+
+6. 파일 및 추가 Python 의존성
+----------------------------------------------------------------------
+[모바일 서버 실행에 필요한 주요 파일]
+GUIServer_mobile_final.py   최종 실행 진입점, OLED/PWM/각도/방향 보정
+GUIServer_mobile.py         HTTP 서버 및 내장 웹 UI, 카메라/조작 API
+SmoothServo.py              목 서보 및 집게 부드러운 이동 로직
+RPIservo.py                 서보 기반 함수
+OLED_eyes.py                OLED 눈동자 그래픽
+YOLO_detector.py            YOLO 모델 로딩 및 추론
+Move.py                     바퀴 모터 제어
+Switch.py                   조명 제어
+PiVoiceLauncher.py          음성 인식 프로세스 시작/요청
+PiVoice.py                  음성 인식 서비스
+models/hazard_3class_v1.pt  학습된 3개 클래스 탐지 모델
+
+[주요 Python 라이브러리 - 버전은 별도 확인 필요]
+adafruit-blinka, adafruit-circuitpython-pca9685,
+adafruit-circuitpython-motor, board, busio,
+PIL(Pillow), ultralytics, torch, cv2, picamera2, luma.oled, gpiozero.
+
+[음성 기능 - 준비된 실행 환경, 실기 최종 검증 전]
+- 독립 음성 Python 실행 경로: /home/pi/picar-voice/bin/python
+- 음성 서비스 파일: PiVoice.py, 실행 관리: PiVoiceLauncher.py
+- 로컬 음성 서비스: localhost:5056 (테스트 로그)
+- 인식 모델 설정 로그: small
+- 음성 관련 라이브러리: faster-whisper, sounddevice, scipy, numpy 등.
+- ReSpeaker Lite 입력 장치로 실제 음성 명령이 성공하는지는 추후 점검 필요.
+
+7. 기본 실행·상태 확인 명령어
+----------------------------------------------------------------------
+# Python 버전/패키지 확인
+~/picar-yolo/bin/python --version
+~/picar-yolo/bin/python -m pip show torch torchvision ultralytics picamera2
+
+# IP 및 I2C 설정 확인
+hostname -I
+grep -n 'i2c_arm' /boot/firmware/config.txt
+
+# 전원/온도 상태 확인
+vcgencmd get_throttled
+vcgencmd measure_temp
+
+# Python 문법 확인
+cd ~/Adeept_PiCar-Pro/Server
+~/picar-yolo/bin/python -m py_compile GUIServer_mobile_final.py
+
+# 모바일 서버 실행
+sudo ~/picar-yolo/bin/python GUIServer_mobile_final.py
+
+8. 검증 상태 / 미완료 사항
+----------------------------------------------------------------------
+- 최종 모바일 서버, 카메라, OLED, 실제 소화기 YOLO 탐지 정상 작동 확인.
+- A 좌우/상하, 집게는 매끄럽게 조작됨. B 상하는 미세 떨림이 남음.
+- ReSpeaker Lite 마이크 기반 음성 인식 실기 재검증 예정.
+- PC Tkinter/VNC용 GUIServer_custom.py 최적화는 추후 진행 예정.
+- 초기 전원 종료 현상의 원인 및 장시간 안정성을 완전 해결로 단정하지 않음.
+- 다른 라즈베리파이에서의 실행에는 OS·장치 드라이버·패키지 설치가 별도로 필요함.
