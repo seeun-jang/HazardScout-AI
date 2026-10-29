@@ -13,9 +13,15 @@ import torch
 from picamera2 import Picamera2
 import Move as move
 import RPIservo
+from SmoothServo import SmoothNeck, SmoothGripper  # SMOOTH_AB_INTEGRATION_v1
+
+neck_controller = None
+grip_controller = None
 import Switch as switch
 from OLED_eyes import OLEDEyes
 from YOLO_detector import YOLODetector
+
+from PiVoiceLauncher import start_voice, voice_request
 
 # =========================================================
 # CPU 부하 제한
@@ -61,7 +67,7 @@ JPEG_QUALITY = 60
 # YOLO 설정
 
 # =========================================================
-YOLO_MODEL_PATH = "yolov8n.pt"
+YOLO_MODEL_PATH = "/home/pi/Adeept_PiCar-Pro/Server/models/hazard_3class_v1.pt"
 YOLO_CONFIDENCE = 0.35
 # 기존 256 -> 224
 YOLO_IMAGE_SIZE = 224
@@ -186,7 +192,8 @@ def oled_set_direction(direction):
 def initialize_servos():
     steering.moveServoInit([0])
     # 모바일은 시작할 때 카메라 목을 한 번만 90도로 고정
-    camera_servo.set_angle(1, CAMERA_FIXED_ANGLE)
+
+    # 카메라 목 고정 해제: 초기 위치로 점프하지 않음
     # 이전 버전의 setDelay(0.12) 제거
     # RPIservo 기본 delay를 그대로 사용
     gripper_servo.start()
@@ -199,26 +206,13 @@ def initialize_servos():
 # =========================================================
 
 def gripper_start(direction):
-    # 기존:
-    # stopWiggle()
-    # sleep(0.02)
-    # singleServo()
-    #
-    # 위 과정 때문에 버튼을 누를 때마다 끊겼다가
-    # 다시 움직이는 느낌이 생길 수 있어 바로 방향만 전달한다.
-    with gripper_lock:
-        gripper_servo.singleServo(
-            4,
-            direction,
-            GRIPPER_SPEED
-        )
+    if grip_controller is None:
+        raise RuntimeError("집게 제어기 초기화 전입니다")
+    grip_controller.hold(direction)
 
 def gripper_stop():
-    with gripper_lock:
-        try:
-            gripper_servo.stopWiggle()
-        except Exception:
-            pass
+    if grip_controller is not None:
+        grip_controller.release()
 
 # =========================================================
 # 라이트
@@ -304,7 +298,12 @@ def drive_command(motion, direction, steering_offset, speed):
         )
         apply_motion_lights(motion)
 
-def robot_ctrl(command):
+def robot_ctrl(command, neck_seq=None):
+    if command.startswith("neck:"):
+        if neck_controller is None:
+            raise RuntimeError("목 제어기 초기화 전입니다")
+        neck_controller.command(command, neck_seq)
+        return
     if command == "forward":
         drive_command(
             "forward",
@@ -910,6 +909,26 @@ body {
         height: min(64vw, 260px);
     }
 }
+
+/* VOICE_REPEAKER_1: Voice GUI */
+.voice-card .voice-button {width:100%;border:0;border-radius:14px;padding:19px 12px;background:#3182F6;color:white;font-weight:750;font-size:17px;touch-action:none;user-select:none;-webkit-user-select:none;}
+.voice-card .voice-button.recording {background:#D9534F;}
+.voice-card .voice-text {margin-top:12px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.7;}
+.voice-card .voice-hint {font-size:12px;opacity:.72;margin-top:9px;}
+
+
+/* SMOOTH_AB_INTEGRATION_v1 : camera neck control */
+.neck-control-card .neck-title {font-size:18px;font-weight:700;margin:0 0 8px;}
+.neck-control-card .neck-note {font-size:12px;opacity:.75;line-height:1.5;margin-bottom:12px;}
+.neck-control-card .neck-joystick {position:relative;width:min(62vw,240px);height:min(62vw,240px);border:4px solid #bbc1c9;border-radius:50%;background:#51565e;margin:16px auto;touch-action:none;}
+.neck-control-card .neck-joystick::before,.neck-control-card .neck-joystick::after {content:"";position:absolute;left:50%;top:50%;background:#ffffff70;transform:translate(-50%,-50%);pointer-events:none;}
+.neck-control-card .neck-joystick::before{width:2px;height:100%;}
+.neck-control-card .neck-joystick::after{width:100%;height:2px;}
+.neck-control-card .neck-knob{position:absolute;left:50%;top:50%;width:34%;height:34%;border-radius:50%;background:#b7bec7;transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 3px 10px #0004;}
+.neck-control-card .neck-b-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
+.neck-control-card .neck-b-btn{border:1px solid #ccd1d8;border-radius:12px;background:#f4f6f8;color:#243142;font-weight:700;padding:17px 12px;touch-action:none;font-size:16px;}
+.neck-control-card .neck-b-btn.active{background:#3182f6;color:#fff;}
+
 </style>
 </head>
 <body>
@@ -1039,6 +1058,33 @@ data-command="loose"
 손을 떼면 정지합니다.
 </div>
 </div>
+
+<!-- VOICE_REPEAKER_1 -->
+<div class="card voice-card">
+    <div class="card-title">🎤 한국어 음성 인식</div>
+    <button type="button" id="piVoiceButton" class="voice-button">🎤 누르고 말하기</button>
+    <div class="voice-hint">라즈베리파이에 연결한 ReSpeaker Lite로 녹음합니다.<br>누르고 있는 동안 녹음 · 놓으면 음성 인식</div>
+    <div class="voice-text" id="piVoiceStatus">음성 인식 준비 상태 확인 중...</div>
+    <div class="voice-text" id="piVoiceText"></div>
+</div>
+
+
+<!-- SMOOTH_AB_INTEGRATION_v1 -->
+<div class="card neck-control-card">
+    <div class="neck-title">A · 카메라 목</div>
+    <div class="neck-note">상·하·좌·우 · 누르는 동안 부드럽게 회전 · 손을 떼면 그 위치에서 정지</div>
+    <div class="neck-joystick" id="neckJoystick">
+        <div class="neck-knob" id="neckKnob"></div>
+    </div>
+    <div class="neck-title">B · 목 하단 관절</div>
+    <div class="neck-note">상·하 버튼으로 조작</div>
+    <div class="neck-b-row">
+        <button type="button" class="neck-b-btn" data-neck-axis="b_tilt" data-neck-dir="1">▲ 위</button>
+        <button type="button" class="neck-b-btn" data-neck-axis="b_tilt" data-neck-dir="-1">▼ 아래</button>
+    </div>
+    <div class="neck-note">최초 테스트와 동일하게 중심 기준 ±12° 이내로 제한됩니다.</div>
+</div>
+
 <div class="footer">
 PiCar-Pro Mobile GUI
 </div>
@@ -1488,6 +1534,215 @@ document.addEventListener("fullscreenchange",()=>{
 );
 loadStatus();
 cameraWatchdog();
+
+/* VOICE_REPEAKER_1: use SAME ORIGIN proxy, never browser microphone permission */
+(function () {
+    const btn = document.getElementById('piVoiceButton');
+    if (!btn) return;
+    const status = document.getElementById('piVoiceStatus');
+    const output = document.getElementById('piVoiceText');
+    let held = false;
+    let sequence = Promise.resolve();
+    let lastResult = '';
+
+    function voiceAction(action) {
+        // Start and stop are serialized to avoid reversed requests on slow Wi-Fi.
+        sequence = sequence.catch(() => {}).then(async () => {
+            const response = await fetch('/api/voice/' + action, {
+                method:'POST', cache:'no-store', headers:{'Content-Type':'application/json'},
+                body:'{}', keepalive:true
+            });
+            if (!response.ok) throw new Error('HTTP ' + response.status);
+            return response.json();
+        }).catch(err => {
+            status.textContent = '마이크 명령 전송 오류: ' + err.message;
+        });
+    }
+    function start(e) {
+        if (e) e.preventDefault();
+        if (held) return;
+        held = true;
+        btn.classList.add('recording');
+        btn.textContent = '● 녹음 중 · 손을 떼면 인식';
+        voiceAction('start');
+    }
+    const voiceHeartbeat = setInterval(() => {
+        if (held) voiceAction('ping');
+    }, 650);
+    function end() {
+        if (!held) return;
+        held = false;
+        btn.classList.remove('recording');
+        btn.textContent = '🎤 누르고 말하기';
+        voiceAction('stop');
+    }
+    btn.addEventListener('pointerdown', e => {
+        start(e);
+        try { btn.setPointerCapture(e.pointerId); } catch (_) {}
+    });
+    for (const ev of ['pointerup','pointercancel','lostpointercapture']) {
+        btn.addEventListener(ev, end);
+    }
+    window.addEventListener('blur', end);
+    window.addEventListener('pagehide', end);
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) end();
+    });
+
+    async function refreshVoice() {
+        try {
+            const response = await fetch('/api/voice/status', {cache:'no-store'});
+            if (!response.ok) throw new Error('HTTP ' + response.status);
+            const data = await response.json();
+            const names = {
+                loading:'음성 모델 준비 중', ready:'음성 인식 준비 완료',
+                opening:'마이크 연결 중', recording:'녹음 중',
+                processing:'한국어 인식 중', done:'음성 인식 완료',
+                error:'음성 오류', offline:'음성 서비스 오프라인'
+            };
+            status.textContent = names[data.state] || data.message || '연결 확인 중';
+            if (data.state === 'done' && data.text && data.text !== lastResult) {
+                lastResult = data.text;
+                output.textContent = '인식 결과: ' + data.text +
+                    (data.elapsed != null ? ' (' + data.elapsed + '초)' : '');
+            }
+            if (data.state === 'error' || data.state === 'offline') {
+                output.textContent = data.error || data.message || '마이크 연결 확인 필요';
+            }
+        } catch (err) {
+            status.textContent = '음성 서비스 연결 확인 중';
+        }
+    }
+    refreshVoice();
+    setInterval(refreshVoice, 650);
+})();
+
+
+/* SMOOTH_AB_INTEGRATION_v1 : neck joystick/button keepalive */
+(function () {
+    const j = document.getElementById('neckJoystick');
+    if (!j) return;
+    const k = document.getElementById('neckKnob');
+    let seq = Date.now() * 1000;
+    let heldPointer = null;
+    let timer = null;
+    let pan = 0;
+    let tilt = 0;
+    const bHolds = new Map();
+
+    function neckSend(axis, value) {
+        ++seq;
+        fetch('/api/command', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({command:'neck:' + axis + ':' + value, seq:seq}),
+            cache: 'no-store', keepalive: true
+        }).catch(() => {});
+    }
+    function readJoystick(event) {
+        const r = j.getBoundingClientRect();
+        const centerX = r.left + r.width / 2;
+        const centerY = r.top + r.height / 2;
+        const maxR = r.width * .31;
+        let dx = event.clientX - centerX;
+        let dy = event.clientY - centerY;
+        const distance = Math.hypot(dx, dy);
+        if (distance > maxR) { dx *= maxR / distance; dy *= maxR / distance; }
+        k.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+        const x = dx / maxR, y = dy / maxR;
+        const newPan = x > .25 ? 1 : x < -.25 ? -1 : 0;
+        const newTilt = y < -.25 ? 1 : y > .25 ? -1 : 0;
+        if (newPan !== pan) { pan = newPan; neckSend('a_pan', pan); }
+        if (newTilt !== tilt) { tilt = newTilt; neckSend('a_tilt', tilt); }
+    }
+    function heartbeat() {
+        if (heldPointer === null) return;
+        if (pan) neckSend('a_pan', pan);
+        if (tilt) neckSend('a_tilt', tilt);
+    }
+    function joystickStop() {
+        if (timer !== null) clearInterval(timer);
+        timer = null; heldPointer = null;
+        pan = 0; tilt = 0;
+        neckSend('a_pan', 0);
+        neckSend('a_tilt', 0);
+        k.style.transform = 'translate(-50%, -50%)';
+    }
+    j.addEventListener('pointerdown', e => {
+        e.preventDefault();
+        if (heldPointer !== null) return;
+        heldPointer = e.pointerId;
+        try { j.setPointerCapture(e.pointerId); } catch (_) {}
+        readJoystick(e);
+        timer = setInterval(heartbeat, 260);
+    });
+    j.addEventListener('pointermove', e => {
+        if (heldPointer === e.pointerId) { e.preventDefault(); readJoystick(e); }
+    });
+    for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) {
+        j.addEventListener(event, () => { if (heldPointer !== null) joystickStop(); });
+    }
+
+    document.querySelectorAll('[data-neck-axis]').forEach(btn => {
+        const axis = btn.dataset.neckAxis;
+        const direction = Number(btn.dataset.neckDir);
+        let id = null;
+        let pointer = null;
+        function endHold() {
+            if (id !== null) clearInterval(id);
+            id = null; pointer = null;
+            bHolds.delete(btn);
+            btn.classList.remove('active');
+            neckSend(axis, 0);
+        }
+        btn.addEventListener('pointerdown', e => {
+            e.preventDefault();
+            if (id !== null) return;
+            pointer = e.pointerId;
+            btn.classList.add('active');
+            try { btn.setPointerCapture(pointer); } catch (_) {}
+            neckSend(axis, direction);
+            id = setInterval(() => neckSend(axis, direction), 260);
+            bHolds.set(btn, endHold);
+        });
+        for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) {
+            btn.addEventListener(event, () => { if (id !== null) endHold(); });
+        }
+    });
+
+    function stopAll() {
+        if (heldPointer !== null) joystickStop();
+        for (const stop of Array.from(bHolds.values())) stop();
+    }
+    window.addEventListener('blur', stopAll);
+    window.addEventListener('pagehide', stopAll);
+    document.addEventListener('visibilitychange', () => { if (document.hidden) stopAll(); });
+})();
+
+
+/* SMOOTH_AB_INTEGRATION_v1: grip keepalive without servo restart */
+(function () {
+    let gripRepeat = null;
+    document.querySelectorAll('.grip').forEach(btn => {
+        btn.addEventListener('pointerdown', () => {
+            if (gripRepeat !== null) clearInterval(gripRepeat);
+            gripRepeat = setInterval(() => {
+                if (gripButton === btn) queueGripCommand(btn.dataset.command);
+            }, 320);
+        });
+        function end() {
+            if (gripRepeat !== null) clearInterval(gripRepeat);
+            gripRepeat = null;
+        }
+        btn.addEventListener('pointerup', end);
+        btn.addEventListener('pointercancel', end);
+        btn.addEventListener('lostpointercapture', end);
+        btn.addEventListener('pointerleave', end);
+        window.addEventListener('blur', end);
+        document.addEventListener('visibilitychange', () => { if (document.hidden) end(); });
+    });
+})();
+
 </script>
 </body>
 </html>
@@ -1541,6 +1796,9 @@ class MobileHandler(
     def do_GET(
         self
     ):
+        if self.path.split('?', 1)[0] == '/api/voice/status':
+            self.send_json(voice_request('status'))
+            return
         if (
             self.path == "/"
             or
@@ -1688,6 +1946,15 @@ class MobileHandler(
     def do_POST(
         self
     ):
+        if self.path.split('?', 1)[0] in ('/api/voice/start', '/api/voice/stop', '/api/voice/ping'):
+            origin = self.headers.get('Origin')
+            local_origin = 'http://' + self.headers.get('Host', '')
+            if origin and origin != local_origin:
+                self.send_json({'state': 'error', 'error': '잘못된 접속 출처'}, status=403)
+                return
+            action = self.path.rsplit('/', 1)[-1]
+            self.send_json(voice_request(action))
+            return
         global last_move_seq
         if not self.path.startswith(
             "/api/command"
@@ -1771,9 +2038,7 @@ class MobileHandler(
                 "[모바일 명령]",
                 command
             )
-            robot_ctrl(
-                command
-            )
+            robot_ctrl(command, data.get("seq"))
             self.send_json(
                 {
                     "status":
@@ -1851,7 +2116,7 @@ def main():
     )
     print(
         f"CAMERA SERVO : "
-        f"{CAMERA_FIXED_ANGLE}도 고정"
+        "A/B 목 관절 제어"
     )
     print(
         f"YOLO         : "
@@ -1922,6 +2187,10 @@ def main():
         )
     # Servo
     initialize_servos()
+    global neck_controller, grip_controller
+    neck_controller = SmoothNeck()
+    neck_controller.start()
+    grip_controller = SmoothGripper(gripper_servo, speed=GRIPPER_SPEED)
     # 시작 시 안전 정지
     safe_stop(
         force_lights_off=True
@@ -1962,6 +2231,10 @@ def main():
         server_running = False
         with camera_condition:
             camera_condition.notify_all()
+        if neck_controller is not None:
+            neck_controller.close()
+        if grip_controller is not None:
+            grip_controller.close()
         gripper_stop()
         safe_stop(
             force_lights_off=True
@@ -2000,4 +2273,5 @@ def main():
             "[서버] 종료 완료"
         )
 if __name__ == "__main__":
+    start_voice()  # VOICE_REPEAKER_1
     main()
