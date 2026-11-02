@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""PiCar-Pro mobile server: validated stage-14 settings, without stage test files.
+"""PiCar-Pro mobile server: original mj Final features with expanded neck ranges.
 
 Run on the Pi:
-    sudo ~/picar-yolo/bin/python GUIServer_mobile_final.py
+    sudo ~/picar-yolo/bin/python GUIServer_mobile_final_angle_90_80_90.py
 
 Original GUIServer_mobile.py / OLED_eyes.py / RPIservo.py / SmoothServo.py
 are not modified. Assumes Pi I2C speed was already set to 400kHz.
+
+CAUTION: The expanded travel ranges have NOT been verified on the actual robot.
+The installed 180-degree servo driver cannot command +/-100 degrees around 90.
 """
 
 import threading
@@ -24,20 +27,21 @@ import GUIServer_mobile as server
 from OLED_eyes import OLEDEyes
 
 
-# Same hardware settings verified in stage8.
+# Original mj Final hardware settings.
 NECK_CHANNELS = (1, 2, 3)
 PWM_ADDRESS = 0x5F
 PWM_FREQUENCY = 50
 
-# Relative offsets from the original startup positions (degrees).
-# Increase movement conservatively: stop if a servo strains or binds.
-# B positive is the UP direction in the tested mobile controls.
+# Relative offsets from the original 90-degree startup positions.
+# Requested B +/-100 is not possible with current 0..180-degree actuator setup.
+# These are software command limits, NOT proven mechanical safety limits.
 NECK_TRAVEL_LIMITS = {
-    "a_pan": (-25, 25),     # A left/right: symmetric +/-25 from starting pose
-    "b_tilt": (-20, 12),   # B down: -16 -> -20; B up remains +12
+    "a_pan": (-90, 90),    # A left/right: requested +/-90
+    "a_tilt": (-80, 80),   # A up/down: requested +/-80
+    "b_tilt": (-90, 90),   # B up/down: requested +/-100 -> hardware +/-90 max
 }
 
-# Same OLED scheduling verified in stage12.
+# Same OLED scheduling as the original mj Final.
 OLED_POLL_SECONDS = 0.08
 OLED_ANIMATION_SECONDS = 0.5
 OLED_SERVO_IDLE_SECONDS = 0.20
@@ -259,7 +263,8 @@ def main():
         # Invert only the A neck left/right direction; all other axes unchanged.
         SmoothServo.NECK_SIGNS["a_pan"] = -1
         server.SmoothNeck = ExtendedSmoothNeck
-        print("[각도 확장] A 좌우: -25~+25도, B 상하: -20~+12도")
+        print("[각도 확장] A 좌우: -90~+90도, A 상하: -80~+80도, B 상하: -90~+90도")
+        print("[각도 주의] B 요청 +/-100도는 현재 서보 절대각 0~180도 범위 밖입니다")
         print("[최종] A 목 좌우 방향 반전 적용")
         print("[최종] 목 PWM 캐시 준비 완료")
         print("[최종] 원본 YOLO 사용 + 실제 인식 시 로그 출력")
@@ -279,4 +284,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

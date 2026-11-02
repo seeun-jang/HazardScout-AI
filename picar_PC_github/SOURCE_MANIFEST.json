@@ -1,0 +1,59 @@
+{
+  "package_type": "PC-specific TigerVNC code, no voice integration",
+  "pc_source": "assistant-created non-voice PC integration, previously reported working by operator",
+  "repository": "seeun-jang/HazardScout-AI",
+  "files": {
+    "Server/Move.py": {
+      "bytes": 4516,
+      "sha256": "c098cd3f47a5e0dfccbb6eb02064bc411b0347806f9011f1675513c90dc79752"
+    },
+    "Server/Switch.py": {
+      "bytes": 2593,
+      "sha256": "75d789ecf9511868d052d10e0ab2f1216004167c49d3b68750ceb8d1771015c6"
+    },
+    "Server/SmoothServo.py": {
+      "bytes": 7230,
+      "sha256": "a71f32407dec51427c4e4b6bb9e433076ce6f45aacc87ef4e4378d2db90d4d2f"
+    },
+    "Server/RPIservo.py": {
+      "bytes": 9173,
+      "sha256": "93ca94eae9bff0f8210d24da21595a0012a334ce896c4935228694762bee603d"
+    },
+    "Server/GUIServer_custom.py": {
+      "bytes": 12309,
+      "sha256": "33306f764aa74f44dfd356e399c8868475260bc4ab36d160b76a0819305f5431"
+    },
+    "Server/YOLO_detector.py": {
+      "bytes": 4095,
+      "sha256": "f7666f06ebe8b8b8971fd8b27bbf70be15e3e7e65c22f7a8db2412d4d55e01fa"
+    },
+    "move/robot_gui.py": {
+      "bytes": 22195,
+      "sha256": "55eb49827cc790a7c712897e4b2bfd135172d1f161269733c47edd2e723ed162"
+    },
+    "move/fullscreen_gui.py": {
+      "bytes": 7217,
+      "sha256": "ffbcafe369fda005e1a742d5bd3ee22b27fd731c87efbf840dc6ba783dd8f29f"
+    }
+  },
+  "missing_external_sources": [
+    {
+      "target": "Server/GUIServer_custom_base.py",
+      "branch": "ym",
+      "github_path": "code/GUIServer_custom.py",
+      "git_blob_sha": "a2ecfb05cb79549534bb15460e89f0f4686fdd0b"
+    },
+    {
+      "target": "Server/OLED_eyes.py",
+      "branch": "mj",
+      "github_path": "picar_mobile_github/OLED_eyes.py",
+      "git_blob_sha": "6d3b4793e189437db29d116b64cf99645849cdf8"
+    },
+    {
+      "target": "Server/models/hazard_3class_v1.pt",
+      "branch": "mj",
+      "github_path": "picar_mobile_github/models/hazard_3class_v1.pt",
+      "git_blob_sha": "94498867e7f06d968957b59f8a3369ccbde786b1"
+    }
+  ]
+}
