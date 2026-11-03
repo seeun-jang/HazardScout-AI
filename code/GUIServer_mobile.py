@@ -25,6 +25,7 @@ from PiVoiceLauncher import start_voice, voice_request
 
 # =========================================================
 # CPU 부하 제한
+
 # =========================================================
 try:
     torch.set_num_threads(1)
@@ -41,6 +42,7 @@ except Exception:
 
 # =========================================================
 # 서버 / 주행 설정
+
 # =========================================================
 HOST = "0.0.0.0"
 WEB_PORT = 5000
@@ -51,6 +53,7 @@ Dv = -1
 
 # =========================================================
 # 카메라 설정
+
 # =========================================================
 CAMERA_FIXED_ANGLE = 90
 CAMERA_WIDTH = 640
@@ -62,6 +65,7 @@ JPEG_QUALITY = 60
 
 # =========================================================
 # YOLO 설정
+
 # =========================================================
 YOLO_MODEL_PATH = "/home/pi/Adeept_PiCar-Pro/Server/models/hazard_3class_v1.pt"
 YOLO_CONFIDENCE = 0.35
@@ -72,11 +76,13 @@ YOLO_DETECT_EVERY_N_FRAMES = 8
 
 # =========================================================
 # 집게 설정
+
 # =========================================================
 GRIPPER_SPEED = 5
 
 # =========================================================
 # 프로그램 상태
+
 # =========================================================
 server_running = True
 light_always_on = False
@@ -96,6 +102,7 @@ move_seq_lock = threading.Lock()
 
 # =========================================================
 # Servo
+
 # =========================================================
 steering = RPIservo.ServoCtrl()
 camera_servo = RPIservo.ServoCtrl()
@@ -103,6 +110,7 @@ gripper_servo = RPIservo.ServoCtrl()
 
 # =========================================================
 # 비동기 YOLO
+
 # =========================================================
 
 class AsyncYOLO:
@@ -170,6 +178,7 @@ class AsyncYOLO:
 
 # =========================================================
 # OLED / Servo 초기화
+
 # =========================================================
 
 def oled_set_direction(direction):
@@ -193,6 +202,7 @@ def initialize_servos():
 
 # =========================================================
 # 집게
+
 # =========================================================
 
 def gripper_start(direction):
@@ -206,6 +216,7 @@ def gripper_stop():
 
 # =========================================================
 # 라이트
+
 # =========================================================
 
 def both_lights_on():
@@ -247,6 +258,7 @@ def light_off_mode():
 
 # =========================================================
 # 주행
+
 # =========================================================
 
 def safe_stop(force_lights_off=False):
@@ -364,6 +376,7 @@ def robot_ctrl(command, neck_seq=None):
 
 # =========================================================
 # 카메라
+
 # =========================================================
 
 def set_camera_state(connected, error=""):
@@ -500,6 +513,7 @@ def camera_worker():
 
 # =========================================================
 # 모바일 GUI
+
 # =========================================================
 MOBILE_HTML = r"""
 <!DOCTYPE html>
@@ -1007,6 +1021,198 @@ body {
   .app.camera-fullscreen .tablet-tools{display:none!important;}
 }
 
+
+/* ===========================================================
+   카메라별 전체화면 전용 UI
+   - 평소 태블릿 화면은 기존 스타일/배치 그대로 유지
+   - 카메라가 전체 배경을 차지하고, 조이스틱은 그 위에 불투명하게 표시
+   - 기존 #joystick / #neckJoystick 노드를 잠시 이동해 기존 이벤트 유지
+   =========================================================== */
+#cameraFullscreenLayer[hidden] { display: none !important; }
+#cameraFullscreenLayer {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #090d12;
+  color: #fff;
+  display: block;
+  isolation: isolate;
+}
+#cameraFullscreenLayer:fullscreen { width: 100vw; height: 100vh; }
+#cameraFullscreenLayer .fs-video-backdrop,
+#cameraFullscreenLayer .fs-main-image,
+#cameraFullscreenLayer .fs-empty-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+#cameraFullscreenLayer .fs-video-backdrop { overflow: hidden; background: #090d12; z-index: 0; }
+#cameraFullscreenLayer .fs-main-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #090d12;
+}
+#cameraFullscreenLayer .fs-empty-image {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #b7c2cd;
+  font-size: 15px;
+  padding: 20px;
+  background: #111821;
+}
+#cameraFullscreenLayer .fs-topbar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: max(12px,env(safe-area-inset-top)) 16px 18px;
+  background: linear-gradient(to bottom,rgba(0,0,0,.80),rgba(0,0,0,0));
+  pointer-events: none;
+}
+#cameraFullscreenLayer .fs-camera-title {
+  font-size: 17px;
+  font-weight: 800;
+  text-shadow: 0 1px 5px #000;
+}
+#cameraFullscreenLayer .fs-top-actions { display: flex; gap: 8px; align-items: center; pointer-events: auto; }
+#cameraFullscreenLayer .fs-action {
+  min-height: 40px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.5);
+  background: #222b36;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 8px 12px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+#cameraFullscreenLayer .fs-action.stop { background: #b5333b; border-color: #f6b6b9; }
+#cameraFullscreenLayer .fs-action.exit { background: #1f2935; }
+#cameraFullscreenLayer .fs-bottom-controls {
+  position: absolute;
+  z-index: 4;
+  left: 0; right: 0; bottom: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px clamp(18px,4vw,60px) max(22px,env(safe-area-inset-bottom));
+  pointer-events: none;
+}
+#cameraFullscreenLayer .fs-joy-unit {
+  width: clamp(150px,26vw,240px);
+  flex: 0 1 clamp(150px,26vw,240px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  pointer-events: auto;
+}
+#cameraFullscreenLayer .fs-joy-label,
+#cameraFullscreenLayer .fs-joy-status {
+  color: #fff;
+  padding: 4px 9px;
+  border-radius: 8px;
+  background: #1c2734;
+  font-weight: 800;
+  font-size: 12px;
+  text-align: center;
+  max-width: 100%;
+  text-shadow: 0 1px 2px #000;
+}
+#cameraFullscreenLayer .fs-joy-status { font-size: 11px; font-weight: 600; }
+#cameraFullscreenLayer .fs-joystick-holder {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* 기존 조이스틱 원형·색상 유지. 전체화면에서만 크기 지정, 완전 불투명. */
+#cameraFullscreenLayer .fs-joystick-holder .joystick,
+#cameraFullscreenLayer .fs-joystick-holder .neck-joystick {
+  width: clamp(145px,24vw,215px) !important;
+  height: clamp(145px,24vw,215px) !important;
+  max-width: min(31vh,215px);
+  max-height: min(31vh,215px);
+  flex: none;
+  border-radius: 50%;
+  background: #505050 !important;
+  background-color: #505050 !important;
+  border: 5px solid #c6c6c6 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: 0 5px 19px rgba(0,0,0,.58);
+  margin: 0 !important;
+  touch-action: none;
+}
+#cameraFullscreenLayer .fs-joystick-holder .joystick-knob,
+#cameraFullscreenLayer .fs-joystick-holder .neck-knob {
+  background: #9b9b9b !important;
+  background-color: #9b9b9b !important;
+  opacity: 1 !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+}
+/* 기존 목 A 원은 원래 .neck-control-card 안에만 스타일이 정의되어 있으므로,
+   전체화면으로 DOM 이동한 경우에도 십자선/손잡이 모양을 똑같이 복원한다. */
+#cameraFullscreenLayer .fs-joystick-holder .neck-joystick { position: relative !important; }
+#cameraFullscreenLayer .fs-joystick-holder .neck-joystick::before,
+#cameraFullscreenLayer .fs-joystick-holder .neck-joystick::after {
+  content: "";
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%,-50%);
+  background: rgba(255,255,255,.62);
+  pointer-events: none;
+}
+#cameraFullscreenLayer .fs-joystick-holder .neck-joystick::before { width: 2px; height: 100%; }
+#cameraFullscreenLayer .fs-joystick-holder .neck-joystick::after { width: 100%; height: 2px; }
+#cameraFullscreenLayer .fs-joystick-holder .neck-knob {
+  position: absolute !important;
+  left: 50%; top: 50%;
+  width: 34% !important; height: 34% !important;
+  border-radius: 50%;
+  transform: translate(-50%,-50%);
+  box-shadow: 0 4px 14px rgba(0,0,0,.3);
+  pointer-events: none;
+}
+@media (orientation: portrait) {
+  #cameraFullscreenLayer .fs-bottom-controls { padding: 12px 9px max(18px,env(safe-area-inset-bottom)); gap: 4px; }
+  #cameraFullscreenLayer .fs-joy-unit { flex-basis: 50%; width: 50%; }
+  #cameraFullscreenLayer .fs-joystick-holder .joystick,
+  #cameraFullscreenLayer .fs-joystick-holder .neck-joystick {
+    width: min(37vw,180px) !important;
+    height: min(37vw,180px) !important;
+  }
+  #cameraFullscreenLayer .fs-camera-title { font-size: 13px; }
+  #cameraFullscreenLayer .fs-action { padding: 6px 8px; min-height: 35px; font-size: 11px; }
+}
+@media (max-height: 550px) and (orientation: landscape) {
+  #cameraFullscreenLayer .fs-joystick-holder .joystick,
+  #cameraFullscreenLayer .fs-joystick-holder .neck-joystick {
+    width: min(26vh,150px) !important;
+    height: min(26vh,150px) !important;
+  }
+  #cameraFullscreenLayer .fs-bottom-controls { padding-bottom: 7px; }
+  #cameraFullscreenLayer .fs-joy-unit { gap: 3px; }
+}
+
 </style>
 </head>
 <body>
@@ -1065,7 +1271,10 @@ class="camera-state"
 <div class="card camera-card environment-card">
 <div class="card-title-row">
 <div class="card-title">환경 카메라</div>
+<div style="display:flex;gap:7px;align-items:center;">
+<button id="environmentFullscreenButton" class="fullscreen-button" type="button" title="환경 카메라 전체화면" aria-label="환경 카메라 전체화면">⛶</button>
 <button id="environmentConfig" class="fullscreen-button environment-config" type="button" title="환경 카메라 주소 설정">⚙</button>
+</div>
 </div>
 <div class="camera-box">
 <img id="environmentCamera" class="camera" alt="환경 카메라" style="display:none" />
@@ -1186,6 +1395,35 @@ data-command="loose"
 PiCar-Pro Mobile GUI
 </div>
 </div>
+
+<!-- 카메라별 전체화면: 평소에는 숨김. 별도 Python 파일 불필요. -->
+<div id="cameraFullscreenLayer" hidden aria-hidden="true" role="dialog" aria-label="카메라 전체화면">
+  <div class="fs-video-backdrop">
+    <img id="fullscreenMainImage" class="fs-main-image" alt="선택된 카메라 영상" />
+    <div id="fullscreenNoFeed" class="fs-empty-image">카메라 영상 연결 대기</div>
+  </div>
+  <div class="fs-topbar">
+    <span id="fullscreenCameraTitle" class="fs-camera-title">로봇 카메라</span>
+    <div class="fs-top-actions">
+      <button id="fullscreenStopButton" class="fs-action stop" type="button">■ STOP</button>
+      <button id="fullscreenFlashButton" class="fs-action" type="button">후레시 ON</button>
+      <button id="fullscreenCloseButton" class="fs-action exit" type="button" aria-label="전체화면 종료">✕ 닫기</button>
+    </div>
+  </div>
+  <div class="fs-bottom-controls">
+    <section class="fs-joy-unit" aria-label="주행 조이스틱">
+      <span class="fs-joy-label">주행</span>
+      <div id="fullscreenMoveJoystickHost" class="fs-joystick-holder"></div>
+      <span id="fullscreenMoveStatus" class="fs-joy-status">정지</span>
+    </section>
+    <section class="fs-joy-unit" aria-label="목 A 조이스틱">
+      <span class="fs-joy-label">목 A</span>
+      <div id="fullscreenNeckJoystickHost" class="fs-joystick-holder"></div>
+      <span id="fullscreenNeckStatus" class="fs-joy-status">목 A 정지</span>
+    </section>
+  </div>
+</div>
+
 <script>
 let gripButton=null;
 let joystickActive=false;
@@ -1583,52 +1821,7 @@ async function loadStatus(){
         setConnected(false);
     }
 }
-/* ========================================================
-   전체화면
-======================================================== */
-const appRoot=document.querySelector(".app");
-const fullscreenButton=document.getElementById("fullscreenButton");
-async function enterCameraFullscreen(){
-    appRoot.classList.add("camera-fullscreen");
-    document.body.style.overflow= "hidden";
-    fullscreenButton.textContent= "✕";
-    try{
-        if (appRoot.requestFullscreen&&!document.fullscreenElement){
-            await appRoot.requestFullscreen();
-        }
-    }
-    catch (_){
-    }
-}
-async function exitCameraFullscreen(){
-    appRoot.classList.remove("camera-fullscreen");
-    document.body.style.overflow= "";
-    fullscreenButton.textContent= "⛶";
-    try{
-        if (document.fullscreenElement){
-            await document.exitFullscreen();
-        }
-    }
-    catch (_){
-    }
-}
-fullscreenButton.addEventListener("click",()=>{
-    if (appRoot.classList.contains("camera-fullscreen")){
-        exitCameraFullscreen();
-    }
-    else{
-        enterCameraFullscreen();
-    }
-}
-);
-document.addEventListener("fullscreenchange",()=>{
-    if (!document.fullscreenElement&&appRoot.classList.contains("camera-fullscreen")){
-        appRoot.classList.remove("camera-fullscreen");
-        document.body.style.overflow= "";
-        fullscreenButton.textContent= "⛶";
-    }
-}
-);
+/* 카메라별 전체화면은 아래 fullscreen 전용 스크립트에서 처리합니다. */
 loadStatus();
 cameraWatchdog();
 
@@ -1905,11 +2098,125 @@ cameraWatchdog();
   if(saved)setUrl(saved);
 })();
 </script>
+
+<script>
+/* ============================================================
+   카메라별 전체화면: 로봇카메라 / 환경카메라
+   기존 조이스틱 DOM을 화면에 옮겼다가 복원하므로 주행/목 A
+   pointerdown / pointermove / pointerup 이벤트와 API는 그대로 작동.
+   ============================================================ */
+(function(){
+  'use strict';
+  const layer=document.getElementById('cameraFullscreenLayer');
+  const image=document.getElementById('fullscreenMainImage');
+  const empty=document.getElementById('fullscreenNoFeed');
+  const title=document.getElementById('fullscreenCameraTitle');
+  const moveHost=document.getElementById('fullscreenMoveJoystickHost');
+  const neckHost=document.getElementById('fullscreenNeckJoystickHost');
+  const moveJoy=document.getElementById('joystick');
+  const neckJoy=document.getElementById('neckJoystick');
+  const moveStatus=document.getElementById('motion');
+  const neckStatus=document.getElementById('neckStatus');
+  const fsMoveStatus=document.getElementById('fullscreenMoveStatus');
+  const fsNeckStatus=document.getElementById('fullscreenNeckStatus');
+  const flash=document.getElementById('fullscreenFlashButton');
+  const close=document.getElementById('fullscreenCloseButton');
+  const stop=document.getElementById('fullscreenStopButton');
+  const originalBodyOverflow=document.body.style.overflow;
+  // Keep real original parents and sibling positions, not newly cloned elements.
+  const home=[
+    {node:moveJoy,parent:moveJoy.parentNode,next:moveJoy.nextSibling,host:moveHost},
+    {node:neckJoy,parent:neckJoy.parentNode,next:neckJoy.nextSibling,host:neckHost}
+  ];
+  let open=false;
+
+  function syncStatuses(){
+    fsMoveStatus.textContent=moveStatus.textContent || '정지';
+    fsNeckStatus.textContent=neckStatus.textContent || '목 A 정지';
+    const topFlash=document.getElementById('tabletFlash');
+    flash.textContent=topFlash.textContent;
+  }
+  new MutationObserver(syncStatuses).observe(moveStatus,{childList:true,characterData:true,subtree:true});
+  new MutationObserver(syncStatuses).observe(neckStatus,{childList:true,characterData:true,subtree:true});
+  new MutationObserver(syncStatuses).observe(document.getElementById('tabletFlash'),{childList:true,characterData:true,subtree:true});
+  syncStatuses();
+
+  // Existing event handlers listen for blur to release pressed controls safely.
+  function releaseHeldControls(){ window.dispatchEvent(new Event('blur')); }
+
+  function openCamera(kind){
+    if(open)return;
+    releaseHeldControls();
+    const source=kind==='environment' ? document.getElementById('environmentCamera') : document.getElementById('robotCamera');
+    const connected=Boolean(source.getAttribute('src')) && source.style.display!=='none';
+    title.textContent=kind==='environment'?'환경 카메라':'로봇 카메라';
+    if(connected){
+      // A separate image preserves the camera feed on the normal GUI.
+      image.style.display='block';
+      image.src=source.src;
+      empty.style.display='none';
+    } else {
+      image.removeAttribute('src');
+      image.style.display='none';
+      empty.textContent=kind==='environment'?'환경 카메라 연결 대기 · 일반 화면의 ⚙에서 영상 주소를 설정하세요.':'로봇 카메라 연결 대기';
+      empty.style.display='flex';
+    }
+    home.forEach(item=>item.host.appendChild(item.node));
+    layer.hidden=false;
+    layer.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+    open=true;
+    syncStatuses();
+    // requestFullscreen may not be supported (e.g., iOS). Fixed layer still works.
+    if(typeof layer.requestFullscreen==='function'){
+      try{const result=layer.requestFullscreen();if(result&&typeof result.catch==='function')result.catch(()=>{});}catch(_){}
+    }
+  }
+  async function closeCamera(exitNative=true){
+    if(!open)return;
+    releaseHeldControls();
+    // A stop on closing is intentional even if joystick release was missed.
+    // Regular server JS owns the command dispatch; blur invokes its safety stop.
+    home.forEach(item=>item.parent.insertBefore(item.node,item.next));
+    open=false;
+    layer.hidden=true;
+    layer.setAttribute('aria-hidden','true');
+    document.body.style.overflow=originalBodyOverflow;
+    image.removeAttribute('src');
+    image.style.display='none';
+    if(exitNative&&document.fullscreenElement===layer&&typeof document.exitFullscreen==='function'){
+      try{await document.exitFullscreen();}catch(_){}
+    }
+  }
+  document.getElementById('fullscreenButton').addEventListener('click',()=>openCamera('robot'));
+  document.getElementById('environmentFullscreenButton').addEventListener('click',()=>openCamera('environment'));
+  close.addEventListener('click',()=>closeCamera());
+  flash.addEventListener('click',()=>document.getElementById('tabletFlash').click());
+  stop.addEventListener('click',()=>{
+    releaseHeldControls();
+    // In live server mode: send explicit safe stop if needed.
+    if(typeof sendMoveCommand==='function')sendMoveCommand('stop_move');
+  });
+  image.addEventListener('error',()=>{
+    if(!open)return;
+    image.style.display='none';
+    empty.textContent='선택한 카메라 영상을 불러올 수 없습니다.';
+    empty.style.display='flex';
+  });
+  document.addEventListener('fullscreenchange',()=>{
+    if(open && document.fullscreenElement!==layer)closeCamera(false);
+  });
+  document.addEventListener('keydown',e=>{
+    if(open&&e.key==='Escape'){e.preventDefault();closeCamera();}
+  });
+  window.addEventListener('pagehide',()=>{if(open)closeCamera(false);});
+})();
+</script>
 </body>
 </html>
-"""
-# =========================================================
+"""# =========================================================
 # HTTP Handler
+
 # =========================================================
 
 class MobileHandler(
@@ -2229,6 +2536,7 @@ class MobileHandler(
 
 # =========================================================
 # HTTP Server
+
 # =========================================================
 
 class MobileHTTPServer(
@@ -2239,6 +2547,7 @@ class MobileHTTPServer(
 
 # =========================================================
 # MAIN
+
 # =========================================================
 
 def main():
