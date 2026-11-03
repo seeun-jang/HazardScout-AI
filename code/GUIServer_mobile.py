@@ -25,7 +25,6 @@ from PiVoiceLauncher import start_voice, voice_request
 
 # =========================================================
 # CPU 부하 제한
-
 # =========================================================
 try:
     torch.set_num_threads(1)
@@ -42,7 +41,6 @@ except Exception:
 
 # =========================================================
 # 서버 / 주행 설정
-
 # =========================================================
 HOST = "0.0.0.0"
 WEB_PORT = 5000
@@ -53,7 +51,6 @@ Dv = -1
 
 # =========================================================
 # 카메라 설정
-
 # =========================================================
 CAMERA_FIXED_ANGLE = 90
 CAMERA_WIDTH = 640
@@ -65,7 +62,6 @@ JPEG_QUALITY = 60
 
 # =========================================================
 # YOLO 설정
-
 # =========================================================
 YOLO_MODEL_PATH = "/home/pi/Adeept_PiCar-Pro/Server/models/hazard_3class_v1.pt"
 YOLO_CONFIDENCE = 0.35
@@ -76,13 +72,11 @@ YOLO_DETECT_EVERY_N_FRAMES = 8
 
 # =========================================================
 # 집게 설정
-
 # =========================================================
 GRIPPER_SPEED = 5
 
 # =========================================================
 # 프로그램 상태
-
 # =========================================================
 server_running = True
 light_always_on = False
@@ -102,7 +96,6 @@ move_seq_lock = threading.Lock()
 
 # =========================================================
 # Servo
-
 # =========================================================
 steering = RPIservo.ServoCtrl()
 camera_servo = RPIservo.ServoCtrl()
@@ -110,7 +103,6 @@ gripper_servo = RPIservo.ServoCtrl()
 
 # =========================================================
 # 비동기 YOLO
-
 # =========================================================
 
 class AsyncYOLO:
@@ -178,7 +170,6 @@ class AsyncYOLO:
 
 # =========================================================
 # OLED / Servo 초기화
-
 # =========================================================
 
 def oled_set_direction(direction):
@@ -202,7 +193,6 @@ def initialize_servos():
 
 # =========================================================
 # 집게
-
 # =========================================================
 
 def gripper_start(direction):
@@ -216,7 +206,6 @@ def gripper_stop():
 
 # =========================================================
 # 라이트
-
 # =========================================================
 
 def both_lights_on():
@@ -258,7 +247,6 @@ def light_off_mode():
 
 # =========================================================
 # 주행
-
 # =========================================================
 
 def safe_stop(force_lights_off=False):
@@ -376,7 +364,6 @@ def robot_ctrl(command, neck_seq=None):
 
 # =========================================================
 # 카메라
-
 # =========================================================
 
 def set_camera_state(connected, error=""):
@@ -513,7 +500,6 @@ def camera_worker():
 
 # =========================================================
 # 모바일 GUI
-
 # =========================================================
 MOBILE_HTML = r"""
 <!DOCTYPE html>
@@ -929,10 +915,103 @@ body {
 .neck-control-card .neck-b-btn{border:1px solid #ccd1d8;border-radius:12px;background:#f4f6f8;color:#243142;font-weight:700;padding:17px 12px;touch-action:none;font-size:16px;}
 .neck-control-card .neck-b-btn.active{background:#3182f6;color:#fff;}
 
+
+
+/* 태블릿 배치 전용 추가 CSS: 원본 스타일과 Python/JS 제어 로직은 유지 */
+.tablet-cameras,.tablet-joysticks,.tablet-tools{display:block;}
+.environment-card .environment-config{font-size:19px;}
+.environment-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#aeb5bf;font-size:14px;pointer-events:none;}
+.environment-note{margin-top:8px;color:#8b95a1;font-size:11px;}
+.tablet-top-flash{background:var(--green-light);color:var(--green);border:1px solid var(--border);border-radius:12px;font-size:12px;font-weight:800;padding:9px 12px;white-space:nowrap;margin-left:auto;}
+.tablet-top-flash.light-selected{background:var(--green)!important;color:#fff!important;}
+.neck-motion{font-size:13px;}
+/* 주행과 목 A 설명을 각각 원형 조이스틱 바로 아래 똑같은 높이에 배치 */
+.tablet-joysticks .joystick-hint,.tablet-joysticks .neck-hint{color:var(--sub);text-align:center;line-height:1.35;font-size:11px;min-height:16px;margin-top:5px;}
+/* 조이스틱 배경과 손잡이는 전체화면에서도 불투명 */
+.app.camera-fullscreen .joystick,.app.camera-fullscreen .neck-joystick{opacity:1!important;background:#505050!important;background-color:#505050!important;filter:none!important;backdrop-filter:none!important;mix-blend-mode:normal!important;isolation:isolate;}
+.app.camera-fullscreen .joystick-knob{background:#9b9b9b!important;opacity:1!important;filter:none!important;}
+.app.camera-fullscreen .neck-knob{background:#b7bec7!important;opacity:1!important;filter:none!important;}
+.app.camera-fullscreen .tablet-joysticks>.card{background:#fff!important;opacity:1!important;border:1px solid var(--border)!important;}
+@media (max-width:739px),(orientation:portrait){
+  .tablet-cameras>.card,.tablet-joysticks>.card,.tablet-tools>.card{margin-bottom:12px;}
+}
+@media (min-width:740px) and (orientation:landscape){
+  body{padding:8px 12px 9px;}
+  .app{width:100%;max-width:1600px;margin:0 auto;}
+  .header{margin-bottom:7px;}
+  .tablet-cameras,.tablet-joysticks{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;margin-bottom:9px;}
+  .tablet-tools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+  .tablet-cameras>.card,.tablet-joysticks>.card,.tablet-tools>.card{min-width:0;margin:0;}
+  .tablet-cameras .card{padding:12px 14px;}
+  /* 카메라를 메인으로: 기존 160px -> 일반 태블릿에서 약 275~320px */
+  .tablet-cameras .camera-box{aspect-ratio:auto;height:clamp(238px,37.5vh,420px);}
+  .tablet-cameras .camera{object-fit:contain;}
+  .tablet-cameras .card-title-row{margin-bottom:7px;}
+  .tablet-joysticks>.card{padding:9px 14px 8px;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;}
+  .tablet-joysticks .card-title,.tablet-joysticks .neck-title{font-size:15px!important;margin-bottom:3px!important;font-weight:800;}
+  .tablet-joysticks .motion{font-size:12px;min-height:18px;margin:0 0 2px!important;}
+  .tablet-joysticks .joystick-wrap{padding:0;}
+  .tablet-joysticks .joystick,.tablet-joysticks .neck-joystick{
+    width:clamp(104px,17vh,170px);height:clamp(104px,17vh,170px);margin:2px auto!important;
+  }
+  .tablet-joysticks .joystick-hint{font-size:11px;min-height:15px;margin-top:4px;}
+  .tablet-tools>.card{padding:10px 12px;}
+  .tablet-tools .card-title,.tablet-tools .neck-title{font-size:14px!important;margin-bottom:6px!important;}
+  .tablet-tools .btn{min-height:45px;font-size:13px;padding:5px;}
+  .tablet-tools .neck-b-row{margin-top:5px;gap:6px;}
+  .tablet-tools .neck-b-btn{font-size:13px;padding:10px 6px;}
+  .tablet-tools .neck-note{font-size:10px;line-height:1.3;margin-bottom:4px;}
+  .tablet-tools .voice-button{padding:10px 6px;font-size:13px;}
+  .tablet-tools .voice-hint{display:none;}
+  .tablet-tools .voice-text{font-size:11px;line-height:1.35;margin-top:6px;max-height:2.8em;overflow:auto;}
+  .tablet-tools .info{font-size:10px;margin-top:7px;}
+  .footer{display:none;}
+  /* 카메라 전체화면: 기존 구조를 유지하되 2대 영상을 가장 크게 표시.
+     조이스틱/손잡이는 화면 아래쪽에서도 100% 불투명한 원본 회색을 사용. */
+  .app.camera-fullscreen{
+    display:flex!important;flex-direction:column!important;position:fixed;inset:0;z-index:9999;
+    height:100dvh;width:100vw;max-width:none;margin:0;padding:10px;overflow:auto;
+    background:#0e1116;gap:7px;grid-template-columns:none;grid-template-rows:none;
+  }
+  .app.camera-fullscreen .header,.app.camera-fullscreen .footer{display:none!important;}
+  .app.camera-fullscreen .tablet-cameras{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0;
+    flex:1 1 auto;min-height:0;
+  }
+  .app.camera-fullscreen .tablet-cameras>.camera-card{
+    grid-column:auto!important;grid-row:auto!important;min-height:0;display:flex;flex-direction:column;
+    background:#0e1116!important;border:1px solid #2b313a!important;
+  }
+  .app.camera-fullscreen .tablet-cameras .card-title{color:#fff;}
+  .app.camera-fullscreen .tablet-cameras .camera-box{flex:1 1 auto;min-height:0;height:auto!important;aspect-ratio:auto;}
+  .app.camera-fullscreen .tablet-cameras .camera{object-fit:contain;}
+  .app.camera-fullscreen .tablet-joysticks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0;flex:0 0 auto;}
+  .app.camera-fullscreen .tablet-joysticks>.card{grid-column:auto!important;grid-row:auto!important;min-height:0;}
+  .app.camera-fullscreen .tablet-joysticks .joystick,.app.camera-fullscreen .tablet-joysticks .neck-joystick{
+    width:clamp(105px,17vh,175px)!important;height:clamp(105px,17vh,175px)!important;
+    opacity:1!important;background:#505050!important;
+  }
+  .app.camera-fullscreen .tablet-tools{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0;flex:0 0 auto;}
+  .app.camera-fullscreen .tablet-tools>.card{grid-column:auto!important;grid-row:auto!important;background:#fff!important;}
+}
+@media (min-width:740px) and (orientation:landscape) and (max-height:790px){
+  .tablet-cameras .camera-box{height:clamp(230px,36vh,295px);}
+  .tablet-joysticks .joystick,.tablet-joysticks .neck-joystick{width:clamp(103px,16vh,126px);height:clamp(103px,16vh,126px);}
+  .tablet-tools>.card{padding:9px 11px;}
+  .tablet-tools .btn{min-height:43px;}
+  .tablet-tools .neck-b-btn{padding:9px 5px;}
+}
+@media (min-width:740px) and (orientation:landscape) and (max-height:650px){
+  .tablet-cameras .camera-box{height:32vh;}
+  .tablet-joysticks .joystick,.tablet-joysticks .neck-joystick{width:100px;height:100px;}
+  .app.camera-fullscreen .tablet-tools{display:none!important;}
+}
+
 </style>
 </head>
 <body>
 <div class="app">
+<!-- 기존 모바일 제목과 연결 상태 유지 -->
 <div class="header">
 <div>
 <div class="title">
@@ -942,6 +1021,7 @@ PiCar-Pro
 Mobile Control
 </div>
 </div>
+<button type="button" id="tabletFlash" class="tablet-top-flash" title="라이트 ON/OFF">후레시 ON</button>
 <div class="server">
 <span
 id="serverDot"
@@ -952,6 +1032,8 @@ class="dot"
 </span>
 </div>
 </div>
+<!-- 상단 좌/우 카메라 -->
+<div class="tablet-cameras">
 <div class="card camera-card">
 <div class="card-title-row">
 <div class="card-title">
@@ -980,6 +1062,20 @@ class="camera-state"
 </div>
 </div>
 </div>
+<div class="card camera-card environment-card">
+<div class="card-title-row">
+<div class="card-title">환경 카메라</div>
+<button id="environmentConfig" class="fullscreen-button environment-config" type="button" title="환경 카메라 주소 설정">⚙</button>
+</div>
+<div class="camera-box">
+<img id="environmentCamera" class="camera" alt="환경 카메라" style="display:none" />
+<div id="environmentPlaceholder" class="environment-placeholder">환경 카메라 연결 대기<div class="environment-note">영상 주소 설정 후 표시됩니다</div></div>
+<div id="environmentState" class="camera-state">미연결</div>
+</div>
+</div>
+</div>
+<!-- 중단 좌 주행 / 우 목 A: 기존 원형 조이스틱과 JS ID 유지 -->
+<div class="tablet-joysticks">
 <div class="card move-card">
 <div class="card-title">
 이동 제어
@@ -1006,6 +1102,17 @@ class="joystick-knob"
 손을 떼면 자동 정지합니다.
 </div>
 </div>
+<div class="card neck-control-card">
+    <div class="neck-title">A · 카메라 목</div>
+    <div id="neckStatus" class="motion neck-motion">목 A 정지</div>
+    <div class="neck-joystick" id="neckJoystick">
+        <div class="neck-knob" id="neckKnob"></div>
+    </div>
+    <div class="joystick-hint neck-hint">작은 원을 원하는 방향으로 움직이세요. 손을 떼면 현재 위치에 정지합니다.</div>
+</div>
+</div>
+<!-- 라이트와 목 B 카드 위치 교환: 라이트 -> 집게 -> 목 B -> 마이크 -->
+<div class="tablet-tools">
 <div class="card light-card">
 <div class="card-title">
 라이트
@@ -1058,8 +1165,15 @@ data-command="loose"
 손을 떼면 정지합니다.
 </div>
 </div>
-
-<!-- VOICE_REPEAKER_1 -->
+<div class="card neck-control-card neck-b-card">
+<div class="neck-title">B · 목 하단 관절</div>
+    <div class="neck-note">상·하 버튼으로 조작</div>
+    <div class="neck-b-row">
+        <button type="button" class="neck-b-btn" data-neck-axis="b_tilt" data-neck-dir="1">▲ 위</button>
+        <button type="button" class="neck-b-btn" data-neck-axis="b_tilt" data-neck-dir="-1">▼ 아래</button>
+    </div>
+    <div class="neck-note">버튼을 누르고 있는 동안 움직이며 손을 떼면 정지합니다.</div>
+</div>
 <div class="card voice-card">
     <div class="card-title">🎤 한국어 음성 인식</div>
     <button type="button" id="piVoiceButton" class="voice-button">🎤 누르고 말하기</button>
@@ -1067,24 +1181,7 @@ data-command="loose"
     <div class="voice-text" id="piVoiceStatus">음성 인식 준비 상태 확인 중...</div>
     <div class="voice-text" id="piVoiceText"></div>
 </div>
-
-
-<!-- SMOOTH_AB_INTEGRATION_v1 -->
-<div class="card neck-control-card">
-    <div class="neck-title">A · 카메라 목</div>
-    <div class="neck-note">상·하·좌·우 · 누르는 동안 부드럽게 회전 · 손을 떼면 그 위치에서 정지</div>
-    <div class="neck-joystick" id="neckJoystick">
-        <div class="neck-knob" id="neckKnob"></div>
-    </div>
-    <div class="neck-title">B · 목 하단 관절</div>
-    <div class="neck-note">상·하 버튼으로 조작</div>
-    <div class="neck-b-row">
-        <button type="button" class="neck-b-btn" data-neck-axis="b_tilt" data-neck-dir="1">▲ 위</button>
-        <button type="button" class="neck-b-btn" data-neck-axis="b_tilt" data-neck-dir="-1">▼ 아래</button>
-    </div>
-    <div class="neck-note">최초 테스트와 동일하게 중심 기준 ±12° 이내로 제한됩니다.</div>
 </div>
-
 <div class="footer">
 PiCar-Pro Mobile GUI
 </div>
@@ -1744,11 +1841,75 @@ cameraWatchdog();
 })();
 
 </script>
+
+<script>
+/* 기존 조작·음성 스크립트는 위에서 실행됩니다.
+   아래는 환경 영상/후레시 단축 버튼/목 A 상태 표시만 담당합니다. */
+(function(){
+  'use strict';
+  const flash=document.getElementById('tabletFlash');
+  const lightOn=document.getElementById('lightOn');
+  const lightOff=document.getElementById('lightOff');
+  const lightText=document.getElementById('lightText');
+  function refreshFlash(){
+    const active=lightOn.classList.contains('light-selected')||lightText.textContent.includes('계속 ON');
+    flash.textContent=active?'후레시 OFF':'후레시 ON';
+    flash.classList.toggle('light-selected',active);
+  }
+  flash.addEventListener('click',()=>{
+    const active=flash.classList.contains('light-selected');
+    (active?lightOff:lightOn).click();
+  });
+  new MutationObserver(refreshFlash).observe(lightText,{childList:true,subtree:true,characterData:true});
+  refreshFlash();
+
+  const status=document.getElementById('neckStatus');
+  const joystick=document.getElementById('neckJoystick');
+  let held=null;
+  function update(e){
+    const r=joystick.getBoundingClientRect(), mx=r.left+r.width/2,my=r.top+r.height/2;
+    const x=(e.clientX-mx)/(r.width*.31),y=(e.clientY-my)/(r.width*.31);
+    const pan=x>.25?'오른쪽':x<-.25?'왼쪽':'정지';
+    const tilt=y<-.25?'위':y>.25?'아래':'정지';
+    status.textContent='목 A · 좌우 '+pan+' / 상하 '+tilt;
+  }
+  function end(){held=null;status.textContent='목 A 정지';}
+  joystick.addEventListener('pointerdown',e=>{if(held===null){held=e.pointerId;update(e);}});
+  joystick.addEventListener('pointermove',e=>{if(held===e.pointerId)update(e);});
+  ['pointerup','pointercancel','lostpointercapture'].forEach(evt=>joystick.addEventListener(evt,end));
+  window.addEventListener('blur',end);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)end();});
+
+  const btn=document.getElementById('environmentConfig');
+  const img=document.getElementById('environmentCamera');
+  const placeholder=document.getElementById('environmentPlaceholder');
+  const envState=document.getElementById('environmentState');
+  function setUrl(value){
+    const raw=(value||'').trim();
+    if(!raw){img.removeAttribute('src');img.style.display='none';placeholder.style.display='flex';envState.textContent='미연결';return;}
+    let url;
+    try{url=new URL(raw,location.href);if(!['http:','https:'].includes(url.protocol))throw Error('프로토콜');}
+    catch(_){alert('http:// 또는 https:// 영상 주소를 입력하세요.');return;}
+    img.style.display='block';placeholder.style.display='none';envState.textContent='연결 중';
+    img.src=url.href;
+    try{localStorage.setItem('picar_environment_camera',raw);}catch(_){}
+  }
+  img.addEventListener('load',()=>{envState.textContent='LIVE';});
+  img.addEventListener('error',()=>{img.style.display='none';placeholder.style.display='flex';envState.textContent='연결 실패';});
+  btn.addEventListener('click',()=>{
+    let old='';try{old=localStorage.getItem('picar_environment_camera')||'';}catch(_){}
+    const value=prompt('환경 카메라 MJPEG 또는 이미지 URL (삭제하려면 빈칸)',old);
+    if(value!==null){if(!value.trim())try{localStorage.removeItem('picar_environment_camera');}catch(_){}setUrl(value);}
+  });
+  let saved='';try{saved=localStorage.getItem('picar_environment_camera')||'';}catch(_){}
+  if(saved)setUrl(saved);
+})();
+</script>
 </body>
 </html>
-"""# =========================================================
+"""
+# =========================================================
 # HTTP Handler
-
 # =========================================================
 
 class MobileHandler(
@@ -2068,7 +2229,6 @@ class MobileHandler(
 
 # =========================================================
 # HTTP Server
-
 # =========================================================
 
 class MobileHTTPServer(
@@ -2079,7 +2239,6 @@ class MobileHTTPServer(
 
 # =========================================================
 # MAIN
-
 # =========================================================
 
 def main():
