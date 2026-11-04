@@ -1,146 +1,63 @@
-"""Independent YOLO test for laptop webcam / image / video (no GUI/server edits).
-Examples:
-  python test_yolo.py --mode baseline --source 0
-  python test_yolo.py --mode world --source 0
-  python test_yolo.py --mode world --source C:/Videos/test.mp4 --save
-  python test_yolo.py --mode custom --source 0 --model models/hazard_v1.pt
-  python test_yolo.py --mode yoloe --source 0
-Press s to save a screenshot, q to quit. Detections CSV is always written.
-"""
+"""이미지/영상/USB 카메라 CPU 추론 또는 custom 검증·테스트 평가."""
 import argparse
-import csv
-import time
-from datetime import datetime
 from pathlib import Path
+from lab_utils import ROOT, inference_args, validate_inference_args
 
-import cv2
-from ultralytics import YOLO
 
-ROOT = Path(__file__).resolve().parent
-DEFAULT_MODELS = {
-    "baseline": ROOT / "models/yolov8n.pt",
-    "world": ROOT / "models/world_hazard.pt",
-    "custom": ROOT / "models/hazard_v1.pt",
-    "yoloe": ROOT / "models/yoloe-26n-seg-pf.pt",
-}
+def opencv_frames(source):
+    import cv2
+    import numpy as np
+    from PIL import Image, ImageOps, UnidentifiedImageError
+    path = Path(source).expanduser()
+    if path.is_file():
+        try:
+            with Image.open(path) as image:
+                image.load()
+                # Ultralytics numpy 입력은 BGR입니다. 확장자 없는 사용자 JPEG도 지원합니다.
+                yield np.asarray(ImageOps.exif_transpose(image).convert("RGB"))[:, :, ::-1].copy()
+            return
+        except UnidentifiedImageError:
+            pass  # 비디오 파일이면 VideoCapture로 처리
+    cap = cv2.VideoCapture(int(source) if source.isdecimal() else str(path))
+    try:
+        if not cap.isOpened():
+            raise RuntimeError(f"카메라/영상 열기 실패: {source}")
+        while True:
+            ok, frame = cap.read()
+            if not ok:
+                break
+            yield frame
+    finally:
+        cap.release()
 
 
 def main():
-    p = argparse.ArgumentParser()
-    p.add_argument("--mode", choices=DEFAULT_MODELS, default="baseline")
-    p.add_argument("--model", help="Optional custom .pt path; relative to yolo_lab/")
-    p.add_argument("--source", default="0", help="0 for webcam, otherwise image/video path")
-    p.add_argument("--conf", type=float, default=0.30)
-    p.add_argument("--imgsz", type=int, default=320)
-    p.add_argument("--every", type=int, default=1, help="Infer every N frames, reusing the last result for display")
-    p.add_argument("--max-frames", type=int, default=0, help="0 = no frame limit")
-    p.add_argument("--no-show", action="store_true", help="No OpenCV window (headless)")
-    p.add_argument("--save", action="store_true", help="Save annotated video/image and screenshots")
-    args = p.parse_args()
-
-    if not 0.0 < args.conf <= 1.0 or args.every < 1 or args.imgsz < 32:
-        p.error("Use 0 < --conf <= 1; --every >= 1; --imgsz >= 32")
-    model_path = Path(args.model) if args.model else DEFAULT_MODELS[args.mode]
-    if not model_path.is_absolute():
-        model_path = ROOT / model_path if args.model else model_path
-    if not model_path.exists():
-        p.error(f"Model not found: {model_path}. Run 'python prepare_models.py' first (or train).")
-
-    model = YOLO(str(model_path))
-    run_dir = ROOT / "results" / f"{args.mode}_{datetime.now():%Y%m%d_%H%M%S}"
-    run_dir.mkdir(parents=True, exist_ok=True)
-    csv_path = run_dir / "detections.csv"
-    headers = ["frame", "class", "confidence", "x1", "y1", "x2", "y2", "center_x", "center_y", "inference_ms"]
-
-    src_path = Path(args.source)
-    is_image = src_path.is_file() and src_path.suffix.lower() in {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
-    is_camera = args.source.isdigit()
-    source = int(args.source) if is_camera else args.source
-    writer = None
-    cap = None
-
-    try:
-        with csv_path.open("w", newline="", encoding="utf-8-sig") as f:
-            csv_writer = csv.writer(f)
-            csv_writer.writerow(headers)
-            if is_image:
-                frame = cv2.imread(str(src_path))
-                if frame is None:
-                    raise RuntimeError(f"Cannot open image: {src_path}")
-                annotated, count, ms = predict_one(model, frame, args, csv_writer, 1)
-                cv2.imwrite(str(run_dir / "image_result.jpg"), annotated)
-                print(f"image -> {count} detections, {ms:.1f} ms. Saved {run_dir / 'image_result.jpg'}")
-                if not args.no_show:
-                    cv2.imshow("HazardScout YOLO (press any key)", annotated)
-                    cv2.waitKey(0)
-                return
-
-            cap = cv2.VideoCapture(source)
-            if not cap.isOpened():
-                raise RuntimeError(f"Cannot open camera/video: {source}")
-            count_frame = 0
-            last_annotated = None
-            last_ms = 0.0
-            last_count = 0
-            while True:
-                ok, frame = cap.read()
-                if not ok:
-                    break
-                count_frame += 1
-                if count_frame == 1 or (count_frame - 1) % args.every == 0:
-                    last_annotated, last_count, last_ms = predict_one(model, frame, args, csv_writer, count_frame)
-                    annotated = last_annotated.copy()
-                else:
-                    # Cached boxes are visual only; they may lag behind moving objects.
-                    annotated = frame.copy()
-                    cv2.putText(annotated, "INFERENCE SKIPPED (cached last result not drawn)", (10, 50),
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.47, (0, 255, 255), 1)
-                overlay = f"{args.mode} | frame {count_frame} | last {last_count} objects | {last_ms:.0f} ms"
-                cv2.putText(annotated, overlay, (10, 25), cv2.FONT_HERSHEY_SIMPLEX,
-                            0.55, (0, 255, 255), 2)
-                if args.save:
-                    if writer is None:
-                        h, w = annotated.shape[:2]
-                        video_fps = cap.get(cv2.CAP_PROP_FPS)
-                        fps = video_fps if 1 <= video_fps <= 120 else 15.0
-                        writer = cv2.VideoWriter(str(run_dir / "output.mp4"), cv2.VideoWriter_fourcc(*"mp4v"), fps, (w, h))
-                        if not writer.isOpened():
-                            raise RuntimeError("Cannot create output.mp4; check codec/path")
-                    writer.write(annotated)
-                if not args.no_show:
-                    cv2.imshow("HazardScout YOLO (q=quit, s=screenshot)", annotated)
-                    key = cv2.waitKey(1) & 0xFF
-                    if key == ord("s"):
-                        path = run_dir / f"screenshot_{count_frame:05d}.jpg"
-                        cv2.imwrite(str(path), annotated)
-                        print(f"Saved: {path}")
-                    if key == ord("q"):
-                        break
-                if args.max_frames > 0 and count_frame >= args.max_frames:
-                    break
-            print(f"Processed {count_frame} frames. Results: {run_dir}")
-    finally:
-        if writer is not None:
-            writer.release()
-        if cap is not None:
-            cap.release()
-        if not args.no_show:
-            cv2.destroyAllWindows()
-    print(f"Detections CSV: {csv_path}")
-
-
-def predict_one(model, frame, args, writer, frame_index):
-    t0 = time.perf_counter()
-    r = model.predict(frame, imgsz=args.imgsz, conf=args.conf, verbose=False)[0]
-    ms = (time.perf_counter() - t0) * 1000
-    if r.boxes is not None:
-        for box in r.boxes:
-            x1, y1, x2, y2 = [int(v) for v in box.xyxy[0].tolist()]
-            idx = int(box.cls.item())
-            name = r.names.get(idx, str(idx)) if isinstance(r.names, dict) else r.names[idx]
-            writer.writerow([frame_index, name, round(float(box.conf.item()), 5),
-                             x1, y1, x2, y2, (x1 + x2) // 2, (y1 + y2) // 2, round(ms, 2)])
-    return r.plot(), (len(r.boxes) if r.boxes is not None else 0), ms
+    parser = argparse.ArgumentParser(description=__doc__)
+    inference_args(parser)
+    parser.add_argument("--source", default="0", help="카메라 번호 또는 파일 경로; 상대 경로는 현재 디렉터리 기준")
+    parser.add_argument("--evaluate", choices=["val", "test"], help="custom 7종 정량 평가")
+    args = parser.parse_args()
+    validate_inference_args(parser, args)
+    if args.evaluate:
+        if args.mode != "custom":
+            parser.error("--evaluate는 --mode custom에서 사용하세요.")
+        from prepare_dataset import check_dataset
+        from lab_utils import load_model
+        import yaml
+        from datetime import datetime
+        check_dataset(ROOT / "dataset/safety7")
+        cfg = yaml.safe_load((ROOT / "dataset/safety7/data.yaml").read_text(encoding="utf-8"))
+        cfg["path"] = str(ROOT / "dataset/safety7")
+        folder = ROOT / "results" / ("eval_" + datetime.now().strftime("%Y%m%d_%H%M%S_%f"))
+        folder.mkdir(parents=True)
+        data = folder / "data_runtime.yaml"
+        data.write_text(yaml.safe_dump(cfg, sort_keys=False), encoding="utf-8")
+        model = load_model("custom", args.model)
+        model.val(data=str(data), split=args.evaluate, imgsz=args.imgsz, device="cpu", workers=0,
+                  project=str(folder), name=args.evaluate, plots=True)
+        return
+    from inference import run_frames
+    run_frames(opencv_frames(args.source), args)
 
 
 if __name__ == "__main__":

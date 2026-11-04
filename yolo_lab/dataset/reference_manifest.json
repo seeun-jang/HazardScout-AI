@@ -1,0 +1,58 @@
+[
+  {
+    "class": "traffic_cone",
+    "original": "미니콘",
+    "copy": "dataset\\references\\traffic_cone\\traffic_cone_1.jpg",
+    "status": "source_reference_preserved; visually boxed copy in raw/local_reference; train only",
+    "sha256": "02893fb25e059093a4b569feff29ecd8272e701061d7e9d6c050dd12e35221a0"
+  },
+  {
+    "class": "fire_extinguisher",
+    "original": "소화기1",
+    "copy": "dataset\\references\\fire_extinguisher\\fire_extinguisher_1.jpg",
+    "status": "source_reference_preserved; visually boxed copy in raw/local_reference; train only",
+    "sha256": "75b7e5f854ad98be4dd4c5273a19ff9bae49e2f1cfd1b97def667b91c30d8687"
+  },
+  {
+    "class": "fire_extinguisher",
+    "original": "소화기2",
+    "copy": "dataset\\references\\fire_extinguisher\\fire_extinguisher_2.jpg",
+    "status": "source_reference_preserved; visually boxed copy in raw/local_reference; train only",
+    "sha256": "0554e5f0ac371289ccf8e31d611989afb9c80fcc7191fa4849353fec0b17ed76"
+  },
+  {
+    "class": "safety_helmet",
+    "original": "안전모",
+    "copy": "dataset\\references\\safety_helmet\\safety_helmet_1.jpg",
+    "status": "source_reference_preserved; visually boxed copy in raw/local_reference; train only",
+    "sha256": "9ac178a7168e2b8861aed2dcea33394c05b8b1b2c4721ff6ea3b7fa550e1d0f6"
+  },
+  {
+    "class": "safety_vest",
+    "original": "작업복",
+    "copy": "dataset\\references\\safety_vest\\safety_vest_1.jpg",
+    "status": "source_reference_preserved; visually boxed copy in raw/local_reference; train only",
+    "sha256": "c0b1955882f8eb25df90297748f44da330c7f146aebe3631dbb2dd0f63ae4f9d"
+  },
+  {
+    "class": "safety_gloves",
+    "original": "장갑",
+    "copy": "dataset\\references\\safety_gloves\\safety_gloves_1.jpg",
+    "status": "source_reference_preserved; visually boxed copy in raw/local_reference; train only",
+    "sha256": "4c919c485c462b85e23a3ecf1b42f42a15a2ab38ce8a9883c131e20a7ffdd1e2"
+  },
+  {
+    "class": "earmuffs",
+    "original": "귀마개형 보호도구",
+    "copy": "dataset\\references\\earmuffs\\earmuffs_1.jpg",
+    "status": "source_reference_preserved; visually boxed copy in raw/local_reference; train only",
+    "sha256": "c577548f2ee3cd35eca9cb967a8110543f607f9ec6066a9485e63595f7ba9c44"
+  },
+  {
+    "class": "safety_goggles",
+    "original": "고글",
+    "copy": "dataset\\references\\safety_goggles\\safety_goggles_1.jpg",
+    "status": "source_reference_preserved; visually boxed copy in raw/local_reference; train only",
+    "sha256": "b16a5b0c9683a207bad1bb54be202b2d399974e2bf59c77ce27aabb744e5c126"
+  }
+]

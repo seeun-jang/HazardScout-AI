@@ -1,0 +1,11 @@
+train: images/train
+val: images/val
+test: images/test
+names:
+  0: traffic_cone
+  1: fire_extinguisher
+  2: safety_helmet
+  3: safety_vest
+  4: safety_gloves
+  5: earmuffs
+  6: safety_goggles

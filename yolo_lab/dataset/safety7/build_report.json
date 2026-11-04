@@ -1,0 +1,2165 @@
+{
+  "images": 213,
+  "counts": {
+    "train": {
+      "traffic_cone": 29,
+      "fire_extinguisher": 30,
+      "safety_helmet": 37,
+      "safety_vest": 20,
+      "safety_gloves": 37,
+      "earmuffs": 32,
+      "safety_goggles": 28
+    },
+    "val": {
+      "traffic_cone": 6,
+      "fire_extinguisher": 6,
+      "safety_helmet": 8,
+      "safety_vest": 6,
+      "safety_gloves": 6,
+      "earmuffs": 6,
+      "safety_goggles": 13
+    },
+    "test": {
+      "traffic_cone": 6,
+      "fire_extinguisher": 6,
+      "safety_helmet": 4,
+      "safety_vest": 4,
+      "safety_gloves": 7,
+      "earmuffs": 4,
+      "safety_goggles": 5
+    }
+  },
+  "skipped": [],
+  "records": [
+    {
+      "image": "dataset/raw/curated/cone/images/cone_189_jpg.rf.d3d568f00eaf7356c3b6890c854ebf88.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_189_jpg.rf.d3d568f00eaf7356c3b6890c854ebf88.txt",
+      "source": "cone",
+      "group": "cone:cone_189_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/0ded873cdbe558e810af.jpg",
+      "sha256": "0ded873cdbe558e810af53558377b1937a90fe6f3832418c08370832dd118667"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_219_jpg.rf.f5b7fcc62a1d83b1c412bd0f16fa4f37.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_219_jpg.rf.f5b7fcc62a1d83b1c412bd0f16fa4f37.txt",
+      "source": "cone",
+      "group": "cone:cone_219_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/56c06cf44e726dd7cff2.jpg",
+      "sha256": "56c06cf44e726dd7cff2dd371af9717aa01f43d626fd43b2fa303dd4efed855c"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_road-traffic-cone85_jpg.rf.a75426d7173a17beddc5ef11c31541fb.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_road-traffic-cone85_jpg.rf.a75426d7173a17beddc5ef11c31541fb.txt",
+      "source": "cone",
+      "group": "cone:cone_road-traffic-cone85_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/e089e2aedbaab8965ce0.jpg",
+      "sha256": "e089e2aedbaab8965ce067ced737d56abeb7dca8333503a7484f0a44bc3ccd42"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_road-traffic-cone30_jpg.rf.607c80850fc765a17e52e4231dfb4f30.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_road-traffic-cone30_jpg.rf.607c80850fc765a17e52e4231dfb4f30.txt",
+      "source": "cone",
+      "group": "cone:cone_road-traffic-cone30_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/7b4d1b30c45c8b643f38.jpg",
+      "sha256": "7b4d1b30c45c8b643f3812a3ca252a1f6171d41f971d1f3dcdf06be4c14e5573"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_road-traffic-cone161_jpg.rf.44905d9793197935fa36600911af2cae.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_road-traffic-cone161_jpg.rf.44905d9793197935fa36600911af2cae.txt",
+      "source": "cone",
+      "group": "cone:cone_road-traffic-cone161_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/bddbbd236949461afc91.jpg",
+      "sha256": "bddbbd236949461afc9154a45e094f12a51ec19d42963b7151281002364f9064"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_16_jpg.rf.8591f09b6c6a04f307352beb797502b0.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_16_jpg.rf.8591f09b6c6a04f307352beb797502b0.txt",
+      "source": "cone",
+      "group": "cone:cone_16_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/bfc6d1701b1f2d3ec13e.jpg",
+      "sha256": "bfc6d1701b1f2d3ec13e15b4b734ca1f37f3e1fa4e998e1dd7c9e3a18641a33b"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_235_jpg.rf.9a9b848d946a930f4e681a0cd6e03988.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_235_jpg.rf.9a9b848d946a930f4e681a0cd6e03988.txt",
+      "source": "cone",
+      "group": "cone:cone_235_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/42c1c1c4009c63949615.jpg",
+      "sha256": "42c1c1c4009c6394961579dacbc6c282404d6d0dbcf31d1f0c579690d6501b46"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_229_jpg.rf.505717bd2ae8cbd7eb8da2965dfc05cc.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_229_jpg.rf.505717bd2ae8cbd7eb8da2965dfc05cc.txt",
+      "source": "cone",
+      "group": "cone:cone_229_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/331f71feaa6041d92dcb.jpg",
+      "sha256": "331f71feaa6041d92dcb7d389ab5f37005cb58fac2cc6e2dc57d3eee936c2bce"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_238_jpg.rf.df08e7a2b649bc737c1e36a56897e291.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_238_jpg.rf.df08e7a2b649bc737c1e36a56897e291.txt",
+      "source": "cone",
+      "group": "cone:cone_238_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/85b755f5f54147aa78f9.jpg",
+      "sha256": "85b755f5f54147aa78f9f559b0f78114770365d21bdf5238036d2e45157c2a58"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_road-traffic-cone122_jpg.rf.61faeb923986549c142ddf65e20afafb.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_road-traffic-cone122_jpg.rf.61faeb923986549c142ddf65e20afafb.txt",
+      "source": "cone",
+      "group": "cone:cone_road-traffic-cone122_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/1b2c1b2f95c70f2c7f90.jpg",
+      "sha256": "1b2c1b2f95c70f2c7f901630c57c6bf83c2bcf622c47d0480a2f10706585ec0f"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_road-traffic-cone153_jpg.rf.beee19ca1651d96c3d4030d63d5f709b.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_road-traffic-cone153_jpg.rf.beee19ca1651d96c3d4030d63d5f709b.txt",
+      "source": "cone",
+      "group": "cone:cone_road-traffic-cone153_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/1628b84474319c68c98f.jpg",
+      "sha256": "1628b84474319c68c98fe926ac3fde4e0a819fb58cc497bc1f4519bb91827970"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_road-traffic-cone54_jpg.rf.684756c7401828d6f69b095a93e19c2e.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_road-traffic-cone54_jpg.rf.684756c7401828d6f69b095a93e19c2e.txt",
+      "source": "cone",
+      "group": "cone:cone_road-traffic-cone54_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/f28e3297868f330da5ab.jpg",
+      "sha256": "f28e3297868f330da5ab97eec9903a4d93fa0e852a63a9ad22c7dffb0410883a"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_road-traffic-cone296_jpg.rf.e4bd88680d8e25437625b35c83cff3f3.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_road-traffic-cone296_jpg.rf.e4bd88680d8e25437625b35c83cff3f3.txt",
+      "source": "cone",
+      "group": "cone:cone_road-traffic-cone296_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/769a04e8ad1d384a8d26.jpg",
+      "sha256": "769a04e8ad1d384a8d26b026bb9f712cf4b043190f5e7a80f4058be2cf650dd1"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_197_jpg.rf.e886e078f39dcc413d19b3269f344671.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_197_jpg.rf.e886e078f39dcc413d19b3269f344671.txt",
+      "source": "cone",
+      "group": "cone:cone_197_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/02a23a66f191f9cf44b5.jpg",
+      "sha256": "02a23a66f191f9cf44b548cd851d09de76e2229912419da55f16cd67966aaa79"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_204_jpg.rf.2f701d9c0b12d95cb0c1f39622826da8.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_204_jpg.rf.2f701d9c0b12d95cb0c1f39622826da8.txt",
+      "source": "cone",
+      "group": "cone:cone_204_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/3d601112c09754e97fd0.jpg",
+      "sha256": "3d601112c09754e97fd0991fafa63fc5b399e94cf0bfda14b4b037797b413ad7"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_74_jpg.rf.43b8b4eebc6776d9853c5512b6df0773.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_74_jpg.rf.43b8b4eebc6776d9853c5512b6df0773.txt",
+      "source": "cone",
+      "group": "cone:cone_74_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/67878e94a054c00ca668.jpg",
+      "sha256": "67878e94a054c00ca668b84854f8f48d66139e698a776aa557102670d368d955"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_173_jpg.rf.da9c59d253741b1a686c26ed787cc7d5.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_173_jpg.rf.da9c59d253741b1a686c26ed787cc7d5.txt",
+      "source": "cone",
+      "group": "cone:cone_173_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/ce522bf0fb5e1e88dd4d.jpg",
+      "sha256": "ce522bf0fb5e1e88dd4d41176294c40cefe681cc634545eddb2789cb9eff84bc"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_road-traffic-cone18_jpg.rf.c07aa1b5bd786e0467e95a549e5a7392.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_road-traffic-cone18_jpg.rf.c07aa1b5bd786e0467e95a549e5a7392.txt",
+      "source": "cone",
+      "group": "cone:cone_road-traffic-cone18_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/853710af486d3e87ebc7.jpg",
+      "sha256": "853710af486d3e87ebc7b00a0991680e7ac428d478d953c6d505433dc39d085e"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_road-traffic-cone196_jpg.rf.7be0f80d9401d4c447bdff21fa12bca7.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_road-traffic-cone196_jpg.rf.7be0f80d9401d4c447bdff21fa12bca7.txt",
+      "source": "cone",
+      "group": "cone:cone_road-traffic-cone196_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/c5a495623b4bab8d8e59.jpg",
+      "sha256": "c5a495623b4bab8d8e59a4925ecd0871cb384514af843fa2961dbcb87cca7a52"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_road-traffic-cone223_jpg.rf.4dc7101bee98adcaf3adc0ec98a6190a.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_road-traffic-cone223_jpg.rf.4dc7101bee98adcaf3adc0ec98a6190a.txt",
+      "source": "cone",
+      "group": "cone:cone_road-traffic-cone223_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/17d615981d7303289562.jpg",
+      "sha256": "17d615981d7303289562e1e8610092aea3bf7c3d4f5912039a3230f854dc3f6f"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_212_jpg.rf.738b3e3cde94c9a8e667a13de77ad10a.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_212_jpg.rf.738b3e3cde94c9a8e667a13de77ad10a.txt",
+      "source": "cone",
+      "group": "cone:cone_212_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/b384b23caac8bda0f431.jpg",
+      "sha256": "b384b23caac8bda0f431e3599af2cf4be40c17d9eba79c27062ce2c13b843c3c"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_11_jpg.rf.296ac13c6b9986ee7b874664f07e8909.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_11_jpg.rf.296ac13c6b9986ee7b874664f07e8909.txt",
+      "source": "cone",
+      "group": "cone:cone_11_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/a13bee6c3e317aef2de9.jpg",
+      "sha256": "a13bee6c3e317aef2de9ed7f5939f96a78e654eb0a745755f89a0883eab37c8b"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_road-traffic-cone59_jpg.rf.9d7d95b9262c18136ea2d6d1ad96ca60.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_road-traffic-cone59_jpg.rf.9d7d95b9262c18136ea2d6d1ad96ca60.txt",
+      "source": "cone",
+      "group": "cone:cone_road-traffic-cone59_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/2069fc5c2ba4e723f3fe.jpg",
+      "sha256": "2069fc5c2ba4e723f3fe96507da8a610cc5ff46bcbd0b34955d58cbf76ae1ab1"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_road-traffic-cone158_jpg.rf.5e125c13b9e7f37c5e59e729927fa1d7.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_road-traffic-cone158_jpg.rf.5e125c13b9e7f37c5e59e729927fa1d7.txt",
+      "source": "cone",
+      "group": "cone:cone_road-traffic-cone158_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/01b2865b3418e5899bf0.jpg",
+      "sha256": "01b2865b3418e5899bf087e78693cf749e063d978e00ee4c5ec48979cdffa40a"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_road-traffic-cone12_jpg.rf.3356d06a683f4bffa15f8ee76fae0fb3.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_road-traffic-cone12_jpg.rf.3356d06a683f4bffa15f8ee76fae0fb3.txt",
+      "source": "cone",
+      "group": "cone:cone_road-traffic-cone12_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/83a08c829e452b2dc519.jpg",
+      "sha256": "83a08c829e452b2dc519a6c122767d6ad435cf2034ff00d8bbc546480b83458a"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_road-traffic-cone264_jpg.rf.dfe794f763f89aa1bf2bee53da74b2b5.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_road-traffic-cone264_jpg.rf.dfe794f763f89aa1bf2bee53da74b2b5.txt",
+      "source": "cone",
+      "group": "cone:cone_road-traffic-cone264_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/9cf35b96962bd10f7bec.jpg",
+      "sha256": "9cf35b96962bd10f7becd7a6847f19fe549cc78e556dbd891a638b87baf0f68b"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_111_jpg.rf.a7c5a70ede9d0a2b24814534e563e482.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_111_jpg.rf.a7c5a70ede9d0a2b24814534e563e482.txt",
+      "source": "cone",
+      "group": "cone:cone_111_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/633d530d65362248bbcf.jpg",
+      "sha256": "633d530d65362248bbcf4836f271cdc917ebb8c6ca2f3d211d1e06bec88d53ef"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_128_jpg.rf.285bffcc635e27c53d3a5c003c0c0012.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_128_jpg.rf.285bffcc635e27c53d3a5c003c0c0012.txt",
+      "source": "cone",
+      "group": "cone:cone_128_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/714e596c02582abb24be.jpg",
+      "sha256": "714e596c02582abb24bef52eb7786d0fb88104c60638a30532fd9b7175955417"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_90_jpg.rf.219ccbada865614b9510c65e7da0a893.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_90_jpg.rf.219ccbada865614b9510c65e7da0a893.txt",
+      "source": "cone",
+      "group": "cone:cone_90_jpg",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/522fdadc52be7c3f3b6a.jpg",
+      "sha256": "522fdadc52be7c3f3b6a7746a674a0abcfe72d7168b5bc8332a3c80623f292e5"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_59_jpg.rf.839bc5c4b8af35ce296348459bbe77c5.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_59_jpg.rf.839bc5c4b8af35ce296348459bbe77c5.txt",
+      "source": "cone",
+      "group": "cone:cone_59_jpg",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/4f80bec6ca8fd6b03494.jpg",
+      "sha256": "4f80bec6ca8fd6b0349453eb555fdefe40c749266939036c2205b19e54eb3b11"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_road-traffic-cone199_jpg.rf.24814246899324916cb639d2d2a20f8b.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_road-traffic-cone199_jpg.rf.24814246899324916cb639d2d2a20f8b.txt",
+      "source": "cone",
+      "group": "cone:cone_road-traffic-cone199_jpg",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/27a9972c541af8b6809e.jpg",
+      "sha256": "27a9972c541af8b6809e34d05d2f554cddfb0c3321608ecb8086a81b0aed2ce9"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_road-traffic-cone211_jpg.rf.bec3677fdac540dd37c1d2e82c286f68.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_road-traffic-cone211_jpg.rf.bec3677fdac540dd37c1d2e82c286f68.txt",
+      "source": "cone",
+      "group": "cone:cone_road-traffic-cone211_jpg",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/d3ed68e2c38f11ee60e1.jpg",
+      "sha256": "d3ed68e2c38f11ee60e1dadee6d78820420a73935069aeff55b6a33174061b13"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_65_jpg.rf.d75ac4cd5e59ffccdd390d9aa2ef5d1f.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_65_jpg.rf.d75ac4cd5e59ffccdd390d9aa2ef5d1f.txt",
+      "source": "cone",
+      "group": "cone:cone_65_jpg",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/f41eeb4e3f832ef7d477.jpg",
+      "sha256": "f41eeb4e3f832ef7d4778147af11907bbea06fcad02a96c35e516402ab69c751"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_road-traffic-cone198_jpg.rf.19f17c1727fbb660be6f423bcc28d6aa.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_road-traffic-cone198_jpg.rf.19f17c1727fbb660be6f423bcc28d6aa.txt",
+      "source": "cone",
+      "group": "cone:cone_road-traffic-cone198_jpg",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/28a3b45a5de3dcdbb7c7.jpg",
+      "sha256": "28a3b45a5de3dcdbb7c7199fd78d1b3a1bb8f559026deeb4540a6906ad6e08bf"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_61_jpg.rf.eb4a9d40a2f0cc4a99efd9395a0ed5fb.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_61_jpg.rf.eb4a9d40a2f0cc4a99efd9395a0ed5fb.txt",
+      "source": "cone",
+      "group": "cone:cone_61_jpg",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/79b7f3db2aea5bc2108e.jpg",
+      "sha256": "79b7f3db2aea5bc2108ef5ca7e6fc5485cd56703e152aa61c8505c6d99454489"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_road-traffic-cone117_jpg.rf.c4abf90559110fafd9a51d3b8f2756e6.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_road-traffic-cone117_jpg.rf.c4abf90559110fafd9a51d3b8f2756e6.txt",
+      "source": "cone",
+      "group": "cone:cone_road-traffic-cone117_jpg",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/5e30a412a73d7acc0b09.jpg",
+      "sha256": "5e30a412a73d7acc0b09d106eabdd62cf76d91ca91727ff214dac7f051099799"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_road-traffic-cone243_jpg.rf.5529554f3d9550bb65e2eed94dc8a25b.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_road-traffic-cone243_jpg.rf.5529554f3d9550bb65e2eed94dc8a25b.txt",
+      "source": "cone",
+      "group": "cone:cone_road-traffic-cone243_jpg",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/434430980bf8e3df156e.jpg",
+      "sha256": "434430980bf8e3df156e0fb7485506ffec3730f63bbcd52344f35a387a1b26c5"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_54_jpg.rf.2cb78cf743ff18bc19fe8e6ac0856a9e.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_54_jpg.rf.2cb78cf743ff18bc19fe8e6ac0856a9e.txt",
+      "source": "cone",
+      "group": "cone:cone_54_jpg",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/69871a80d25242ec85b3.jpg",
+      "sha256": "69871a80d25242ec85b3ff6f79ec85ac1d174f7884e72f7f08e98dda2e42a0a4"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_220_jpg.rf.e8805a22b9ad52b3808a3fe4f829a9c0.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_220_jpg.rf.e8805a22b9ad52b3808a3fe4f829a9c0.txt",
+      "source": "cone",
+      "group": "cone:cone_220_jpg",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/6c4bbf240e38e8e20ff3.jpg",
+      "sha256": "6c4bbf240e38e8e20ff36cd0826cf8a5ddd6653597834300173027cfcf4d35ab"
+    },
+    {
+      "image": "dataset/raw/curated/cone/images/cone_227_jpg.rf.1601fcdd89eb0ccaf1f9a8949b5d004b.jpg",
+      "label": "dataset/raw/curated/cone/labels/cone_227_jpg.rf.1601fcdd89eb0ccaf1f9a8949b5d004b.txt",
+      "source": "cone",
+      "group": "cone:cone_227_jpg",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/5ab8c65b67abf51387b5.jpg",
+      "sha256": "5ab8c65b67abf51387b5471dbcd7bdfe7097abdf93a0a8e392fd5484a3aa3370"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_199_jpg.rf.de013abaaaa2c1d1fdfd95efbbd0ab26.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_199_jpg.rf.de013abaaaa2c1d1fdfd95efbbd0ab26.txt",
+      "source": "fire",
+      "group": "fire:fire_199_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/5f752ec4e2161ce567c0.jpg",
+      "sha256": "5f752ec4e2161ce567c03824d39bd0f858bc25c2116ddf7b2f44bdc67c1a21bc"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_0642_jpg.rf.1e23987856abc5466c40a9e4bead91c3.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_0642_jpg.rf.1e23987856abc5466c40a9e4bead91c3.txt",
+      "source": "fire",
+      "group": "fire:fire_0642_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/38fddb81cd6a73a8c386.jpg",
+      "sha256": "38fddb81cd6a73a8c386648cb69d88eee497566e37c77ac5a39323f0025a7cd4"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_233_jpg.rf.004a3d84ab1ae2c816c35d7b2d456f20.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_233_jpg.rf.004a3d84ab1ae2c816c35d7b2d456f20.txt",
+      "source": "fire",
+      "group": "fire:fire_233_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/902a413a369a5078e5a4.jpg",
+      "sha256": "902a413a369a5078e5a4f92c8ea25e1c1b7d449caad80c7d5760daec492ccd15"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_156_jpg.rf.d04caf797b2ef2266a1eba6b1e2d03a1.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_156_jpg.rf.d04caf797b2ef2266a1eba6b1e2d03a1.txt",
+      "source": "fire",
+      "group": "fire:fire_156_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/faa10c92b9ce00404094.jpg",
+      "sha256": "faa10c92b9ce00404094fb537f7c11796be9fe8ccd05b4aa0425c718bf26ed40"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_0900_jpg.rf.bdd437990e15bd72e1467acc1fbefd88.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_0900_jpg.rf.bdd437990e15bd72e1467acc1fbefd88.txt",
+      "source": "fire",
+      "group": "fire:fire_0900_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/9467ab5f169a0100ce13.jpg",
+      "sha256": "9467ab5f169a0100ce138065348b91c5b7df48fc5971d9c39fb0260a8bac3fcd"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_0560_jpg.rf.2d313e12bde38a7080255145f2655b6b.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_0560_jpg.rf.2d313e12bde38a7080255145f2655b6b.txt",
+      "source": "fire",
+      "group": "fire:fire_0560_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/9a6c4f7a6e06fb75cc1a.jpg",
+      "sha256": "9a6c4f7a6e06fb75cc1af88f1d4afac96d53e2895df6a2eb2c5041c54d28f03d"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_328_jpg.rf.e9fb015bb03a8ef94702312367b96a95.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_328_jpg.rf.e9fb015bb03a8ef94702312367b96a95.txt",
+      "source": "fire",
+      "group": "fire:fire_328_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/08892823f89881ef3b5d.jpg",
+      "sha256": "08892823f89881ef3b5d4de6dad83a9c4f7866b503d201f307312c5a96860304"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_0545_jpg.rf.33dd443088c360c9d2238867e7e6e9ad.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_0545_jpg.rf.33dd443088c360c9d2238867e7e6e9ad.txt",
+      "source": "fire",
+      "group": "fire:fire_0545_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/c9fa2031e8422958adc3.jpg",
+      "sha256": "c9fa2031e8422958adc3013cc4da85d5243c68fa943fdfeff36ddba8eacf2d72"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_336_jpg.rf.05456586627c83c52501482d0618af08.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_336_jpg.rf.05456586627c83c52501482d0618af08.txt",
+      "source": "fire",
+      "group": "fire:fire_336_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/762465a8a159b0295b37.jpg",
+      "sha256": "762465a8a159b0295b37fe510b6559b9c5260b74c7f50686b6df308de6c5b7ed"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_85_jpg.rf.ac370485663c9d7dd77b65e7aac6cb03.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_85_jpg.rf.ac370485663c9d7dd77b65e7aac6cb03.txt",
+      "source": "fire",
+      "group": "fire:fire_85_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/4f750b224828fb85050e.jpg",
+      "sha256": "4f750b224828fb85050e952d7719ef38e76bb433556ce85537ce5674530baa4c"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_236_jpg.rf.24e0d6eb86aa35b2aec23aab455a24f8.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_236_jpg.rf.24e0d6eb86aa35b2aec23aab455a24f8.txt",
+      "source": "fire",
+      "group": "fire:fire_236_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/827de11d8b1163f9a797.jpg",
+      "sha256": "827de11d8b1163f9a79703bbdacd18b6607b077f0b0e706bf89319819b7c0a3e"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_590_jpg.rf.ff9bc0137f95a07c09abb8fc5aec6970.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_590_jpg.rf.ff9bc0137f95a07c09abb8fc5aec6970.txt",
+      "source": "fire",
+      "group": "fire:fire_590_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/da62b1714f1aa2f43e68.jpg",
+      "sha256": "da62b1714f1aa2f43e68d018dfbe2985135861559d9ed735bf64db1fc3887910"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_342_jpg.rf.b0cbdd812a949bccc1ba8b499aa65ee1.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_342_jpg.rf.b0cbdd812a949bccc1ba8b499aa65ee1.txt",
+      "source": "fire",
+      "group": "fire:fire_342_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/56c29b74b3d9c15b8d51.jpg",
+      "sha256": "56c29b74b3d9c15b8d51b95470d56a019a0c43a08ea196a544ab45f350e6386c"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_1215_jpg.rf.ad32faa49561dbee8ecfa8d7ba276b38.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_1215_jpg.rf.ad32faa49561dbee8ecfa8d7ba276b38.txt",
+      "source": "fire",
+      "group": "fire:fire_1215_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/9e9be53e11c524a41e1b.jpg",
+      "sha256": "9e9be53e11c524a41e1bc950054d32beeecd72c6f37bc1c9a279b26eb56c5205"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_1386_jpg.rf.0ddf3486a7789e7046a180e307698491.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_1386_jpg.rf.0ddf3486a7789e7046a180e307698491.txt",
+      "source": "fire",
+      "group": "fire:fire_1386_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/e213e06fd6757abaebe0.jpg",
+      "sha256": "e213e06fd6757abaebe0c17cfc9396ce8e6f8c0d68f806c4d3d18da53b8bd413"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_0747_jpg.rf.d8e89ccff5758aa978676e27afc90967.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_0747_jpg.rf.d8e89ccff5758aa978676e27afc90967.txt",
+      "source": "fire",
+      "group": "fire:fire_0747_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/a63d7445e91d84a72307.jpg",
+      "sha256": "a63d7445e91d84a723074108d27c096202f352f0d1dd9b5ff9c1022566e5934f"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_578_jpg.rf.2975770e47cb0018ee20c74ca79b0da4.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_578_jpg.rf.2975770e47cb0018ee20c74ca79b0da4.txt",
+      "source": "fire",
+      "group": "fire:fire_578_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/091871049bc8292c203d.jpg",
+      "sha256": "091871049bc8292c203d5e06c79425db3d9b7504ea54b96d55d2ab472f3c117b"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_0856_jpg.rf.e1554ac8caef2640598b6e699b2a79aa.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_0856_jpg.rf.e1554ac8caef2640598b6e699b2a79aa.txt",
+      "source": "fire",
+      "group": "fire:fire_0856_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/de164c8e0d6bdd66be2e.jpg",
+      "sha256": "de164c8e0d6bdd66be2e8d675d86db704f751785415d38563b11c5cca79625de"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_379_jpg.rf.67ab7599e70116def9b05bbc85d41225.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_379_jpg.rf.67ab7599e70116def9b05bbc85d41225.txt",
+      "source": "fire",
+      "group": "fire:fire_379_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/ffcfff96b867c2f76f5f.jpg",
+      "sha256": "ffcfff96b867c2f76f5f7cd4ca856983299b5c1ca198cd8199ec828d59458eef"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_1443_jpg.rf.4a404b1d57cdc6f2a0fedb7232754984.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_1443_jpg.rf.4a404b1d57cdc6f2a0fedb7232754984.txt",
+      "source": "fire",
+      "group": "fire:fire_1443_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/3e16e4b500edfb96a9bf.jpg",
+      "sha256": "3e16e4b500edfb96a9bff46040910a30ebdac6ba2864f7a35b0691ad9f3a7e35"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_294_jpg.rf.2f7f9a4b688b99a77e74bb4e7715dedd.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_294_jpg.rf.2f7f9a4b688b99a77e74bb4e7715dedd.txt",
+      "source": "fire",
+      "group": "fire:fire_294_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/15b9f09434b10bf1aa60.jpg",
+      "sha256": "15b9f09434b10bf1aa607734db9c53e9fb44bf60c888028a6d30e9853680d06f"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_565_jpg.rf.9d7c1fd15e104d1f2eaf6eb3b9799f19.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_565_jpg.rf.9d7c1fd15e104d1f2eaf6eb3b9799f19.txt",
+      "source": "fire",
+      "group": "fire:fire_565_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/c3124d3b0cc06fd79fc9.jpg",
+      "sha256": "c3124d3b0cc06fd79fc9162c38dffdf73bdcf887a7c087735d9937aa194224bf"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_25_jpg.rf.0f2278187ed0aa8248af2087def7de6f.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_25_jpg.rf.0f2278187ed0aa8248af2087def7de6f.txt",
+      "source": "fire",
+      "group": "fire:fire_25_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/cc94b9865d187ad28739.jpg",
+      "sha256": "cc94b9865d187ad287390ad5483e5f6aed3a45201c53628ffdb82cd4efe262a8"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_0149_jpg.rf.55896d650190071d7fb074e73370ed1c.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_0149_jpg.rf.55896d650190071d7fb074e73370ed1c.txt",
+      "source": "fire",
+      "group": "fire:fire_0149_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/3cb521190f1e85fcd5fb.jpg",
+      "sha256": "3cb521190f1e85fcd5fb00b48bcd1cf084b6f159b8f231fb4c0c82d15fbdcb10"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_165_jpg.rf.b6bff945f2d0b471ae6bc43dfb4c68b1.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_165_jpg.rf.b6bff945f2d0b471ae6bc43dfb4c68b1.txt",
+      "source": "fire",
+      "group": "fire:fire_165_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/a0e7b5d4a94e365f5138.jpg",
+      "sha256": "a0e7b5d4a94e365f5138a9719d02e2d01c31e02eaeccf948cde97d3b0c4b4095"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_487_jpg.rf.575218ece77327c05f76b4b1787298c3.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_487_jpg.rf.575218ece77327c05f76b4b1787298c3.txt",
+      "source": "fire",
+      "group": "fire:fire_487_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/80734aa540a3cfab70d6.jpg",
+      "sha256": "80734aa540a3cfab70d60002cf0a7dfc35cb924e0bbf8f9cefffc52d5366c05b"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_353_jpg.rf.edcb4d0397dfcb3cbb5149d6a467be76.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_353_jpg.rf.edcb4d0397dfcb3cbb5149d6a467be76.txt",
+      "source": "fire",
+      "group": "fire:fire_353_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/99c213a04057b5633cad.jpg",
+      "sha256": "99c213a04057b5633cad78f769214ae5c3436afe0ec99516c22b731b5407ea88"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_0869_jpg.rf.bcab027849b5197e8a3a7682bc9d6881.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_0869_jpg.rf.bcab027849b5197e8a3a7682bc9d6881.txt",
+      "source": "fire",
+      "group": "fire:fire_0869_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/e9e597f2564da569bda9.jpg",
+      "sha256": "e9e597f2564da569bda9c032b3973f6f15975e4de43f92a0267ad45260e8d91b"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_1201_jpg.rf.087dc7977234b9b0f0662f348eb3d518.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_1201_jpg.rf.087dc7977234b9b0f0662f348eb3d518.txt",
+      "source": "fire",
+      "group": "fire:fire_1201_jpg",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/f41c2a002165080dd782.jpg",
+      "sha256": "f41c2a002165080dd782ddfb51207844361e0774a865fc65cf0f4cf765276503"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_1374_jpg.rf.afef63dd3ee4e352affa3a6c14027be6.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_1374_jpg.rf.afef63dd3ee4e352affa3a6c14027be6.txt",
+      "source": "fire",
+      "group": "fire:fire_1374_jpg",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/3291e909db806d412340.jpg",
+      "sha256": "3291e909db806d412340c68db52283aab1ca5ed9a7f5239f49e53e79a5cc426f"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_283_jpg.rf.f1c058c55189666de5ac9620a4a4b682.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_283_jpg.rf.f1c058c55189666de5ac9620a4a4b682.txt",
+      "source": "fire",
+      "group": "fire:fire_283_jpg",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/5c1a61ce23390e73d059.jpg",
+      "sha256": "5c1a61ce23390e73d059509eb51d30106438653593bc7b0fa39d8abc561cda00"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_280_jpg.rf.f36f01cb9128e47f8653a2ebb15a586b.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_280_jpg.rf.f36f01cb9128e47f8653a2ebb15a586b.txt",
+      "source": "fire",
+      "group": "fire:fire_280_jpg",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/f02fcd3e440b35aaf1f5.jpg",
+      "sha256": "f02fcd3e440b35aaf1f561bef1c66c5ea02e46d8f590e089ae0ebf5ccb623ac5"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_8_jpg.rf.bf3c6c921173e8292fc1e1b66075abf7.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_8_jpg.rf.bf3c6c921173e8292fc1e1b66075abf7.txt",
+      "source": "fire",
+      "group": "fire:fire_8_jpg",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/7eb5f31150b0c67348d9.jpg",
+      "sha256": "7eb5f31150b0c67348d9e8731ed8a8ac12251870baa229702054cfbc8c8770d8"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_1355_jpg.rf.92f50f6972e967500660926e358f63c0.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_1355_jpg.rf.92f50f6972e967500660926e358f63c0.txt",
+      "source": "fire",
+      "group": "fire:fire_1355_jpg",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/ff5d9615414f07a77c3d.jpg",
+      "sha256": "ff5d9615414f07a77c3d626a6306eba06cd3efed0efd3ddec7cbddeb68eda0f9"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_0082_jpg.rf.a005b27ed465d9410b76d6c1a3aa5e40.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_0082_jpg.rf.a005b27ed465d9410b76d6c1a3aa5e40.txt",
+      "source": "fire",
+      "group": "fire:fire_0082_jpg",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/f7220e54894d431ec03c.jpg",
+      "sha256": "f7220e54894d431ec03ce36e36a6f991ff2482f2345211c881e25ea8b4cb1678"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_0941_jpg.rf.2c9aa4e9b74d58046f509b9a6410ac46.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_0941_jpg.rf.2c9aa4e9b74d58046f509b9a6410ac46.txt",
+      "source": "fire",
+      "group": "fire:fire_0941_jpg",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/3ccb2ba2a4c3483799ed.jpg",
+      "sha256": "3ccb2ba2a4c3483799ed2dd9e60064a0ab076e20d18949ef59c7585622b2309e"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_0711_jpg.rf.9fac717c99ac6b4355279a14f6a47ded.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_0711_jpg.rf.9fac717c99ac6b4355279a14f6a47ded.txt",
+      "source": "fire",
+      "group": "fire:fire_0711_jpg",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/80ead2dbf2e97ff7a36a.jpg",
+      "sha256": "80ead2dbf2e97ff7a36ae2059dc21f489c50809972d7d4108ff9661b17ff07bc"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_0835_jpg.rf.090a07ef5afe781abf3ec5656adbc52a.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_0835_jpg.rf.090a07ef5afe781abf3ec5656adbc52a.txt",
+      "source": "fire",
+      "group": "fire:fire_0835_jpg",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/76c8830dfaa99c25a3f3.jpg",
+      "sha256": "76c8830dfaa99c25a3f3dd8f24ef50b3aab6cb29c7e465ef2b4571a35f41bd99"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_0497_jpg.rf.504c2e2f2648d32a20ce7c382b79417c.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_0497_jpg.rf.504c2e2f2648d32a20ce7c382b79417c.txt",
+      "source": "fire",
+      "group": "fire:fire_0497_jpg",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/623a64bd3cd97c9a5bf5.jpg",
+      "sha256": "623a64bd3cd97c9a5bf53f31e85f6252ca8bf7088d628d13d40d1fbb97296e27"
+    },
+    {
+      "image": "dataset/raw/curated/fire/images/fire_1206_jpg.rf.8c2c17bc45ad975744979c47485f09a1.jpg",
+      "label": "dataset/raw/curated/fire/labels/fire_1206_jpg.rf.8c2c17bc45ad975744979c47485f09a1.txt",
+      "source": "fire",
+      "group": "fire:fire_1206_jpg",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/ef2d119adbf70b3bce79.jpg",
+      "sha256": "ef2d119adbf70b3bce79c85a11c07f77ee04b78577de0b87d9bae9d09f2d53b6"
+    },
+    {
+      "image": "dataset/raw/curated/construction-safety-gsnvb/images/ppe_0684_jpg.rf.a1cdc65418d9b300bdffcff72b976673.jpg",
+      "label": "dataset/raw/curated/construction-safety-gsnvb/labels/ppe_0684_jpg.rf.a1cdc65418d9b300bdffcff72b976673.txt",
+      "source": "construction-safety-gsnvb",
+      "group": "construction-safety-gsnvb:ppe_0684_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/bcad8d352db83ed7d08e.jpg",
+      "sha256": "bcad8d352db83ed7d08e52e63000d35bc3332684d6eff11533f69237f2b49168"
+    },
+    {
+      "image": "dataset/raw/curated/construction-safety-gsnvb/images/ppe_0270_jpg.rf.cf72f44113041f51cf8c0dccc6f06b81.jpg",
+      "label": "dataset/raw/curated/construction-safety-gsnvb/labels/ppe_0270_jpg.rf.cf72f44113041f51cf8c0dccc6f06b81.txt",
+      "source": "construction-safety-gsnvb",
+      "group": "construction-safety-gsnvb:ppe_0270_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/06b52912c9980173d5ad.jpg",
+      "sha256": "06b52912c9980173d5ad23e319a5c2a1a70b03fd50a1ee99faf2442d87fa9c1d"
+    },
+    {
+      "image": "dataset/raw/curated/construction-safety-gsnvb/images/ppe_0534_jpg.rf.468d90e2ce8ba8afc59745bb0ca0be0a.jpg",
+      "label": "dataset/raw/curated/construction-safety-gsnvb/labels/ppe_0534_jpg.rf.468d90e2ce8ba8afc59745bb0ca0be0a.txt",
+      "source": "construction-safety-gsnvb",
+      "group": "construction-safety-gsnvb:ppe_0534_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/6fed781222eca57aa0de.jpg",
+      "sha256": "6fed781222eca57aa0de716cc6783d936332d71be8a315a9993b4fc28401f98b"
+    },
+    {
+      "image": "dataset/raw/curated/construction-safety-gsnvb/images/ppe_0514_jpg.rf.2ce792355684198eb08f7cb1676c9962.jpg",
+      "label": "dataset/raw/curated/construction-safety-gsnvb/labels/ppe_0514_jpg.rf.2ce792355684198eb08f7cb1676c9962.txt",
+      "source": "construction-safety-gsnvb",
+      "group": "construction-safety-gsnvb:ppe_0514_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/bcaecbdedf90f1ce5cbc.jpg",
+      "sha256": "bcaecbdedf90f1ce5cbcf5b0c3694446b326bc9c4b7a80508d923aa409118704"
+    },
+    {
+      "image": "dataset/raw/curated/construction-safety-gsnvb/images/ppe_0811_jpg.rf.83df33925d281cafd580286dbb1cc1c8.jpg",
+      "label": "dataset/raw/curated/construction-safety-gsnvb/labels/ppe_0811_jpg.rf.83df33925d281cafd580286dbb1cc1c8.txt",
+      "source": "construction-safety-gsnvb",
+      "group": "construction-safety-gsnvb:ppe_0811_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/5affb23b835cd9b5df6d.jpg",
+      "sha256": "5affb23b835cd9b5df6d47065faf03224453913f83a9d20e9fde241507dff3f7"
+    },
+    {
+      "image": "dataset/raw/curated/construction-safety-gsnvb/images/ppe_0473_jpg.rf.2b8ceabdf8abfb068f8a305efe8f7408.jpg",
+      "label": "dataset/raw/curated/construction-safety-gsnvb/labels/ppe_0473_jpg.rf.2b8ceabdf8abfb068f8a305efe8f7408.txt",
+      "source": "construction-safety-gsnvb",
+      "group": "construction-safety-gsnvb:ppe_0473_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/2bfe934eddb5183c1522.jpg",
+      "sha256": "2bfe934eddb5183c15226c13f96bd8d0fa3e7e63fed171b3b4c78a7f2eae522c"
+    },
+    {
+      "image": "dataset/raw/curated/construction-safety-gsnvb/images/ppe_1070_jpg.rf.654ae247796a3ac1b5915cb72b229e5e.jpg",
+      "label": "dataset/raw/curated/construction-safety-gsnvb/labels/ppe_1070_jpg.rf.654ae247796a3ac1b5915cb72b229e5e.txt",
+      "source": "construction-safety-gsnvb",
+      "group": "construction-safety-gsnvb:ppe_1070_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/2960e895c17242498ce9.jpg",
+      "sha256": "2960e895c17242498ce9f8f95e13e6ee5844244f6cfe19d1fd9be2afd6e088e3"
+    },
+    {
+      "image": "dataset/raw/curated/construction-safety-gsnvb/images/ppe_1105_jpg.rf.3707afb9da5857b399928a3a193a319a.jpg",
+      "label": "dataset/raw/curated/construction-safety-gsnvb/labels/ppe_1105_jpg.rf.3707afb9da5857b399928a3a193a319a.txt",
+      "source": "construction-safety-gsnvb",
+      "group": "construction-safety-gsnvb:ppe_1105_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/c06ecf5ce511d92256cf.jpg",
+      "sha256": "c06ecf5ce511d92256cf1cd8bb216d06288884dde9814f888a13ecf3ede62696"
+    },
+    {
+      "image": "dataset/raw/curated/construction-safety-gsnvb/images/ppe_0837_jpg.rf.e5034cff2c17df34d2dafa7e5c6b8122.jpg",
+      "label": "dataset/raw/curated/construction-safety-gsnvb/labels/ppe_0837_jpg.rf.e5034cff2c17df34d2dafa7e5c6b8122.txt",
+      "source": "construction-safety-gsnvb",
+      "group": "construction-safety-gsnvb:ppe_0837_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/037b5e3dadde5b214e69.jpg",
+      "sha256": "037b5e3dadde5b214e694fedfca84d0b8873f023ea51e9ca6e5cc4dbb3e4630e"
+    },
+    {
+      "image": "dataset/raw/curated/construction-safety-gsnvb/images/ppe_1186_jpg.rf.e7ca841af0a4c527c878b3720f271891.jpg",
+      "label": "dataset/raw/curated/construction-safety-gsnvb/labels/ppe_1186_jpg.rf.e7ca841af0a4c527c878b3720f271891.txt",
+      "source": "construction-safety-gsnvb",
+      "group": "construction-safety-gsnvb:ppe_1186_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/bf755d2b68bcc607b7b8.jpg",
+      "sha256": "bf755d2b68bcc607b7b86d1d19aa7f9f36cca294e0befe5fc68e6980c941b3b0"
+    },
+    {
+      "image": "dataset/raw/curated/construction-safety-gsnvb/images/ppe_0013_jpg.rf.8b5f9624055be39335d2ac101a8efe0d.jpg",
+      "label": "dataset/raw/curated/construction-safety-gsnvb/labels/ppe_0013_jpg.rf.8b5f9624055be39335d2ac101a8efe0d.txt",
+      "source": "construction-safety-gsnvb",
+      "group": "construction-safety-gsnvb:ppe_0013_jpg",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/79a9a0deb5279f2d70d8.jpg",
+      "sha256": "79a9a0deb5279f2d70d8b4aea201e0fb0b069b8ce9a0cbcc6b1905438c99d2f4"
+    },
+    {
+      "image": "dataset/raw/curated/construction-safety-gsnvb/images/ppe_1214_jpg.rf.a632f529b15fc89102fc8d5f6cdf49e8.jpg",
+      "label": "dataset/raw/curated/construction-safety-gsnvb/labels/ppe_1214_jpg.rf.a632f529b15fc89102fc8d5f6cdf49e8.txt",
+      "source": "construction-safety-gsnvb",
+      "group": "construction-safety-gsnvb:ppe_1214_jpg",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/3bd5863b065076931d61.jpg",
+      "sha256": "3bd5863b065076931d6167f5622ebae544a74341fe129bcba2aa6d02113b520a"
+    },
+    {
+      "image": "dataset/raw/curated/construction-safety-gsnvb/images/ppe_0342_jpg.rf.e323c80153b82c6e37966d37a509c866.jpg",
+      "label": "dataset/raw/curated/construction-safety-gsnvb/labels/ppe_0342_jpg.rf.e323c80153b82c6e37966d37a509c866.txt",
+      "source": "construction-safety-gsnvb",
+      "group": "construction-safety-gsnvb:ppe_0342_jpg",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/46254f0b4fb0e5a03418.jpg",
+      "sha256": "46254f0b4fb0e5a03418f71a7ea9ceff3e0ec10fe86e479d89ba48fbe1b6c217"
+    },
+    {
+      "image": "dataset/raw/curated/construction-safety-gsnvb/images/ppe_0993_jpg.rf.1c6ea7920d737de7365bd2041a2af18c.jpg",
+      "label": "dataset/raw/curated/construction-safety-gsnvb/labels/ppe_0993_jpg.rf.1c6ea7920d737de7365bd2041a2af18c.txt",
+      "source": "construction-safety-gsnvb",
+      "group": "construction-safety-gsnvb:ppe_0993_jpg",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/a0ba46e80b141253937d.jpg",
+      "sha256": "a0ba46e80b141253937d1eee2e0c1ac23ef10f24c3461b4f8b1a9f57b27c5000"
+    },
+    {
+      "image": "dataset/raw/curated/construction-safety-gsnvb/images/ppe_0923_jpg.rf.9db89c6069c13ab0a8bed79c0e1d861d.jpg",
+      "label": "dataset/raw/curated/construction-safety-gsnvb/labels/ppe_0923_jpg.rf.9db89c6069c13ab0a8bed79c0e1d861d.txt",
+      "source": "construction-safety-gsnvb",
+      "group": "construction-safety-gsnvb:ppe_0923_jpg",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/ba8a0c05485313b1c5d5.jpg",
+      "sha256": "ba8a0c05485313b1c5d55e3494d9c4d28a79472ab36edbca4f4abe9153bf4d0d"
+    },
+    {
+      "image": "dataset/raw/curated/construction-safety-gsnvb/images/ppe_0174_jpg.rf.2d28fca487083a72891ad45dd0965b9b.jpg",
+      "label": "dataset/raw/curated/construction-safety-gsnvb/labels/ppe_0174_jpg.rf.2d28fca487083a72891ad45dd0965b9b.txt",
+      "source": "construction-safety-gsnvb",
+      "group": "construction-safety-gsnvb:ppe_0174_jpg",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/178538e8a4a006cbb4d1.jpg",
+      "sha256": "178538e8a4a006cbb4d14b961524f5e7776f6d52bce297190133600fa84cad1f"
+    },
+    {
+      "image": "dataset/raw/curated/construction-safety-gsnvb/images/ppe_0080_jpg.rf.b6e05ab6f942e9f35748f412117d6217.jpg",
+      "label": "dataset/raw/curated/construction-safety-gsnvb/labels/ppe_0080_jpg.rf.b6e05ab6f942e9f35748f412117d6217.txt",
+      "source": "construction-safety-gsnvb",
+      "group": "construction-safety-gsnvb:ppe_0080_jpg",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/0267813669c192ab893b.jpg",
+      "sha256": "0267813669c192ab893b28821c7e48ac75223cb3ac22860628c9a3fba1296512"
+    },
+    {
+      "image": "dataset/raw/curated/construction-safety-gsnvb/images/ppe_1287_jpg.rf.dac2f6fbe965476456327db453086d65.jpg",
+      "label": "dataset/raw/curated/construction-safety-gsnvb/labels/ppe_1287_jpg.rf.dac2f6fbe965476456327db453086d65.txt",
+      "source": "construction-safety-gsnvb",
+      "group": "construction-safety-gsnvb:ppe_1287_jpg",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/897674d4138e09c04660.jpg",
+      "sha256": "897674d4138e09c04660f94f86fd8c1e5bbce25995f2b9bda35d5ec13aefa83a"
+    },
+    {
+      "image": "dataset/raw/curated/construction-safety-gsnvb/images/ppe_0640_jpg.rf.d718eb0359c68eb5e0b257ea05738a6a.jpg",
+      "label": "dataset/raw/curated/construction-safety-gsnvb/labels/ppe_0640_jpg.rf.d718eb0359c68eb5e0b257ea05738a6a.txt",
+      "source": "construction-safety-gsnvb",
+      "group": "construction-safety-gsnvb:ppe_0640_jpg",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/54f413d6042110d6940d.jpg",
+      "sha256": "54f413d6042110d6940d52ab850eab642c6acf1be71d939c71299345c4d342d2"
+    },
+    {
+      "image": "dataset/raw/curated/construction-safety-gsnvb/images/ppe_1127_jpg.rf.faa8439fcc726348d9c6e161f682a99c.jpg",
+      "label": "dataset/raw/curated/construction-safety-gsnvb/labels/ppe_1127_jpg.rf.faa8439fcc726348d9c6e161f682a99c.txt",
+      "source": "construction-safety-gsnvb",
+      "group": "construction-safety-gsnvb:ppe_1127_jpg",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/fca30a5866dc2287eb16.jpg",
+      "sha256": "fca30a5866dc2287eb16d61c000427fb687320286e86cec0f6ab601fb0c78baa"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-4491850_jpeg.rf.e34a795a51ff0c68de55caca47166c2f.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-4491850_jpeg.rf.e34a795a51ff0c68de55caca47166c2f.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_band_worker",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/940c2527ea4f873e8bd6.jpg",
+      "sha256": "940c2527ea4f873e8bd6a8cd79285ecd971c218193d39227fe708ffcffdde531"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8960988_jpeg.rf.702812edd68c8f1cfd7f78d26a64a594.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8960988_jpeg.rf.702812edd68c8f1cfd7f78d26a64a594.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_muffs_blue_workwear",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/774d28609e64ffae1779.jpg",
+      "sha256": "774d28609e64ffae177929f6a031226f8c6cf726f11af877c8a351e471795449"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-10316634_jpeg.rf.bffde1dfd20c7f5e51d2c5670f85b66e.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-10316634_jpeg.rf.bffde1dfd20c7f5e51d2c5670f85b66e.txt",
+      "source": "sh17",
+      "group": "sh17:session:red_muffs_workshop",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/dcbe08a2ecfea73bcc7c.jpg",
+      "sha256": "dcbe08a2ecfea73bcc7c638c4ef3b307d58df2f01d03ab11052cd96206a70fbb"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-4491868_jpeg.rf.b4dd867e932e80c39ac0de7d5f700132.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-4491868_jpeg.rf.b4dd867e932e80c39ac0de7d5f700132.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_band_worker",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/32827847b454fd41986d.jpg",
+      "sha256": "32827847b454fd41986d6e93ccb36e1e4d31549bba6d3eb6df2c7919c407215e"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-5710791_jpeg.rf.4cfc36b94e94e83c3f5765a4a6bc7724.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-5710791_jpeg.rf.4cfc36b94e94e83c3f5765a4a6bc7724.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_muffs_blue_workwear",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/d3b015bda4c8ed48ccd7.jpg",
+      "sha256": "d3b015bda4c8ed48ccd7090e066b2a4dc550dddcae3f548ef975719b73d63ee9"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-5973997_jpeg.rf.49f5d49cb60b8fac479a1c53aca32499.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-5973997_jpeg.rf.49f5d49cb60b8fac479a1c53aca32499.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_band_worker",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/37196ca1bff46c71ebbf.jpg",
+      "sha256": "37196ca1bff46c71ebbf90404931b168d59f5843c68f9e04da5a488831639e14"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-9241770_jpeg.rf.b72627db832e8da7bada2caf8b6a5d36.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-9241770_jpeg.rf.b72627db832e8da7bada2caf8b6a5d36.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_muffs_blue_workwear",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/2b5976ee4e7431fdc58a.jpg",
+      "sha256": "2b5976ee4e7431fdc58a82d329bf784636fc802b038282da995179a9dd6e6243"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-4820818_jpeg.rf.9f68644d92604eb83befcf3e45c6be61.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-4820818_jpeg.rf.9f68644d92604eb83befcf3e45c6be61.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_muffs_blue_workwear",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/997f93b9568ce77e32a1.jpg",
+      "sha256": "997f93b9568ce77e32a15e1dfdbed931f639ceb9bc4fa88dd77c5f3f610ff26e"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-5974392_jpeg.rf.3b82a6284d63ffa34b91b22c5bc2af61.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-5974392_jpeg.rf.3b82a6284d63ffa34b91b22c5bc2af61.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_band_worker",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/7853bf9cd987ca6356c4.jpg",
+      "sha256": "7853bf9cd987ca6356c4d870b1a9ffef48f9861696b777dddc346486f26d1996"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8447802_jpeg.rf.eb00257ae63facf5a60a7f3e330844b3.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8447802_jpeg.rf.eb00257ae63facf5a60a7f3e330844b3.txt",
+      "source": "sh17",
+      "group": "sh17:session:woodshop_bench_hearing_and_eye",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/fde5ab91728bc3ddb350.jpg",
+      "sha256": "fde5ab91728bc3ddb35068967df76b5128b9b33b4f4908eac7c8da02be6a0cf8"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-9242803_jpeg.rf.b83909df0e2806d6b7c746f986612a58.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-9242803_jpeg.rf.b83909df0e2806d6b7c746f986612a58.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_muffs_blue_workwear",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/3ef533878823f1a03a35.jpg",
+      "sha256": "3ef533878823f1a03a35a483dcd73c8bab55740bd55c63c53da98ec858ecdb14"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-4820779_jpeg.rf.bbd24f4046efe9be1a15226b80deccb6.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-4820779_jpeg.rf.bbd24f4046efe9be1a15226b80deccb6.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_muffs_blue_workwear",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/f447ebb004db56b3aee7.jpg",
+      "sha256": "f447ebb004db56b3aee73301392ac38daa66c9902c556e41cb79bea5f190adb7"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8961030_jpeg.rf.ab56debad8e7446c215bcb2c56ea2fcc.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8961030_jpeg.rf.ab56debad8e7446c215bcb2c56ea2fcc.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_muffs_blue_workwear",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/c1652034b9b53338aca6.jpg",
+      "sha256": "c1652034b9b53338aca6bc08c5128c58abbc078ae7c843d4469f21729fcdead5"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8961003_jpeg.rf.7fc3e6611935a05eaedbfacde0a70959.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8961003_jpeg.rf.7fc3e6611935a05eaedbfacde0a70959.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_muffs_blue_workwear",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/31e01214ef17a2ff83ee.jpg",
+      "sha256": "31e01214ef17a2ff83ee145a14669aa1d0178c97a36d93300189bec1b8833870"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8192179_jpeg.rf.918c2ce04b43b995baa27a71108024c6.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8192179_jpeg.rf.918c2ce04b43b995baa27a71108024c6.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_band_worker",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/b3ce733215c3b887dba9.jpg",
+      "sha256": "b3ce733215c3b887dba93c1e12ab44c0d7da8b19197828045b76fd7ba86129ea"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-3822859_jpeg.rf.0f7ded86a1c8aa7a811e43e390fa9ff5.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-3822859_jpeg.rf.0f7ded86a1c8aa7a811e43e390fa9ff5.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_muffs_blue_workwear",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/7ca3a4a319f23ccaa050.jpg",
+      "sha256": "7ca3a4a319f23ccaa05081eca5bcb9dc65d52e2b980208f19fa1fed9bb447c19"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-4491858_jpeg.rf.e89792e1059d74b26bc6fbb0e9fcaba8.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-4491858_jpeg.rf.e89792e1059d74b26bc6fbb0e9fcaba8.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_band_worker",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/304a11751ec7e7402de3.jpg",
+      "sha256": "304a11751ec7e7402de3a5ca2c1f681e40223cc6c6459d0c0f31a0ba4e4ea67d"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-5974385_jpeg.rf.8bad53d1869ba7317a018bbf6b86499a.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-5974385_jpeg.rf.8bad53d1869ba7317a018bbf6b86499a.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_band_worker",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/55c19adab0527a3a54a4.jpg",
+      "sha256": "55c19adab0527a3a54a479ef487d3c6a2c357bdcb7621273fe8468a2646a0959"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-9242814_jpeg.rf.8a570f7084e2c441c4e0c9c0b3296667.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-9242814_jpeg.rf.8a570f7084e2c441c4e0c9c0b3296667.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_muffs_blue_workwear",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/d98784088f420df3e352.jpg",
+      "sha256": "d98784088f420df3e352857aded4358313a7b18c8fbe5ef29c6e357f93d61d9f"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-9242815_jpeg.rf.59532c308c517064293221361c4ec2fc.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-9242815_jpeg.rf.59532c308c517064293221361c4ec2fc.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_muffs_blue_workwear",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/5caaf53188389ffda1c5.jpg",
+      "sha256": "5caaf53188389ffda1c5593f163f1c700ae6d80d0a3c175ed4877bbe5978479a"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-9242257_jpeg.rf.db33e20a4f8f818cabe23245f98a6d0e.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-9242257_jpeg.rf.db33e20a4f8f818cabe23245f98a6d0e.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_muffs_blue_workwear",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/e9d72d83bd331a6eb858.jpg",
+      "sha256": "e9d72d83bd331a6eb8589d6e18564ba7dd0444ebe32cc1ea2281a235ad28cec4"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8192190_jpeg.rf.2d6f4aba4977e82e9b5f9bbce02fbc2c.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8192190_jpeg.rf.2d6f4aba4977e82e9b5f9bbce02fbc2c.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_band_worker",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/87df618f7a3fd7ddd1ef.jpg",
+      "sha256": "87df618f7a3fd7ddd1ef5aafa864200effbe34af1fcccdc832dcff1592a38e09"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8961032_jpeg.rf.20da05e244bcef20a70cca32d6d752fe.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8961032_jpeg.rf.20da05e244bcef20a70cca32d6d752fe.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_muffs_blue_workwear",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/89c9948d5bd977fb02f6.jpg",
+      "sha256": "89c9948d5bd977fb02f6ab6d2816c4f754978732ee2de3ca893ec8a718a5c118"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8961029_jpeg.rf.120399e2859b1f7d63b4de14afede016.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8961029_jpeg.rf.120399e2859b1f7d63b4de14afede016.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_muffs_blue_workwear",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/184c9b7dd781103e5980.jpg",
+      "sha256": "184c9b7dd781103e59801194dc4401e5170d63241986b3284008075fa6876a9e"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-9242807_jpeg.rf.78b00a92bb713396efd89274693bd34e.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-9242807_jpeg.rf.78b00a92bb713396efd89274693bd34e.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_muffs_blue_workwear",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/177f5e6da0f5b28af4fd.jpg",
+      "sha256": "177f5e6da0f5b28af4fd20593400a9d42d2401f8a6d4884dab1116e9375568e7"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-5974008_jpeg.rf.907f1f7c59e8569f6013e49b9023fb5b.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-5974008_jpeg.rf.907f1f7c59e8569f6013e49b9023fb5b.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_band_worker",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/12fd4488a895c276d6d2.jpg",
+      "sha256": "12fd4488a895c276d6d2f9193b301d7ebe241938aa94a33d3bb7de523076a828"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-6174450_jpeg.rf.d7dd1e269193b6aca1c4c41c7d2a7ffb.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-6174450_jpeg.rf.d7dd1e269193b6aca1c4c41c7d2a7ffb.txt",
+      "source": "sh17",
+      "group": "sh17:session:red_muffs_workshop",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/151b2924d560161670cb.jpg",
+      "sha256": "151b2924d560161670cbdb59355ee80765585e6af19e4c6e9b7d163a1cb835c2"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-5059647_jpeg.rf.ebe13ec22710d5f2f1a534c509d10ccc.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-5059647_jpeg.rf.ebe13ec22710d5f2f1a534c509d10ccc.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-5059647",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/1fd6804d47481390dc75.jpg",
+      "sha256": "1fd6804d47481390dc7511fe337df6adefb492f5d439c3d30b06d05973479f21"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8960993_jpeg.rf.22abef8f00f78edcfe920cc7fafc4e55.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8960993_jpeg.rf.22abef8f00f78edcfe920cc7fafc4e55.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_muffs_blue_workwear",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/4053f2bc80ac8a2983a6.jpg",
+      "sha256": "4053f2bc80ac8a2983a679d8f4e9ab259c72ca9ab1afe57faafac503c8fa51bc"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-9242818_jpeg.rf.b2869e6b5f252b31117b5fa9e905615f.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-9242818_jpeg.rf.b2869e6b5f252b31117b5fa9e905615f.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_muffs_blue_workwear",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/7f4c5e9109b8c1955fe7.jpg",
+      "sha256": "7f4c5e9109b8c1955fe7e7dae40c0de9816fdf7b3dbf91fe3cb5a14e06421aaf"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-14189337_jpeg.rf.678c0e1f675decea6934deb4adcff9c0.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-14189337_jpeg.rf.678c0e1f675decea6934deb4adcff9c0.txt",
+      "source": "sh17",
+      "group": "sh17:session:red_muffs_workshop",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/0f6a4a75bb601af2300e.jpg",
+      "sha256": "0f6a4a75bb601af2300e6757fbe2ec6da678458d04aa9490a68b642512e6155f"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-11930042_jpeg.rf.78169676e8de89a2be4babdab5f3f989.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-11930042_jpeg.rf.78169676e8de89a2be4babdab5f3f989.txt",
+      "source": "sh17",
+      "group": "sh17:session:red_muffs_workshop",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/519e6f944e29b14eee36.jpg",
+      "sha256": "519e6f944e29b14eee36371686076f55306cb3ae1849a967ee0107aac31d8489"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-6790035_jpeg.rf.50a568dd223af594d491ddcbd152bd57.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-6790035_jpeg.rf.50a568dd223af594d491ddcbd152bd57.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_band_worker",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/383f133a076c7aa02d56.jpg",
+      "sha256": "383f133a076c7aa02d56c2d020bbec9858c7136495ebfa7ac7551a9347188160"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-3913030_jpeg.rf.522e8fe7d2e904ee44abf341ab41be29.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-3913030_jpeg.rf.522e8fe7d2e904ee44abf341ab41be29.txt",
+      "source": "sh17",
+      "group": "sh17:session:red_muffs_workshop",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/2f7672d673c4ab9a62d7.jpg",
+      "sha256": "2f7672d673c4ab9a62d7a9d9da5c81c53bdd0e3557888618d2e90a2ca9e7801b"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-15016528_jpeg.rf.a27acd2c6542cab74af0fc6a0097abea.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-15016528_jpeg.rf.a27acd2c6542cab74af0fc6a0097abea.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_muffs_blue_workwear",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/1ca9fa85b9f1863e21cf.jpg",
+      "sha256": "1ca9fa85b9f1863e21cf5e82028b47ff49a54dc30c7bf84cec9765f52b9ccffa"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-5974012_jpeg.rf.64c8d96d27d0b4b3db37304e25a62bdd.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-5974012_jpeg.rf.64c8d96d27d0b4b3db37304e25a62bdd.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_band_worker",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/e0631af66cf6af51dc2d.jpg",
+      "sha256": "e0631af66cf6af51dc2deac3e915cb6734981415a188838eea4ab98769512007"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-14252235_png.rf.062eec0b6dd1f55a72e59f3135eaef09.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-14252235_png.rf.062eec0b6dd1f55a72e59f3135eaef09.txt",
+      "source": "sh17",
+      "group": "sh17:session:red_muffs_workshop",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/576ed2ce0f8ecb5dc9ed.jpg",
+      "sha256": "576ed2ce0f8ecb5dc9ed737a0e7b9d0857321257c0033b044981d703854d5938"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-5710790_jpeg.rf.9356d90ea2778d1c2e1e53e44c4e46b5.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-5710790_jpeg.rf.9356d90ea2778d1c2e1e53e44c4e46b5.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_muffs_blue_workwear",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/1e99210b5f960e2387f1.jpg",
+      "sha256": "1e99210b5f960e2387f1283e5540bae4d9056a63a81446331da073a67f8aba2b"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-1659747_jpeg.rf.61b8b7d2c322c954a456ae38b5349dd1.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-1659747_jpeg.rf.61b8b7d2c322c954a456ae38b5349dd1.txt",
+      "source": "sh17",
+      "group": "sh17:session:striped_work_gloves",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/c91d0989761f5e424466.jpg",
+      "sha256": "c91d0989761f5e424466f13b3175186d379e7a448abfbfd671e311a8973f7f34"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8411429_jpeg.rf.4365587fe6b22f3adf5752e0d326496e.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8411429_jpeg.rf.4365587fe6b22f3adf5752e0d326496e.txt",
+      "source": "sh17",
+      "group": "sh17:session:striped_work_gloves",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/5d8c4ead2f385c874711.jpg",
+      "sha256": "5d8c4ead2f385c8747112c7172e4aac611f3649d4ee751dacc274015fb3cf5e4"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8961701_jpeg.rf.89beb7b3d1dcb355b57b41d1880b49ca.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8961701_jpeg.rf.89beb7b3d1dcb355b57b41d1880b49ca.txt",
+      "source": "sh17",
+      "group": "sh17:session:striped_work_gloves",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/a3396d1e0b41aee09c25.jpg",
+      "sha256": "a3396d1e0b41aee09c25c942b98b48724ee62139ccd2f760c689ea0ebf816ac6"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-9875420_jpeg.rf.e961901a95c32574816219e75013e6fa.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-9875420_jpeg.rf.e961901a95c32574816219e75013e6fa.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-9875420",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/75be662437499b0cfe0a.jpg",
+      "sha256": "75be662437499b0cfe0add9515dc3d0d94bd3ec67fa171ce070cb7ae27cbc2fb"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-10202856_jpeg.rf.7b7aefde33d7abde8a94ddbf95c3543b.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-10202856_jpeg.rf.7b7aefde33d7abde8a94ddbf95c3543b.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-10202856",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/71f5538ed13e264953aa.jpg",
+      "sha256": "71f5538ed13e264953aaa7dd42bc22552064c7635ee1ebb378fb5fef6ae4b36c"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8853538_jpeg.rf.d89363cf61849e65d7d28f6095285d36.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8853538_jpeg.rf.d89363cf61849e65d7d28f6095285d36.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-8853538",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/218e3db47b7c24f40bc5.jpg",
+      "sha256": "218e3db47b7c24f40bc53afab57e18cb50d788206ab536961688300222bf71a5"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-4254169_jpeg.rf.6ce5d9ee7303ab6e2468f61053eb68fd.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-4254169_jpeg.rf.6ce5d9ee7303ab6e2468f61053eb68fd.txt",
+      "source": "sh17",
+      "group": "sh17:session:orange_work_gloves",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/f66bcf7bb287bca805de.jpg",
+      "sha256": "f66bcf7bb287bca805de29b8a28cbf33e6fea6b18c9749732bb0e696b0103075"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-4254165_jpeg.rf.b3e397df5631812ed982f040cdc577ef.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-4254165_jpeg.rf.b3e397df5631812ed982f040cdc577ef.txt",
+      "source": "sh17",
+      "group": "sh17:session:orange_work_gloves",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/f79546f906ca7ee675bd.jpg",
+      "sha256": "f79546f906ca7ee675bdbf0242e37c7429433de84c2bf0f85ce5c1cb50c0b4aa"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-4254161_jpeg.rf.92e8e1800ad58eb0442460e49591be5f.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-4254161_jpeg.rf.92e8e1800ad58eb0442460e49591be5f.txt",
+      "source": "sh17",
+      "group": "sh17:session:orange_work_gloves",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/08a219936c1c128eb59e.jpg",
+      "sha256": "08a219936c1c128eb59e8720c1ec6c52f952252e723a43c21ec8bf44aecee1bd"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-6720542_jpeg.rf.2c4627c94ef35a360b042e71b3e7faef.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-6720542_jpeg.rf.2c4627c94ef35a360b042e71b3e7faef.txt",
+      "source": "sh17",
+      "group": "sh17:session:orange_work_gloves",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/cc12c3e876951d7f697d.jpg",
+      "sha256": "cc12c3e876951d7f697d4384cdcaa57d6b8a3b26290480baccdf0b3dcd139a31"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-6720544_jpeg.rf.ac0c1f9c0f07b6f72af4f5e04cfa4676.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-6720544_jpeg.rf.ac0c1f9c0f07b6f72af4f5e04cfa4676.txt",
+      "source": "sh17",
+      "group": "sh17:session:orange_work_gloves",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/4fe039c7157b20661c36.jpg",
+      "sha256": "4fe039c7157b20661c363bc5db1ada7717a6604a8ef300d427b7f336438dd989"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-5619459_jpeg.rf.0849dd0a743086fbfae2c1c951f2283b.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-5619459_jpeg.rf.0849dd0a743086fbfae2c1c951f2283b.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-5619459",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/33c14cb41ab43901da72.jpg",
+      "sha256": "33c14cb41ab43901da72ff653dee72999cb785964e3f1f0a40f03ad8be39957b"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8832033_jpeg.rf.b204221c66dfb9e8bd5b1d704166a95c.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8832033_jpeg.rf.b204221c66dfb9e8bd5b1d704166a95c.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-8832033",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/7367a30477c9c943d08e.jpg",
+      "sha256": "7367a30477c9c943d08e2a65a54d57e6686db69bdaa6366eef26ad70f8abff3c"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-7023922_jpeg.rf.5567111d3e7abf1c0c7dbf5287572ffd.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-7023922_jpeg.rf.5567111d3e7abf1c0c7dbf5287572ffd.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-7023922",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/c1e9a05108f9184f4639.jpg",
+      "sha256": "c1e9a05108f9184f4639e3cd55de499661ab2d96dc52791d40f4341302bd09a0"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8832032_jpeg.rf.c7b3c14cffb79609a723dc9429d2247a.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8832032_jpeg.rf.c7b3c14cffb79609a723dc9429d2247a.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-8832032",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/fec65b0dd497a2236051.jpg",
+      "sha256": "fec65b0dd497a22360517de71a61566925305d44e0272a16909346c3e563a04f"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-18111488_jpeg.rf.9bfc2f38a44786435f99ed7a9c2e2d9d.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-18111488_jpeg.rf.9bfc2f38a44786435f99ed7a9c2e2d9d.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-18111488",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/76da96bd0efcf40c19fa.jpg",
+      "sha256": "76da96bd0efcf40c19faa6c67e1d57100095dc6f51022c07f5cc1cf1689fe0d0"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8961521_jpeg.rf.4e2a7dee63599e4d4f6916bdba9dbf9e.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8961521_jpeg.rf.4e2a7dee63599e4d4f6916bdba9dbf9e.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-8961521",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/f66dc537007ff95b554b.jpg",
+      "sha256": "f66dc537007ff95b554b1d4988749a612cdda97526ba420a62f03a1ab67502d2"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8821006_jpeg.rf.1db535d1b6a46211044ecf1427756158.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8821006_jpeg.rf.1db535d1b6a46211044ecf1427756158.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-8821006",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/a8862bcfe5ca4a621dfc.jpg",
+      "sha256": "a8862bcfe5ca4a621dfcf516d37b5e18b18e192d15122f6bd28a4b30484a4f36"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8820186_jpeg.rf.4959ce4a1a9bd8e4ae81db0b240ba51d.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8820186_jpeg.rf.4959ce4a1a9bd8e4ae81db0b240ba51d.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-8820186",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/804b8cc75699757737ec.jpg",
+      "sha256": "804b8cc75699757737ec54f12720b85c6b8b841f2b57904236ead06ea386fa56"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8820185_jpeg.rf.8639f401ca435dc4f099802cdbfd881e.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8820185_jpeg.rf.8639f401ca435dc4f099802cdbfd881e.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-8820185",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/90ddd4c97bb9ce274376.jpg",
+      "sha256": "90ddd4c97bb9ce27437668796c7c3b60feb6c8f6729592142754c6b7c25f0622"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8489859_jpeg.rf.4511f127f6d7b07b1f17fe9c363decf9.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8489859_jpeg.rf.4511f127f6d7b07b1f17fe9c363decf9.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-8489859",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/fe7e9bf160a2f029255f.jpg",
+      "sha256": "fe7e9bf160a2f029255f87343fceba546a7d1a3d375f491be910ffc5f6152f8d"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-5845969_jpeg.rf.65b39fa50ca0d76e6af5b58978e625e8.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-5845969_jpeg.rf.65b39fa50ca0d76e6af5b58978e625e8.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-5845969",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/bca437ad991233580338.jpg",
+      "sha256": "bca437ad991233580338521aee0fff194b205ba1f0452c8e032b03fb9b040db0"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-9162007_jpeg.rf.6426f8f9cdf6c5ce1c8843cae5969792.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-9162007_jpeg.rf.6426f8f9cdf6c5ce1c8843cae5969792.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-9162007",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/d4e22ede95b44b8eba0c.jpg",
+      "sha256": "d4e22ede95b44b8eba0c07c13403ce95ca1e52a33ae15f1f3b04d66a0ca3b15a"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-4492083_jpeg.rf.cf54a978206fdb051e6bd11a4ed52d8a.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-4492083_jpeg.rf.cf54a978206fdb051e6bd11a4ed52d8a.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-4492083",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/9c8c56392964f2d4fb9e.jpg",
+      "sha256": "9c8c56392964f2d4fb9ea9ab1bd7602a35e64a2b67d51c7b92708d6c7bea8626"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8820172_jpeg.rf.254edc14dade8c005cbd5e8c371d5d88.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8820172_jpeg.rf.254edc14dade8c005cbd5e8c371d5d88.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-8820172",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/1255f5c6e6f08397072a.jpg",
+      "sha256": "1255f5c6e6f08397072af5b3ba85eddbb312fc8dc141b6b188d0ee5d1496110b"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-4981772_jpeg.rf.3633e599d8b4f57a226ca0e163a07e7b.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-4981772_jpeg.rf.3633e599d8b4f57a226ca0e163a07e7b.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-4981772",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/a9b317ec722e91b5649c.jpg",
+      "sha256": "a9b317ec722e91b5649c467d7e42426a9210abbf2b74119e9b029514629f67a8"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8961109_jpeg.rf.c9c9494dea3f338f3610944ef7e156a8.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8961109_jpeg.rf.c9c9494dea3f338f3610944ef7e156a8.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-8961109",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/354d3ce8cfa1f65b1491.jpg",
+      "sha256": "354d3ce8cfa1f65b14914bfee70ca5cbe8c3ee0da7323b60334301c17e578abf"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8961525_jpeg.rf.bc25fc457d1f157fe64d8ae75bc80604.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8961525_jpeg.rf.bc25fc457d1f157fe64d8ae75bc80604.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-8961525",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/410746946cdce756235d.jpg",
+      "sha256": "410746946cdce756235daaf6ac14c9835679b5203b9000f1cfad1acc755a6297"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8961395_jpeg.rf.f4c1a20784c12ad16b008d66532b9e74.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8961395_jpeg.rf.f4c1a20784c12ad16b008d66532b9e74.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-8961395",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/fe7a1d4756dc0f5fe74c.jpg",
+      "sha256": "fe7a1d4756dc0f5fe74c900cad720c3f9729de936cdbdc0a83ae29a470be4376"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-5726812_jpeg.rf.bc957ac22d5015ceebb03b8570234d0c.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-5726812_jpeg.rf.bc957ac22d5015ceebb03b8570234d0c.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-5726812",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/fa0d9080e421282667ee.jpg",
+      "sha256": "fa0d9080e421282667eed9ec2a23f9891c2ab5bcb34bda17fc1950e7327bf4a3"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-4981783_jpeg.rf.e27d35741743f98ad1c80a44a0a0d34d.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-4981783_jpeg.rf.e27d35741743f98ad1c80a44a0a0d34d.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_lab_goggles",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/63d5e76e8b63cee8bcca.jpg",
+      "sha256": "63d5e76e8b63cee8bccaab9065e516b85a2fc7f8038053ff28b7ce59f7f0cbb9"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-209271_jpeg.rf.7aed29c74446a3b97c98dae7cd8697d3.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-209271_jpeg.rf.7aed29c74446a3b97c98dae7cd8697d3.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_lab_goggles",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/4309283db6b2a9ac414b.jpg",
+      "sha256": "4309283db6b2a9ac414b592e351e20ca1d7c8889b6843cab096863f7ab43577b"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-5726705_jpeg.rf.5cf2604d090e943f8c75dd23e851e051.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-5726705_jpeg.rf.5cf2604d090e943f8c75dd23e851e051.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_lab_goggles",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/980c46f026666688b30e.jpg",
+      "sha256": "980c46f026666688b30ecd6b4f616bcdc0e551dde8667f3a69ab8139d49ab9b7"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-5726694_jpeg.rf.60f57fbc1e371e36a588e4a8b842707d.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-5726694_jpeg.rf.60f57fbc1e371e36a588e4a8b842707d.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_lab_goggles",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/d59bd16a09eb6cccbbbd.jpg",
+      "sha256": "d59bd16a09eb6cccbbbdafd69344cf39b11dabe2ab7a26655af5cae47521d9e5"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-9242813_jpeg.rf.11d10be859b266cea8c0ff25ae9b47ea.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-9242813_jpeg.rf.11d10be859b266cea8c0ff25ae9b47ea.txt",
+      "source": "sh17",
+      "group": "sh17:session:engineering_lab_clear_eyewear",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/a3de5a71e354f535f79b.jpg",
+      "sha256": "a3de5a71e354f535f79b2a623371d857616bb46b1f4e5aa20cb558e11947b3d1"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8961397_jpeg.rf.0e79f9cb1eafc16c175511a8e80effd6.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8961397_jpeg.rf.0e79f9cb1eafc16c175511a8e80effd6.txt",
+      "source": "sh17",
+      "group": "sh17:session:hardhat_eye_protection",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/b71a63738742bc64fd9f.jpg",
+      "sha256": "b71a63738742bc64fd9f1bb29399d2f93242c485ba21eb9cfeb1c76feacb42c0"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-9242210_jpeg.rf.33b0d643794cfa77156deead8918549e.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-9242210_jpeg.rf.33b0d643794cfa77156deead8918549e.txt",
+      "source": "sh17",
+      "group": "sh17:session:engineering_lab_clear_eyewear",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/7e08e4c79e83b7f52d36.jpg",
+      "sha256": "7e08e4c79e83b7f52d363f6ad00629532a608a338f2445943491a2c29c0a0c97"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-6790043_jpeg.rf.33b2d5fd2cd428d972a0a3a22ba41c5b.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-6790043_jpeg.rf.33b2d5fd2cd428d972a0a3a22ba41c5b.txt",
+      "source": "sh17",
+      "group": "sh17:session:woodshop_bench_hearing_and_eye",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/331284a70468a7d12b98.jpg",
+      "sha256": "331284a70468a7d12b98da7bfb4f063acb96a5d480b165194372bd994274e4aa"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-9241768_jpeg.rf.88a9e43594d9403fb49c68510681fc38.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-9241768_jpeg.rf.88a9e43594d9403fb49c68510681fc38.txt",
+      "source": "sh17",
+      "group": "sh17:session:engineering_lab_clear_eyewear",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/cb3c1c7f64ae17b5398b.jpg",
+      "sha256": "cb3c1c7f64ae17b5398b8b4b11ab8170980225adbcfadeeb887e7e0d0f4f3220"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8985600_jpeg.rf.a5097a5aeaba8205d798d0cacfed6a31.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8985600_jpeg.rf.a5097a5aeaba8205d798d0cacfed6a31.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-8985600",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/1995d141985f93eed3e4.jpg",
+      "sha256": "1995d141985f93eed3e468a423daea6b4804c265439c05893a486c28a403270b"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8961700_jpeg.rf.4408769611dbe3b9ae81d8f0bd43b3e8.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8961700_jpeg.rf.4408769611dbe3b9ae81d8f0bd43b3e8.txt",
+      "source": "sh17",
+      "group": "sh17:session:hardhat_eye_protection",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/2f750602c8f26b0fff27.jpg",
+      "sha256": "2f750602c8f26b0fff27a5ea1e55f91a1be6e4d77bf4a1bca926af87f8d5884f"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8961400_jpeg.rf.dabed5e04521716ef37c75ee77a33cc5.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8961400_jpeg.rf.dabed5e04521716ef37c75ee77a33cc5.txt",
+      "source": "sh17",
+      "group": "sh17:session:hardhat_eye_protection",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/9a5634541d2f354c98b4.jpg",
+      "sha256": "9a5634541d2f354c98b4d164084464121802f22ce49573d714be2f8fa3d9f8a6"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-5974055_jpeg.rf.e33dbe4f7f001a0bc487b4f88c558b2f.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-5974055_jpeg.rf.e33dbe4f7f001a0bc487b4f88c558b2f.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_band_worker",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/583c0b158c2da3cb766c.jpg",
+      "sha256": "583c0b158c2da3cb766c16c733e2f036c871d04a74b7b69763be66d428c720f1"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-5234524_jpeg.rf.44e15605de959fdeda4d74a894b81d19.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-5234524_jpeg.rf.44e15605de959fdeda4d74a894b81d19.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-5234524",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/b2474ef4c44f9b9f6727.jpg",
+      "sha256": "b2474ef4c44f9b9f67276dfdd3a851a4b97ab593da9de2657b76348593e1f725"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-9242856_jpeg.rf.0bb0df5c82453aed413a0792ade0dfab.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-9242856_jpeg.rf.0bb0df5c82453aed413a0792ade0dfab.txt",
+      "source": "sh17",
+      "group": "sh17:session:engineering_lab_clear_eyewear",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/5c4c7c3f12b565b1b87b.jpg",
+      "sha256": "5c4c7c3f12b565b1b87bc1048fdd9c62c62e8f147e8289abef71d5eb6ab7e808"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-9242839_jpeg.rf.5bb3586756b1f7558717302005c1a370.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-9242839_jpeg.rf.5bb3586756b1f7558717302005c1a370.txt",
+      "source": "sh17",
+      "group": "sh17:session:engineering_lab_clear_eyewear",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/c8daadd0d13cd7038a4c.jpg",
+      "sha256": "c8daadd0d13cd7038a4c7d7973001e08f69b3628187cde2119c9b780c48a012f"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-6790032_jpeg.rf.a1ac8ea950f64f466901699889c34f32.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-6790032_jpeg.rf.a1ac8ea950f64f466901699889c34f32.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-6790032",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/ee8dec035bc25a52964d.jpg",
+      "sha256": "ee8dec035bc25a52964d07660764d4eb6ddd2149ab3f3a87215156714c311cc5"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-9242204_jpeg.rf.0d91095de519623e4ba86d1600598965.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-9242204_jpeg.rf.0d91095de519623e4ba86d1600598965.txt",
+      "source": "sh17",
+      "group": "sh17:session:engineering_lab_clear_eyewear",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/1b5e300d46e57817fe0e.jpg",
+      "sha256": "1b5e300d46e57817fe0e63eeac43ebabfbfaa7f8326b6da42d25c0372b4db332"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8447849_jpeg.rf.97523c8e86799a07b8cccc76a714128f.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8447849_jpeg.rf.97523c8e86799a07b8cccc76a714128f.txt",
+      "source": "sh17",
+      "group": "sh17:session:woodshop_bench_hearing_and_eye",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/48f7fc66103330e58e3c.jpg",
+      "sha256": "48f7fc66103330e58e3cdc202b1767fb5068a72cdf2c3863fb2364d6e65f8a6b"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-209230_jpeg.rf.af73c588b8c3aac3290a55a1e860bb42.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-209230_jpeg.rf.af73c588b8c3aac3290a55a1e860bb42.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-209230",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/5abe3f03034775f5f243.jpg",
+      "sha256": "5abe3f03034775f5f243fd24e5feeb031cded2a11c2789c8287c03488b2c0cfc"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-5974017_jpeg.rf.e67899d07882b1e765303e32bcb3a6b4.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-5974017_jpeg.rf.e67899d07882b1e765303e32bcb3a6b4.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_band_worker",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/8e42ac7e389e45c6a0e8.jpg",
+      "sha256": "8e42ac7e389e45c6a0e826b9864c8944c1ca6fcbc593a741be0dbdbc8dc11411"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-9241727_jpeg.rf.e4a5b3f3b7a684d2fa6b5523c35c6039.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-9241727_jpeg.rf.e4a5b3f3b7a684d2fa6b5523c35c6039.txt",
+      "source": "sh17",
+      "group": "sh17:session:engineering_lab_clear_eyewear",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/29826dda09b1cef34aa6.jpg",
+      "sha256": "29826dda09b1cef34aa692693a759d2b0a491432d445085cc57849fa29689991"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-5974331_jpeg.rf.ff6fb0bab47d963cf0f9f1efd382015d.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-5974331_jpeg.rf.ff6fb0bab47d963cf0f9f1efd382015d.txt",
+      "source": "sh17",
+      "group": "sh17:session:yellow_band_worker",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/b4af739f33f5564b6bc5.jpg",
+      "sha256": "b4af739f33f5564b6bc5497a0dd440b8cb2a84919ceb3b273221d7ef83a9b855"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-3680959_jpeg.rf.c8d4ad5be203f5c1b111ae33c6cf13ed.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-3680959_jpeg.rf.c8d4ad5be203f5c1b111ae33c6cf13ed.txt",
+      "source": "sh17",
+      "group": "sh17:session:hardhat_eye_protection",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/97c2d0c71a26045cd79c.jpg",
+      "sha256": "97c2d0c71a26045cd79c09ff1d2725dae46c95a72af758f59227d38b8c718e04"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-5726697_jpeg.rf.02238b50766e697d1b3aa0526a21f08f.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-5726697_jpeg.rf.02238b50766e697d1b3aa0526a21f08f.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-5726697",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/ff782403ded499fadcc1.jpg",
+      "sha256": "ff782403ded499fadcc1ea342f6298217eee849eb062b3e6e4984f01c2b9be14"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-9242821_jpeg.rf.93b3c4f25205d2d94953d094a84066f6.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-9242821_jpeg.rf.93b3c4f25205d2d94953d094a84066f6.txt",
+      "source": "sh17",
+      "group": "sh17:session:engineering_lab_clear_eyewear",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/21767757e0419ac3bc57.jpg",
+      "sha256": "21767757e0419ac3bc5760e2aa921857f757f5feeb15d9bfd13962c6ea48f280"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-9241726_jpeg.rf.27415290408c41977c954e6381a41e16.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-9241726_jpeg.rf.27415290408c41977c954e6381a41e16.txt",
+      "source": "sh17",
+      "group": "sh17:session:engineering_lab_clear_eyewear",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/47eef90397b9db0fb696.jpg",
+      "sha256": "47eef90397b9db0fb6963e9d0d4aca162a78c4e0b34f2100ee9a7edd65a23892"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8411433_jpeg.rf.327e51dd4910282813a7ff434cce17cd.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8411433_jpeg.rf.327e51dd4910282813a7ff434cce17cd.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-8411433",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/ba4872e969701384bc80.jpg",
+      "sha256": "ba4872e969701384bc8019148871408065fd7e5cca721f8a2b40c95389ce15bb"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-12759924_jpeg.rf.cdac72b950fdb087ddccdcdd5dd655bf.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-12759924_jpeg.rf.cdac72b950fdb087ddccdcdd5dd655bf.txt",
+      "source": "sh17",
+      "group": "sh17:session:hardhat_eye_protection",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/0185c0bfc0d90a718b49.jpg",
+      "sha256": "0185c0bfc0d90a718b49ac774c0fd1926cb884ba4872a1150cdea0896300cecc"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-9242214_jpeg.rf.c121f935c6cc7156e85c7125726a611c.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-9242214_jpeg.rf.c121f935c6cc7156e85c7125726a611c.txt",
+      "source": "sh17",
+      "group": "sh17:session:engineering_lab_clear_eyewear",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/35d051ea333fd05aedbf.jpg",
+      "sha256": "35d051ea333fd05aedbff6e8e10c26bf0d37f021cec8ad54910ef40e4e1f9f72"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8961337_jpeg.rf.1ba0ca4dbb82152a728a8afef90fbd3a.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8961337_jpeg.rf.1ba0ca4dbb82152a728a8afef90fbd3a.txt",
+      "source": "sh17",
+      "group": "sh17:session:hardhat_eye_protection",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/e0b0f96664a0cac09c6b.jpg",
+      "sha256": "e0b0f96664a0cac09c6b45f8846467deb921df8784f2b9a3727bad266b930042"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-5953758_jpeg.rf.a59cdce1fe4fb910709aa1fe93df6c41.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-5953758_jpeg.rf.a59cdce1fe4fb910709aa1fe93df6c41.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-5953758",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/9938658af496e6e9e121.jpg",
+      "sha256": "9938658af496e6e9e12116307de28150dde759b439830d2c22af5262b0febe1a"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-3688262_jpeg.rf.d813df103644b4cbb0a87b8a3c51ff0d.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-3688262_jpeg.rf.d813df103644b4cbb0a87b8a3c51ff0d.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-3688262",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/22cfc9cb3f2b26e02423.jpg",
+      "sha256": "22cfc9cb3f2b26e024234bc1bc24e6b9d5a8f2847d3b73d5cdc575d109cd71f0"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8961401_jpeg.rf.0ed71e2a0d51881a62b9fcf351004233.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8961401_jpeg.rf.0ed71e2a0d51881a62b9fcf351004233.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-8961401",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/4b99adfe513096f1c5ba.jpg",
+      "sha256": "4b99adfe513096f1c5baa9bd559ec7790c1632fba96c43cdd3b0fc6857cf2305"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8657078_jpeg.rf.7a68a0b75d65cb144d473d129cfb0d01.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8657078_jpeg.rf.7a68a0b75d65cb144d473d129cfb0d01.txt",
+      "source": "sh17",
+      "group": "sh17:pexels-photo-8657078",
+      "split": "val",
+      "reviewed": "yes",
+      "output": "images/val/3f9d3e4a247e80e7b230.jpg",
+      "sha256": "3f9d3e4a247e80e7b2307096c6bcd5598f777c8989dd53fce6391a72863a57ea"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8820177_jpeg.rf.26e54bbf409faf92bdeac8bb2308922a.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8820177_jpeg.rf.26e54bbf409faf92bdeac8bb2308922a.txt",
+      "source": "sh17",
+      "group": "sh17:session:forest_woodwork",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/718436db2bebc7bed89b.jpg",
+      "sha256": "718436db2bebc7bed89b575e0ed8e4660a0177ad4432ee85ade9809e78aceaaa"
+    },
+    {
+      "image": "dataset/raw/curated/sh17/images/pexels-photo-8821013_jpeg.rf.2687f3fcc4c7230e2e5f760ca1e64e50.jpg",
+      "label": "dataset/raw/curated/sh17/labels/pexels-photo-8821013_jpeg.rf.2687f3fcc4c7230e2e5f760ca1e64e50.txt",
+      "source": "sh17",
+      "group": "sh17:session:forest_woodwork",
+      "split": "test",
+      "reviewed": "yes",
+      "output": "images/test/4a2bc1a3ee04203b20a8.jpg",
+      "sha256": "4a2bc1a3ee04203b20a884ad9d23928fc31434a052e6a4dd8d68ab3ec23df469"
+    },
+    {
+      "image": "dataset/raw/local_reference/images/traffic_cone_1.jpg",
+      "label": "dataset/raw/local_reference/labels/traffic_cone_1.txt",
+      "source": "local",
+      "group": "local:purchased_reference_session01",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/3884032c822a510b3923.jpg",
+      "sha256": "3884032c822a510b39230145849471957ee42b7b0668a25ef639f82821cf2da8"
+    },
+    {
+      "image": "dataset/raw/local_reference/images/fire_extinguisher_1.jpg",
+      "label": "dataset/raw/local_reference/labels/fire_extinguisher_1.txt",
+      "source": "local",
+      "group": "local:purchased_reference_session01",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/7e10ea4e021f2d418057.jpg",
+      "sha256": "7e10ea4e021f2d418057c6a8676f5c41c28678e440c6cbeb1e69079b747e18f9"
+    },
+    {
+      "image": "dataset/raw/local_reference/images/fire_extinguisher_2.jpg",
+      "label": "dataset/raw/local_reference/labels/fire_extinguisher_2.txt",
+      "source": "local",
+      "group": "local:purchased_reference_session01",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/a623c270c22fd8da1aac.jpg",
+      "sha256": "a623c270c22fd8da1aac42445fd822c0c81853a3de8ad921894cd43bf2f109b7"
+    },
+    {
+      "image": "dataset/raw/local_reference/images/safety_helmet_1.jpg",
+      "label": "dataset/raw/local_reference/labels/safety_helmet_1.txt",
+      "source": "local",
+      "group": "local:purchased_reference_session01",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/02f5c84192e8fcf058ab.jpg",
+      "sha256": "02f5c84192e8fcf058abc3eeb5cafd0a8c9ad6620e782b62cda34598385bf9eb"
+    },
+    {
+      "image": "dataset/raw/local_reference/images/safety_vest_1.jpg",
+      "label": "dataset/raw/local_reference/labels/safety_vest_1.txt",
+      "source": "local",
+      "group": "local:purchased_reference_session01",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/b3d04b54776281a25d33.jpg",
+      "sha256": "b3d04b54776281a25d3324ef4185852452b4a3dada099f056af152cfcad96f86"
+    },
+    {
+      "image": "dataset/raw/local_reference/images/safety_gloves_1.jpg",
+      "label": "dataset/raw/local_reference/labels/safety_gloves_1.txt",
+      "source": "local",
+      "group": "local:purchased_reference_session01",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/b4138ecd05d0ad6dfe87.jpg",
+      "sha256": "b4138ecd05d0ad6dfe870475cc8a25a7b537df5125b3ef9245c4c59a16ec32a5"
+    },
+    {
+      "image": "dataset/raw/local_reference/images/earmuffs_1.jpg",
+      "label": "dataset/raw/local_reference/labels/earmuffs_1.txt",
+      "source": "local",
+      "group": "local:purchased_reference_session01",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/a39b2d6637d0dc49bb71.jpg",
+      "sha256": "a39b2d6637d0dc49bb710459bd67da47c3026ab54a9e8e71044ca2bcc5875eb8"
+    },
+    {
+      "image": "dataset/raw/local_reference/images/safety_goggles_1.jpg",
+      "label": "dataset/raw/local_reference/labels/safety_goggles_1.txt",
+      "source": "local",
+      "group": "local:purchased_reference_session01",
+      "split": "train",
+      "reviewed": "yes",
+      "output": "images/train/ec480b83db9270b89a15.jpg",
+      "sha256": "ec480b83db9270b89a15e1e3143c8db65b5df8f024815099238647da299e4c26"
+    }
+  ]
+}

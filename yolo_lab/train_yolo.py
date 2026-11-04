@@ -1,74 +1,54 @@
-"""Train a standalone YOLO object detector from a LABELED dataset.
-Requires dataset/images/{train,val}, dataset/labels/{train,val}, dataset/data.yaml.
-Usage: python train_yolo.py --epochs 50 --name hazard_v1
-"""
+"""Windows CUDA에서만 커스텀 7종 YOLOv8n을 학습합니다."""
 import argparse
+import json
 import shutil
+from datetime import datetime
 from pathlib import Path
-
-import yaml
-from ultralytics import YOLO
-
-ROOT = Path(__file__).resolve().parent
+from lab_utils import ROOT, load_model
+from prepare_dataset import check_dataset
 
 
 def main():
-    p = argparse.ArgumentParser()
-    p.add_argument("--data", default="dataset/data.yaml", help="YAML path relative to yolo_lab/")
-    p.add_argument("--model", default="yolov8n.pt", help="Pretrained weights, filename/path")
-    p.add_argument("--name", default="hazard_v1")
-    p.add_argument("--epochs", type=int, default=50)
-    p.add_argument("--batch", type=int, default=8)
-    p.add_argument("--imgsz", type=int, default=640)
-    p.add_argument("--device", default=None, help="cpu or 0 for NVIDIA GPU (omit for auto)")
-    args = p.parse_args()
-
-    data_path = Path(args.data)
-    if not data_path.is_absolute():
-        data_path = ROOT / data_path
-    if not data_path.is_file():
-        p.error(f"Missing data.yaml: {data_path}")
-    cfg = yaml.safe_load(data_path.read_text(encoding="utf-8"))
-    root_dataset = Path(cfg.get("path", data_path.parent))
-    if not root_dataset.is_absolute():
-        root_dataset = (data_path.parent / root_dataset).resolve()
-    for part in ("train", "val"):
-        rel = cfg.get(part)
-        if not rel or not (root_dataset / rel).exists():
-            p.error(f"Missing dataset {part} directory: {root_dataset / str(rel)}")
-    if not cfg.get("names"):
-        p.error("data.yaml must include class names")
-    for part in ("train", "val"):
-        paths = list((root_dataset / cfg[part]).rglob("*.jpg")) + list((root_dataset / cfg[part]).rglob("*.png")) + list((root_dataset / cfg[part]).rglob("*.jpeg"))
-        if not paths:
-            p.error(f"No labeled images in {part}: {root_dataset / cfg[part]}")
-    cfg["path"] = str(root_dataset)
-    runtime_yaml = ROOT / "results" / "data_runtime.yaml"
-    runtime_yaml.parent.mkdir(parents=True, exist_ok=True)
-    runtime_yaml.write_text(yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False), encoding="utf-8")
-
-    weights = Path(args.model)
-    if not weights.is_absolute() and (ROOT / weights).exists():
-        weights = ROOT / weights
-    output = ROOT / "models" / f"{args.name}.pt"
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--epochs", type=int, default=50)
+    parser.add_argument("--batch", type=int, default=8)
+    parser.add_argument("--device", default="0", help="NVIDIA CUDA 장치 번호")
+    args = parser.parse_args()
+    if args.epochs < 1 or args.batch < 1:
+        parser.error("epochs와 batch는 양수여야 합니다.")
+    try:
+        check_dataset(ROOT / "dataset/safety7")
+    except (ValueError, OSError) as exc:
+        parser.exit(1, f"학습 중지: {exc}\n")
+    output = ROOT / "models/safety7.pt"
     if output.exists():
-        p.error(f"Model already exists: {output}; use another --name to keep earlier models")
-    model = YOLO(str(weights))
-    options = dict(data=str(runtime_yaml), epochs=args.epochs, batch=args.batch,
-                   imgsz=args.imgsz, project=str(ROOT / "runs"), name=args.name,
-                   plots=True, workers=0)
-    if args.device is not None:
-        options["device"] = args.device
-    model.train(**options)
-    run_dir = Path(model.trainer.save_dir)
-    best_path = run_dir / "weights" / "best.pt"
-    if not best_path.is_file():
-        raise RuntimeError(f"Training ended, but best.pt not found: {best_path}")
-    output.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(best_path, output)
-    print(f"Training completed. Saved: {output}")
-    print(f"Full experiment results: {run_dir}")
-    print("Note: If you trained only hazard classes, the model is NOT guaranteed to retain COCO 80-class detection.")
+        parser.error("models/safety7.pt가 이미 있습니다. 기존 모델을 먼저 backups/로 보존하세요.")
+    import torch
+    import yaml
+    import ultralytics
+    if not torch.cuda.is_available() or args.device == "cpu":
+        parser.error("CUDA가 필요합니다. 학교 RTX 3080 환경에서 PyTorch CUDA 설치를 확인하세요.")
+    from ultralytics import settings
+    settings.update({key: False for key in ("sync", "tensorboard", "wandb", "mlflow", "comet", "clearml", "neptune", "hub", "dvc") if key in settings})
+    cfg = yaml.safe_load((ROOT / "dataset/safety7/data.yaml").read_text(encoding="utf-8"))
+    cfg["path"] = str(ROOT / "dataset/safety7")
+    run_name = "safety7_" + datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+    runtime = ROOT / "results" / run_name
+    runtime.mkdir(parents=True)
+    data_file = runtime / "data_runtime.yaml"
+    data_file.write_text(yaml.safe_dump(cfg, sort_keys=False), encoding="utf-8")
+    model = load_model("baseline")
+    model.train(data=str(data_file), epochs=args.epochs, batch=args.batch, imgsz=640,
+                device=args.device, project=str(ROOT / "runs"), name=run_name,
+                workers=0, seed=42, deterministic=True, cache=False, amp=False)
+    # amp=False는 AMP 점검에서 다른 모델을 자동 다운로드하는 부작용도 방지합니다.
+    best = Path(model.trainer.save_dir) / "weights/best.pt"
+    load_model("custom", str(best))
+    shutil.copy2(best, output)
+    (ROOT / "models/training_info.json").write_text(json.dumps({
+        "python_torch": torch.__version__, "ultralytics": ultralytics.__version__,
+        "run": run_name, "dataset": "dataset/safety7", "note": "COCO 80 classes are not retained"}, indent=2), encoding="utf-8")
+    print(f"학습 완료: {output}. test_yolo.py --evaluate test로 별도 평가하세요.")
 
 
 if __name__ == "__main__":

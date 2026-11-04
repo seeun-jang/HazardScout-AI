@@ -1,0 +1,66 @@
+{
+  "cone": {
+    "author": "project-k84yn",
+    "url": "https://universe.roboflow.com/project-k84yn/traffic-cone-ry08d/dataset/3",
+    "license": "CC BY 4.0",
+    "allow_local_use": true,
+    "changes": "기존 병합본의 class 2->0; 기존 polygon->bbox 변환 이력 유지. 검은 가림/명백한 워터마크 후보 제외.",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "checked_on": "2026-11-04"
+  },
+  "fire": {
+    "author": "CV projects",
+    "url": "https://universe.roboflow.com/cv-projects-ab4ye/fire-extinguisher-8kk5k/dataset/1",
+    "license": "CC BY 4.0",
+    "allow_local_use": true,
+    "changes": "기존 bbox class 0->1. 빨간 실물 산업 소화기; 노란 호스 모형과 도메인 차이 있음.",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "checked_on": "2026-11-04"
+  },
+  "helmet": {
+    "author": "tunyong",
+    "url": "https://universe.roboflow.com/tunyong/hard-hat-emnvz/dataset/1",
+    "license": "CC BY 4.0",
+    "allow_local_use": true,
+    "changes": "원본 head 제외/helmet 1->2. 로컬 원본 README와 YAML의 라이선스 기록 확인, 실시간 페이지 접근 실패.",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "checked_on": "2026-11-04",
+    "status": "archived; current manifest uses RF100/SH17/local helmet labels"
+  },
+  "construction-safety-gsnvb": {
+    "author": "Roboflow 100; original Anonymous",
+    "url": "https://universe.roboflow.com/roboflow-100/construction-safety-gsnvb/dataset/1",
+    "license": "CC BY 4.0",
+    "allow_local_use": true,
+    "changes": "원본 helmet 0->2, vest 4->3; person/no-helmet/no-vest 제외. 조끼 중심으로 검토, 공개 데이터 보조 시험용.",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "checked_on": "2026-11-04",
+    "download_mirror": "https://huggingface.co/datasets/LibreYOLO/construction-safety-gsnvb",
+    "mirror_revision": "342e545489a6b5f76d6c8225f1ef2629c5a4770a"
+  },
+  "local": {
+    "author": "user",
+    "url": "user-provided local photographs",
+    "license": "local user-provided; no redistribution grant",
+    "allow_local_use": true,
+    "changes": "8 provided photos: EXIF orientation normalized in separate copy; visible equipment manually boxed and overlay-checked; all kept in one train session; original references untouched.",
+    "license_url": null,
+    "checked_on": "2026-11-04"
+  },
+  "sh17": {
+    "author": "Hafiz Mughees Ahmad and Afshin Rahimi",
+    "url": "https://github.com/ahmadmughees/SH17dataset",
+    "original_download": "https://www.kaggle.com/datasets/mugheesahmad/sh17-dataset-for-ppe-detection",
+    "license": "CC BY-NC-SA 4.0 (original author); original Pexels conditions retained",
+    "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "allow_local_use": true,
+    "use_scope": "noncommercial school research/training; raw images and labels excluded from Git",
+    "download_mirror": "https://huggingface.co/datasets/fathansanum/SH-17-Dataset",
+    "mirror_revision": "c979be777eaa1c6b5338410788b65926a033e3a0",
+    "license_note": "Mirror export incorrectly advertises CC BY 4.0; do not use that claim to relax original NC-SA/Pexels conditions. Original author license and original YOLO labels were retrieved directly.",
+    "changes": "640x640 mirror images checked against original normalized YOLO bbox geometry. Actual hearing protection/work gloves/protective eyewear selected visually; music headsets, prescription glasses, medical gloves excluded. Original ids 2->5,9->4,8->6 only when visual review confirms target; helmet10->2,vest16->3. No generated boxes.",
+    "checked_on": "2026-11-05",
+    "final_images": "All 105 selected photos downloaded directly from original Pexels URLs supplied by the author; full frame resized without crop to 640x640. Layout verified against original-label-checked previews.",
+    "download_mirror_role": "Review previews and COCO metadata only; final selected images from original Pexels source and final bbox geometry from author Kaggle YOLO labels."
+  }
+}

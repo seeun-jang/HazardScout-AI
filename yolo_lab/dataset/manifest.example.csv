@@ -1,0 +1,4 @@
+image,label,source,group,split,reviewed
+dataset/raw/local/session01/img001.jpg,dataset/raw/local/session01/img001.txt,local,session01,train,yes
+dataset/raw/local/session02/img002.jpg,dataset/raw/local/session02/img002.txt,local,session02,val,yes
+dataset/raw/local/session03/img003.jpg,dataset/raw/local/session03/img003.txt,local,session03,test,yes
