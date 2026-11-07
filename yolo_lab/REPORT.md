@@ -1,5 +1,10 @@
 # HazardScout-AI 작업 결과 — 2026-11-05 (Asia/Seoul)
 
+> **2026-11-07 추가:** 노트북에서 safety7 213쌍을 SHA-256으로 검증(213/213)하고, 노트북 CPU로 7종 YOLOv8n을 실제 학습했습니다.
+> `models/safety7.pt`(100 epoch, SHA-256 `91e388a7…`)를 Git에 포함합니다. 데이터셋 이미지·라벨은 라이선스 때문에 계속 Git에서 제외합니다.
+> 결과·한계·테스트 절차: [SAFETY7_MODEL.md](SAFETY7_MODEL.md). 복구 검증 도구: `recover_safety7.py`.
+> 아래 2026-11-05 기록 중 "safety7.pt 없음/학습 미수행" 항목은 이 업데이트로 대체됩니다.
+
 저장소: `C:\Users\dnflw\Documents\HazardScout-AI`. 작업 시작/최종 브랜치는 **YOLO-Seeun**입니다.
 사용자 요청에 따라 YOLO-Seeun에 로컬 커밋합니다. Push/PR/Merge/Rebase/브랜치 전환은 수행하지 않습니다.
 최종 Git 변경은 yolo_lab 내부뿐이며 code/ 서버·GUI·모터·OLED는 읽기 전용으로 참고했습니다.

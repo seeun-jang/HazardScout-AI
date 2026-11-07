@@ -1,7 +1,10 @@
 # HazardScout-AI — YOLOv8n 경량 실험실
 
 **7종 데이터셋 213장을 준비했고 0장 클래스는 없습니다.** 기본 COCO 모델의 CPU 추론도 검증했습니다.
-커스텀 가중치는 아직 학습하지 않았습니다. 현재 PC에는 CUDA가 없어 학교 RTX3080에서 학습해야 합니다.
+
+> **2026-11-07 업데이트:** 7종 모델 `models/safety7.pt`를 실제로 학습했습니다(노트북 CPU, 100 epoch).
+> 성능·한계·다음 주 Pi 테스트 방법은 **[SAFETY7_MODEL.md](SAFETY7_MODEL.md)** 를 보세요.
+> CUDA가 없는 PC에서는 `python train_yolo.py --device cpu --allow-cpu`로 학습할 수 있습니다(느림).
 
 모든 작업 파일은 `yolo_lab/` 안에 있으며 팀 서버·GUI·모터·OLED 코드는 수정하지 않았습니다.
 기존 자료는 `backups/`에 보존했습니다. 사용자 승인으로 YOLO-Seeun에 로컬 커밋하며 Push/PR/Merge는 수행하지 않습니다.
@@ -26,7 +29,7 @@ yolo_lab/
       images/{train,val,test}/  # Git 제외
       labels/{train,val,test}/  # Git 제외
   models/yolov8n.pt       # COCO80, 준비/로딩/추론 검증
-  models/safety7.pt       # 아직 없음; 학교 학습 성공 후 생성
+  models/safety7.pt       # 7종 학습 완료(2026-11-07), Git 포함 — SAFETY7_MODEL.md 참고
   deploy/ / results/ / runs/ / .config/ / backups/  # Git 제외
 ```
 
@@ -76,7 +79,8 @@ python -m pip install -r requirements-laptop.txt
 python -c "import torch; print(torch.__version__); print(torch.cuda.is_available()); print(torch.cuda.get_device_name(0))"
 python prepare_models.py
 python prepare_dataset.py --check
-python train_yolo.py --epochs 50 --batch 8 --device 0
+python train_yolo.py --epochs 100 --batch 8 --device 0 --output models/safety7_school.pt
+# CUDA 없는 PC: python train_yolo.py --epochs 100 --batch 8 --device cpu --allow-cpu
 ```
 
 현재 데이터 검사는 통과합니다. CUDA가 없으면 학습은 명확한 오류와 함께 중지합니다.

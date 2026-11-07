@@ -1,0 +1,31 @@
+{
+  "python_torch": "2.14.1+cpu",
+  "ultralytics": "8.4.174",
+  "run": "safety7_20261107_210209_053519",
+  "weights": "safety7.pt",
+  "dataset": "dataset/safety7",
+  "device": "cpu",
+  "epochs": 100,
+  "batch": 8,
+  "imgsz": 640,
+  "note": "COCO 80 classes are not retained",
+  "copied_from": "models/safety7_e100.pt",
+  "sha256": "91e388a76c09f24141ea4a522466ef81bc92a071e7898dfdee0789746928d8b9",
+  "trained_on": "laptop CPU i7-12700H (no CUDA), 2026-11-07, 100 epochs in 1.22 h",
+  "base_model": "models/yolov8n.pt (COCO pretrained)",
+  "classes": [
+    "traffic_cone",
+    "fire_extinguisher",
+    "safety_helmet",
+    "safety_vest",
+    "safety_gloves",
+    "earmuffs",
+    "safety_goggles"
+  ],
+  "previous_candidate": {
+    "run": "safety7_20261107_200334_403133",
+    "epochs": 50,
+    "sha256": "389dbef7e0ea43b9d7260e871977152d66858dc4286897aa418e97f4f151050a",
+    "kept_at": "backups/20261107_safety7_e50/safety7.pt"
+  }
+}

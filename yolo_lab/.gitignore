@@ -1,6 +1,6 @@
 # Local backups, images and generated artifacts (never commit)
 /backups/
-/models/
+/models/*
 /runs/
 /results/
 /deploy/
@@ -18,3 +18,8 @@ __pycache__/
 
 # Optional school environment (create only inside yolo_lab)
 /.venv*/
+
+# 학습 완료된 7종 모델과 그 기록만 Git으로 전달 (yolov8n.pt 등 다른 가중치는 제외)
+!/models/safety7.pt
+!/models/training_info.json
+!/models/safety7_eval.json

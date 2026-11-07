@@ -1,0 +1,520 @@
+{
+ "selected": "models/safety7.pt (= 100 epoch run)",
+ "selection_rule": "validation split only (test not used for selection); val fitness tied (0.1*mAP50+0.9*mAP50-95: e50 0.391 vs e100 0.391 @640, 0.310 vs 0.311 @320); e100 chosen for higher val precision@640 (0.51->0.84) and higher val mAP50 on weakest class safety_gloves @320 (0.24->0.42)",
+ "dataset": "dataset/safety7 213 images (train145/val40/test28), build_report.json SHA-256 verified 213/213",
+ "conf_for_eval": "Ultralytics val defaults; sample predictions conf=0.25",
+ "e100": {
+  "sha256": "91e388a76c09f24141ea4a522466ef81bc92a071e7898dfdee0789746928d8b9",
+  "evals": {
+   "val_imgsz640": {
+    "P": 0.8387,
+    "R": 0.5443,
+    "mAP50": 0.5775,
+    "mAP50-95": 0.3702,
+    "per_class": {
+     "traffic_cone": {
+      "P": 0.918,
+      "R": 0.801,
+      "mAP50": 0.8731,
+      "mAP50-95": 0.6227
+     },
+     "fire_extinguisher": {
+      "P": 0.9459,
+      "R": 0.9167,
+      "mAP50": 0.947,
+      "mAP50-95": 0.6288
+     },
+     "safety_helmet": {
+      "P": 0.8251,
+      "R": 0.7692,
+      "mAP50": 0.7602,
+      "mAP50-95": 0.494
+     },
+     "safety_vest": {
+      "P": 0.8725,
+      "R": 0.8182,
+      "mAP50": 0.8037,
+      "mAP50-95": 0.4495
+     },
+     "safety_gloves": {
+      "P": 0.4873,
+      "R": 0.4,
+      "mAP50": 0.3171,
+      "mAP50-95": 0.2409
+     },
+     "earmuffs": {
+      "P": 1.0,
+      "R": 0.0,
+      "mAP50": 0.0308,
+      "mAP50-95": 0.0116
+     },
+     "safety_goggles": {
+      "P": 0.8224,
+      "R": 0.1053,
+      "mAP50": 0.3108,
+      "mAP50-95": 0.144
+     }
+    }
+   },
+   "val_imgsz320": {
+    "P": 0.6063,
+    "R": 0.4488,
+    "mAP50": 0.5039,
+    "mAP50-95": 0.2904,
+    "per_class": {
+     "traffic_cone": {
+      "P": 0.8435,
+      "R": 0.6429,
+      "mAP50": 0.7455,
+      "mAP50-95": 0.508
+     },
+     "fire_extinguisher": {
+      "P": 0.7866,
+      "R": 0.75,
+      "mAP50": 0.7824,
+      "mAP50-95": 0.419
+     },
+     "safety_helmet": {
+      "P": 0.5894,
+      "R": 0.5385,
+      "mAP50": 0.5417,
+      "mAP50-95": 0.3956
+     },
+     "safety_vest": {
+      "P": 0.7651,
+      "R": 0.5947,
+      "mAP50": 0.651,
+      "mAP50-95": 0.2774
+     },
+     "safety_gloves": {
+      "P": 0.6515,
+      "R": 0.3,
+      "mAP50": 0.4148,
+      "mAP50-95": 0.2791
+     },
+     "earmuffs": {
+      "P": 0.0,
+      "R": 0.0,
+      "mAP50": 0.0009,
+      "mAP50-95": 0.0007
+     },
+     "safety_goggles": {
+      "P": 0.6079,
+      "R": 0.3158,
+      "mAP50": 0.3907,
+      "mAP50-95": 0.1527
+     }
+    }
+   },
+   "test_imgsz640": {
+    "P": 0.6064,
+    "R": 0.5451,
+    "mAP50": 0.5613,
+    "mAP50-95": 0.3278,
+    "per_class": {
+     "traffic_cone": {
+      "P": 0.6943,
+      "R": 0.8333,
+      "mAP50": 0.8555,
+      "mAP50-95": 0.5139
+     },
+     "fire_extinguisher": {
+      "P": 1.0,
+      "R": 0.9834,
+      "mAP50": 0.995,
+      "mAP50-95": 0.7228
+     },
+     "safety_helmet": {
+      "P": 0.7331,
+      "R": 0.625,
+      "mAP50": 0.7403,
+      "mAP50-95": 0.3036
+     },
+     "safety_vest": {
+      "P": 0.6503,
+      "R": 0.5365,
+      "mAP50": 0.5605,
+      "mAP50-95": 0.2911
+     },
+     "safety_gloves": {
+      "P": 0.1059,
+      "R": 0.1538,
+      "mAP50": 0.0803,
+      "mAP50-95": 0.0201
+     },
+     "earmuffs": {
+      "P": 0.7549,
+      "R": 0.5,
+      "mAP50": 0.5783,
+      "mAP50-95": 0.3881
+     },
+     "safety_goggles": {
+      "P": 0.3065,
+      "R": 0.1839,
+      "mAP50": 0.1191,
+      "mAP50-95": 0.0548
+     }
+    }
+   },
+   "test_imgsz320": {
+    "P": 0.8363,
+    "R": 0.4808,
+    "mAP50": 0.5507,
+    "mAP50-95": 0.318,
+    "per_class": {
+     "traffic_cone": {
+      "P": 0.7993,
+      "R": 0.8333,
+      "mAP50": 0.8415,
+      "mAP50-95": 0.4815
+     },
+     "fire_extinguisher": {
+      "P": 0.9991,
+      "R": 1.0,
+      "mAP50": 0.995,
+      "mAP50-95": 0.6884
+     },
+     "safety_helmet": {
+      "P": 0.9158,
+      "R": 0.5,
+      "mAP50": 0.6901,
+      "mAP50-95": 0.2614
+     },
+     "safety_vest": {
+      "P": 0.9609,
+      "R": 0.4286,
+      "mAP50": 0.545,
+      "mAP50-95": 0.2647
+     },
+     "safety_gloves": {
+      "P": 0.536,
+      "R": 0.1538,
+      "mAP50": 0.1887,
+      "mAP50-95": 0.1555
+     },
+     "earmuffs": {
+      "P": 0.7161,
+      "R": 0.25,
+      "mAP50": 0.3863,
+      "mAP50-95": 0.2949
+     },
+     "safety_goggles": {
+      "P": 0.9267,
+      "R": 0.2,
+      "mAP50": 0.2083,
+      "mAP50-95": 0.0797
+     }
+    }
+   }
+  }
+ },
+ "e50": {
+  "sha256": "389dbef7e0ea43b9d7260e871977152d66858dc4286897aa418e97f4f151050a",
+  "evals": {
+   "val_imgsz640": {
+    "P": 0.5142,
+    "R": 0.5678,
+    "mAP50": 0.5839,
+    "mAP50-95": 0.3702,
+    "per_class": {
+     "traffic_cone": {
+      "P": 0.6513,
+      "R": 0.9286,
+      "mAP50": 0.8885,
+      "mAP50-95": 0.6277
+     },
+     "fire_extinguisher": {
+      "P": 0.7927,
+      "R": 0.9167,
+      "mAP50": 0.9648,
+      "mAP50-95": 0.6769
+     },
+     "safety_helmet": {
+      "P": 0.783,
+      "R": 0.8333,
+      "mAP50": 0.8823,
+      "mAP50-95": 0.5365
+     },
+     "safety_vest": {
+      "P": 0.5454,
+      "R": 0.7273,
+      "mAP50": 0.7784,
+      "mAP50-95": 0.448
+     },
+     "safety_gloves": {
+      "P": 0.3081,
+      "R": 0.3584,
+      "mAP50": 0.1967,
+      "mAP50-95": 0.1489
+     },
+     "earmuffs": {
+      "P": 0.0,
+      "R": 0.0,
+      "mAP50": 0.0279,
+      "mAP50-95": 0.0091
+     },
+     "safety_goggles": {
+      "P": 0.5186,
+      "R": 0.2105,
+      "mAP50": 0.3489,
+      "mAP50-95": 0.1441
+     }
+    }
+   },
+   "val_imgsz320": {
+    "P": 0.6179,
+    "R": 0.4679,
+    "mAP50": 0.5122,
+    "mAP50-95": 0.2877,
+    "per_class": {
+     "traffic_cone": {
+      "P": 0.9786,
+      "R": 0.7143,
+      "mAP50": 0.8145,
+      "mAP50-95": 0.5293
+     },
+     "fire_extinguisher": {
+      "P": 0.8652,
+      "R": 0.75,
+      "mAP50": 0.7965,
+      "mAP50-95": 0.4918
+     },
+     "safety_helmet": {
+      "P": 0.8726,
+      "R": 0.5283,
+      "mAP50": 0.5727,
+      "mAP50-95": 0.3889
+     },
+     "safety_vest": {
+      "P": 0.57,
+      "R": 0.6364,
+      "mAP50": 0.6967,
+      "mAP50-95": 0.2891
+     },
+     "safety_gloves": {
+      "P": 0.3528,
+      "R": 0.3,
+      "mAP50": 0.2368,
+      "mAP50-95": 0.1127
+     },
+     "earmuffs": {
+      "P": 0.0,
+      "R": 0.0,
+      "mAP50": 0.0078,
+      "mAP50-95": 0.0024
+     },
+     "safety_goggles": {
+      "P": 0.6859,
+      "R": 0.3461,
+      "mAP50": 0.4605,
+      "mAP50-95": 0.1998
+     }
+    }
+   },
+   "test_imgsz640": {
+    "P": 0.5501,
+    "R": 0.5653,
+    "mAP50": 0.5648,
+    "mAP50-95": 0.3107,
+    "per_class": {
+     "traffic_cone": {
+      "P": 0.6586,
+      "R": 0.8333,
+      "mAP50": 0.8506,
+      "mAP50-95": 0.5152
+     },
+     "fire_extinguisher": {
+      "P": 0.9034,
+      "R": 1.0,
+      "mAP50": 0.995,
+      "mAP50-95": 0.6953
+     },
+     "safety_helmet": {
+      "P": 0.7807,
+      "R": 0.75,
+      "mAP50": 0.7153,
+      "mAP50-95": 0.2321
+     },
+     "safety_vest": {
+      "P": 0.3796,
+      "R": 0.4286,
+      "mAP50": 0.4928,
+      "mAP50-95": 0.2155
+     },
+     "safety_gloves": {
+      "P": 0.2776,
+      "R": 0.2308,
+      "mAP50": 0.1363,
+      "mAP50-95": 0.0488
+     },
+     "earmuffs": {
+      "P": 0.5053,
+      "R": 0.5,
+      "mAP50": 0.4979,
+      "mAP50-95": 0.3477
+     },
+     "safety_goggles": {
+      "P": 0.3455,
+      "R": 0.2146,
+      "mAP50": 0.2659,
+      "mAP50-95": 0.12
+     }
+    }
+   },
+   "test_imgsz320": {
+    "P": 0.8326,
+    "R": 0.4936,
+    "mAP50": 0.5372,
+    "mAP50-95": 0.3073,
+    "per_class": {
+     "traffic_cone": {
+      "P": 0.8964,
+      "R": 0.8333,
+      "mAP50": 0.8235,
+      "mAP50-95": 0.5069
+     },
+     "fire_extinguisher": {
+      "P": 1.0,
+      "R": 0.9303,
+      "mAP50": 0.995,
+      "mAP50-95": 0.6308
+     },
+     "safety_helmet": {
+      "P": 0.9355,
+      "R": 0.5,
+      "mAP50": 0.495,
+      "mAP50-95": 0.2042
+     },
+     "safety_vest": {
+      "P": 0.7187,
+      "R": 0.4286,
+      "mAP50": 0.5466,
+      "mAP50-95": 0.2562
+     },
+     "safety_gloves": {
+      "P": 0.361,
+      "R": 0.0769,
+      "mAP50": 0.2042,
+      "mAP50-95": 0.1121
+     },
+     "earmuffs": {
+      "P": 1.0,
+      "R": 0.486,
+      "mAP50": 0.4967,
+      "mAP50-95": 0.3226
+     },
+     "safety_goggles": {
+      "P": 0.9165,
+      "R": 0.2,
+      "mAP50": 0.1997,
+      "mAP50-95": 0.1184
+     }
+    }
+   }
+  }
+ },
+ "real_photos_TRAIN_ONLY_e100": [
+  {
+   "imgsz": "640",
+   "image": "earmuffs_1.jpg",
+   "detections": "2",
+   "class:conf": "earmuffs:0.9997; earmuffs:0.6573"
+  },
+  {
+   "imgsz": "640",
+   "image": "fire_extinguisher_1.jpg",
+   "detections": "1",
+   "class:conf": "fire_extinguisher:0.9826"
+  },
+  {
+   "imgsz": "640",
+   "image": "fire_extinguisher_2.jpg",
+   "detections": "1",
+   "class:conf": "fire_extinguisher:0.9807"
+  },
+  {
+   "imgsz": "640",
+   "image": "safety_gloves_1.jpg",
+   "detections": "0",
+   "class:conf": ""
+  },
+  {
+   "imgsz": "640",
+   "image": "safety_goggles_1.jpg",
+   "detections": "4",
+   "class:conf": "safety_goggles:0.9992; earmuffs:0.715; safety_goggles:0.5515; earmuffs:0.2729"
+  },
+  {
+   "imgsz": "640",
+   "image": "safety_helmet_1.jpg",
+   "detections": "1",
+   "class:conf": "safety_helmet:0.9987"
+  },
+  {
+   "imgsz": "640",
+   "image": "safety_vest_1.jpg",
+   "detections": "1",
+   "class:conf": "safety_vest:0.9742"
+  },
+  {
+   "imgsz": "640",
+   "image": "traffic_cone_1.jpg",
+   "detections": "1",
+   "class:conf": "traffic_cone:0.9698"
+  },
+  {
+   "imgsz": "320",
+   "image": "earmuffs_1.jpg",
+   "detections": "1",
+   "class:conf": "earmuffs:0.9934"
+  },
+  {
+   "imgsz": "320",
+   "image": "fire_extinguisher_1.jpg",
+   "detections": "1",
+   "class:conf": "fire_extinguisher:0.9676"
+  },
+  {
+   "imgsz": "320",
+   "image": "fire_extinguisher_2.jpg",
+   "detections": "1",
+   "class:conf": "fire_extinguisher:0.8077"
+  },
+  {
+   "imgsz": "320",
+   "image": "safety_gloves_1.jpg",
+   "detections": "1",
+   "class:conf": "safety_gloves:0.7695"
+  },
+  {
+   "imgsz": "320",
+   "image": "safety_goggles_1.jpg",
+   "detections": "2",
+   "class:conf": "safety_goggles:0.6813; earmuffs:0.6132"
+  },
+  {
+   "imgsz": "320",
+   "image": "safety_helmet_1.jpg",
+   "detections": "1",
+   "class:conf": "safety_helmet:0.9986"
+  },
+  {
+   "imgsz": "320",
+   "image": "safety_vest_1.jpg",
+   "detections": "1",
+   "class:conf": "safety_vest:0.9949"
+  },
+  {
+   "imgsz": "320",
+   "image": "traffic_cone_1.jpg",
+   "detections": "1",
+   "class:conf": "traffic_cone:0.8756"
+  }
+ ],
+ "caveats": [
+  "real photos (8) are in TRAIN split: detections on them do not show generalization",
+  "val/test are small (40/28 images; earmuffs val 6 instances) -> metrics have large variance",
+  "robot camera (Pi) performance not yet measured",
+  "COCO 80 classes are NOT retained in safety7.pt"
+ ]
+}
