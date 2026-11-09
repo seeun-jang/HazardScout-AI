@@ -1,0 +1,11 @@
+# make_barcodes.py 결과물 (site_map.json 으로 언제든 다시 만들 수 있음)
+labels/
+
+# 실행 중 저장되는 지도 상태와 그림
+map_state.json
+map_state.json.tmp
+map.png
+
+# test_map.py / pi_check_map.py 결과
+results/
+__pycache__/

@@ -1,0 +1,7 @@
+# 라즈베리파이: 팀 서버 가상환경에 설치 (다른 패키지를 바꾸지 않음)
+#   ~/picar-yolo/bin/pip install zxing-cpp
+zxing-cpp
+
+# 노트북에서 라벨 만들기 / 테스트할 때만 필요
+#   pip3 install "python-barcode[images]" opencv-python numpy
+python-barcode[images]
