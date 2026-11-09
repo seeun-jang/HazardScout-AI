@@ -288,10 +288,17 @@ WinSCP를 쓴다면 `hazard_map` 폴더를 `/home/pi/`에 끌어다 놓으면 �
 
 ```bash
 cd ~/hazard_map
-~/picar-yolo/bin/python pi_check_map.py
+~/picar-yolo/bin/python pi_check_map.py --model
 ```
 
-`[지도 경고]`가 없고 라벨이 `OK`로 나오면 정상입니다.
+`[지도 경고]`가 없고, 라벨이 `OK`로 나오고, 마지막에 아래가 나오면 정상입니다.
+
+```
+  SHA-256 일치: YOLO-Seeun 11월 7일 safety7.pt (mj 서버와 같은 파일)
+  클래스 7종, 순서, robot_config.json 설정 모두 일치
+```
+
+`--model`은 서버가 쓰는 `models/safety7.pt`가 Safety7 7종(클래스 번호 순서까지)인지 확인합니다. YOLO-Seeun 브랜치 `yolo_lab/lab_utils.py`와 같은 기준이에요. 예전 3종 모델이나 COCO 80종 모델이 들어 있으면 `[주의]`로 알려줍니다. 새로 학습한 모델이라 해시가 다른 건 괜찮지만, 클래스가 다르면 `robot_config.json`의 `hazards.classes`도 맞춰야 지도에 올라갑니다.
 
 ### 9-5. 실행
 
@@ -426,6 +433,7 @@ sudo ~/picar-yolo/bin/python /home/pi/hazard_map/run_mobile_map.py
 | YOLO 초기화 실패 | 지도도 같이 꺼집니다(YOLO 클래스에 붙어 있음). 기존 서버 문제부터 해결 |
 | 바코드를 못 읽음 | `pi_check_map.py --camera`로 확인. 조명 반사, 인쇄 크기 100%, 카메라 높이 |
 | 바코드 거리가 이상함 | `focal_px` 보정(10-1), `bar_width_m`이 라벨과 같은지 |
+| 위험물이 지도에 하나도 안 올라감 | `pi_check_map.py --model`로 모델 클래스가 `robot_config.json`과 맞는지 |
 | 회피 때 너무 많이/적게 돎 | `yaw_deg_per_sec` 보정(10-3) |
 | 지도에서 로봇이 엉뚱한 곳 | 서버 켤 때 `start_cell`, `start_heading` 대로 놓았는지. 지도 페이지에서 "지도 초기화" |
 | 위험물 위치가 좌우 반대 | `pan_sign`(10-2) |

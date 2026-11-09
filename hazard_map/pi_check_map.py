@@ -17,8 +17,12 @@ pi_check_map.py
       카메라 렌즈에서 바코드 라벨까지 정확히 0.50m 에 두고 실행
       -> focal_px 를 계산해서 알려줌 (robot_config.json 에 넣기)
 
+  ~/picar-yolo/bin/python pi_check_map.py --model
+      서버가 쓰는 YOLO 모델이 Safety7 7종(순서까지)인지 확인. 카메라 안 씀
+      (YOLO-Seeun 브랜치 yolo_lab/lab_utils.py 의 검사와 같은 기준)
+
   ~/picar-yolo/bin/python pi_check_map.py --camera --yolo
-      Safety7 YOLO 탐지 결과를 거리로 바꿔서 출력
+      위 모델 확인 후, Safety7 탐지 결과를 거리로 바꿔서 출력
       (줄자로 잰 거리와 비교해서 robot_config.json 의 height_m 을 맞춤)
 """
 
@@ -40,6 +44,11 @@ from map_config import Config  # noqa: E402
 from map_hazards import HazardTracker  # noqa: E402
 
 DEFAULT_MODEL = "/home/pi/Adeept_PiCar-Pro/Server/models/safety7.pt"
+
+# YOLO-Seeun 브랜치 yolo_lab/lab_utils.py 의 NAMES 와 같은 순서 (클래스 번호 0~6)
+SAFETY7_NAMES = ["traffic_cone", "fire_extinguisher", "safety_helmet", "safety_vest",
+                 "safety_gloves", "earmuffs", "safety_goggles"]
+SAFETY7_SHA256 = "91e388a76c09f24141ea4a522466ef81bc92a071e7898dfdee0789746928d8b9"
 
 
 def check_versions():
@@ -95,6 +104,65 @@ def check_labels(cfg, watcher):
             print(f"  {code}: 인식 실패")
 
 
+def check_model_names(cfg, names):
+    """
+    모델 클래스 목록 검사. 문제 목록을 돌려줌 (비어 있으면 정상)
+    names: 모델의 클래스 이름 목록 (번호 순서대로)
+    """
+    problems = []
+    if names != SAFETY7_NAMES:
+        if sorted(names) == sorted(SAFETY7_NAMES):
+            problems.append(f"클래스 이름은 같지만 순서가 다름: {names}")
+        else:
+            problems.append(f"Safety7 7종 모델이 아님 ({len(names)}종): {names[:8]}"
+                            + (" ..." if len(names) > 8 else ""))
+
+    configured = set(cfg.hazards["classes"])
+    missing = [n for n in names if n not in configured]
+    unused = [n for n in configured if n not in names]
+    if missing:
+        problems.append(f"robot_config.json 에 없어서 지도에 안 올라가는 클래스: {missing}")
+    if unused:
+        problems.append(f"robot_config.json 에만 있고 모델은 못 찾는 클래스: {unused}")
+    return problems
+
+
+def load_yolo(cfg, model_path):
+    """모델을 불러와 Safety7 인지 확인. 실패하면 None"""
+    print(f"\n[YOLO 모델] {model_path}")
+    if not os.path.isfile(model_path):
+        print("  파일 없음. --model-path 로 서버의 models/safety7.pt 경로를 지정하세요")
+        return None
+
+    import hashlib
+    with open(model_path, "rb") as f:
+        sha = hashlib.sha256(f.read()).hexdigest()
+    if sha == SAFETY7_SHA256:
+        print("  SHA-256 일치: YOLO-Seeun 11월 7일 safety7.pt (mj 서버와 같은 파일)")
+    else:
+        print(f"  SHA-256 {sha[:16]}... : 11월 7일 safety7.pt 와 다른 파일 (새로 학습했다면 정상)")
+
+    try:
+        from ultralytics import YOLO
+        model = YOLO(model_path)
+    except Exception as e:
+        print("  로드 실패:", repr(e))
+        return None
+
+    if getattr(model, "task", "detect") != "detect":
+        print(f"  박스 탐지(detect) 모델이 아님: {model.task}")
+        return None
+
+    names = [model.names[i] for i in range(len(model.names))]
+    problems = check_model_names(cfg, names)
+    if problems:
+        for p in problems:
+            print("  [주의]", p)
+    else:
+        print("  클래스 7종, 순서, robot_config.json 설정 모두 일치")
+    return model
+
+
 def open_camera(cfg):
     from picamera2 import Picamera2
     cam = Picamera2()
@@ -106,7 +174,7 @@ def open_camera(cfg):
     return cam
 
 
-def run_camera(cfg, watcher, seconds, calibrate, use_yolo, model_path):
+def run_camera(cfg, watcher, seconds, calibrate, yolo):
     try:
         cam = open_camera(cfg)
     except Exception as e:
@@ -114,15 +182,7 @@ def run_camera(cfg, watcher, seconds, calibrate, use_yolo, model_path):
         print("  팀 서버가 켜져 있으면 끄고 다시 실행하세요")
         return
 
-    yolo = None
     tracker = HazardTracker(cfg)
-    if use_yolo:
-        try:
-            from ultralytics import YOLO
-            yolo = YOLO(model_path)
-            print(f"[YOLO] {model_path} 로드: {list(yolo.names.values())}")
-        except Exception as e:
-            print("[YOLO] 로드 실패:", repr(e))
 
     print(f"\n[카메라] {seconds}초 동안 확인합니다 (Ctrl+C 로 중단)")
     widths = []
@@ -196,8 +256,9 @@ def main():
     parser = argparse.ArgumentParser(description="좌표 매핑 확인/보정")
     parser.add_argument("--camera", action="store_true", help="실제 카메라로 바코드 확인")
     parser.add_argument("--calibrate", type=float, metavar="거리m", help="라벨을 이 거리에 두고 focal_px 측정")
-    parser.add_argument("--yolo", action="store_true", help="Safety7 탐지 거리도 확인")
-    parser.add_argument("--model", default=DEFAULT_MODEL)
+    parser.add_argument("--yolo", action="store_true", help="Safety7 탐지 거리도 확인 (카메라 사용)")
+    parser.add_argument("--model", action="store_true", help="YOLO 모델이 Safety7 7종인지만 확인 (카메라 안 씀)")
+    parser.add_argument("--model-path", default=DEFAULT_MODEL)
     parser.add_argument("--seconds", type=int, default=20)
     args = parser.parse_args()
 
@@ -207,8 +268,12 @@ def main():
     print("인식 엔진:", watcher.reader.backend)
     check_labels(cfg, watcher)
 
+    yolo = None
+    if args.model or args.yolo:
+        yolo = load_yolo(cfg, args.model_path)
+
     if args.camera or args.calibrate or args.yolo:
-        run_camera(cfg, watcher, args.seconds, args.calibrate, args.yolo, args.model)
+        run_camera(cfg, watcher, args.seconds, args.calibrate, yolo)
 
 
 if __name__ == "__main__":
