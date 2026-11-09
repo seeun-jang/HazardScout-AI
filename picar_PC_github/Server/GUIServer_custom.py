@@ -296,7 +296,7 @@ def run():
         pc.JPEG_QUALITY = 60
         pc.YOLO_MODEL_PATH = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
-            'models', 'hazard_3class_v1.pt',
+            'models', 'safety7.pt',
         )
         pc.YOLO_IMAGE_SIZE = 224
         pc.YOLO_DETECT_EVERY_N_FRAMES = 8
