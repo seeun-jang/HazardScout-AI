@@ -1,0 +1,26 @@
+{
+  "_설명": {
+    "용도": "현장마다 바꾸는 파일. 격자 크기, 출발 위치, 바코드 위치와 회피 방향",
+    "좌표계": "x는 오른쪽(동, E)으로, y는 아래쪽(남, S)으로 증가. (0,0)은 지도 왼쪽 위 칸",
+    "방향": "N(위) / E(오른쪽) / S(아래) / W(왼쪽)",
+    "start_cell": "서버를 켤 때 로봇이 놓여 있는 칸",
+    "start_heading": "서버를 켤 때 로봇이 바라보는 방향",
+    "barcodes.cell": "바코드가 붙은 '막힌 칸'",
+    "barcodes.robot_heading": "로봇이 이 바코드를 정면으로 볼 때 바라보는 방향",
+    "barcodes.action": "left(왼쪽) / right(오른쪽) / back(유턴) / stop(정지) / none(막힌 곳 아님, 위치 보정만)",
+    "바코드 번호": "숫자 4자리. 바코드가 짧아져 멀리서도 읽힘"
+  },
+
+  "cell_size_m": 0.3,
+  "grid_w": 12,
+  "grid_h": 8,
+  "start_cell": [1, 6],
+  "start_heading": "N",
+
+  "barcodes": {
+    "1100": {"cell": [1, 1], "robot_heading": "N", "action": "right", "note": "복도 끝 막힘"},
+    "1101": {"cell": [8, 2], "robot_heading": "E", "action": "right", "note": "창고 앞 막힘"},
+    "1102": {"cell": [7, 6], "robot_heading": "S", "action": "back",  "note": "막다른 길"},
+    "1103": {"cell": [4, 4], "robot_heading": "W", "action": "left",  "note": "낙하물 구역"}
+  }
+}

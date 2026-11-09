@@ -28,6 +28,19 @@ PC 서버와 모바일 서버의 기능적 목표는 같지만, PC는 별도의 
 
 [Safety7 모델 출처](https://github.com/seeun-jang/HazardScout-AI/blob/bf14e2af669d481f97044b5236aed7ab9a61c8ac/yolo_lab/models/safety7.pt)
 
+## 지도 모드
+
+Pi의 `~/hazard_map_80c7951`에 이 패키지의 `hazard_map/` 실행 파일을 배치합니다. 현장 보정값은 Pi의 `robot_config.json`과 `site_map.json`에 유지하세요. 바코드 인식에는 `~/picar-yolo` 환경의 `zxing-cpp`가 필요합니다.
+
+```bash
+cd ~/Adeept_PiCar-Pro/Server
+sudo ~/picar-yolo/bin/python ~/hazard_map_80c7951/run_pc_map.py
+```
+
+지도는 `http://<Pi-IP>:5001/map`에서 엽니다. 배포 기본값에서 바코드 자동 회피는 켜져 있습니다. Pi에서 이미 설정을 수정했다면 실제 실행값은 Pi의 `robot_config.json`을 따릅니다.
+
+[지도 코드 출처](https://github.com/seeun-jang/HazardScout-AI/tree/80c7951c4c3cd9d40a95cff71a4725dad41eacc9/hazard_map)
+
 ## 검증
 
 이 ZIP 내 Python 파일은 문법 검사를 통과했습니다. 실제 주행/목/집게 등 PC 기존 기능은 사용자 실기 동작 확인을 기반으로 기록합니다. GitHub 공통 소스와 기존 실기 파일 간 세부 차이 및 이 ZIP으로 새 환경에 배포한 결과는 별도 확인이 필요합니다.
