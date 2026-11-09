@@ -20,21 +20,13 @@ PC 서버와 모바일 서버의 기능적 목표는 같지만, PC는 별도의 
 - 집게·모터·카메라·OLED·YOLO를 PC 화면에서 조작
 - 음성 관련 파일/버튼/연동: 제외
 
-## 필수 원본 의존 파일
+## 실행 모델과 의존 파일
 
-현재 ZIP에서 아래 **세 파일을 자동 획득하지 못했습니다.** 이 파일이 없으면 PC 서버를 완전히 새 위치에서 실행할 수 없습니다. `SOURCE_MANIFEST.json`에 원본 Git blob SHA가 기록돼 있습니다.
+`Server/GUIServer_custom.py`는 `Server/models/safety7.pt`를 사용합니다. 2026-11-09 Pi에서 7개 클래스 모델을 로드하고 교통콘(`traffic_cone`) 탐지를 확인했습니다.
 
-1. `Server/GUIServer_custom_base.py` — GitHub `ym` 브랜치의 `code/GUIServer_custom.py`를 해당 이름으로 사용
-2. `Server/OLED_eyes.py` — `mj` 브랜치 `picar_mobile_github/OLED_eyes.py`
-3. `Server/models/hazard_3class_v1.pt` — `mj` 브랜치 `picar_mobile_github/models/hazard_3class_v1.pt`
+기본 서버 `Server/GUIServer_custom_base.py`, OLED 모듈 `Server/OLED_eyes.py`, 모델 `Server/models/safety7.pt`가 이 폴더에 포함됩니다. Python 라이브러리와 장치 설정은 기존 Pi 환경을 사용합니다.
 
-로봇의 기존 `~/Adeept_PiCar-Pro/Server`에는 사용자 실기 실행에 사용된 모듈이 이미 있을 수 있습니다. 이 ZIP은 공개 GitHub 업로드용 소스 묶음이며, 외부 Python 라이브러리와 시스템/장치 설정은 포함하지 않습니다.
-
-### 출처
-
-- PC 기본 서버: https://github.com/seeun-jang/HazardScout-AI/blob/ym/code/GUIServer_custom.py
-- OLED: https://github.com/seeun-jang/HazardScout-AI/blob/mj/picar_mobile_github/OLED_eyes.py
-- 학습 YOLO 모델: https://github.com/seeun-jang/HazardScout-AI/blob/mj/picar_mobile_github/models/hazard_3class_v1.pt
+[Safety7 모델 출처](https://github.com/seeun-jang/HazardScout-AI/blob/bf14e2af669d481f97044b5236aed7ab9a61c8ac/yolo_lab/models/safety7.pt)
 
 ## 검증
 

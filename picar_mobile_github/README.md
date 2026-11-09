@@ -19,7 +19,7 @@
 | 모바일 웹 제어 | 브라우저 기반 주행 및 관절 조작 | 정상 동작 |
 | 로봇 주행 | 전진·후진·좌회전·우회전 및 관련 주행 명령 | 기존 기능 유지 |
 | 실시간 카메라 | 640 × 480 영상, 설정 목표 12 FPS | 화면 출력 정상 |
-| AI 객체 탐지 | 학습된 3개 클래스 YOLO 모델 적용 | 소화기 사진 인식 확인 |
+| AI 객체 탐지 | Safety7 7종 YOLO 모델 적용 | 2026-11-09 교통콘 인식 확인 |
 | 목 A 좌우 | 방향 보정, 양쪽 이동 범위 확장 | 부드러운 동작 확인 |
 | 목 A 상하 | 부드러운 단계별 이동 | 부드러운 동작 확인 |
 | 목 B 상하 | 아래쪽 이동 범위 추가 확장 | 동작 확인, 미세한 떨림 잔존 |
@@ -46,7 +46,7 @@ picar_mobile_github/
 ├── PiVoice.py                  # 음성 인식 서비스
 ├── PiVoiceLauncher.py          # 음성 서비스 실행 및 요청 처리
 └── models/
-    └── hazard_3class_v1.pt     # 실제 테스트에 사용한 3클래스 학습 모델
+    └── safety7.pt             # 안전 장비 7종 학습 모델
 ```
 
 ### 주요 파일 관계
@@ -55,7 +55,7 @@ picar_mobile_github/
 - **`GUIServer_mobile.py`**: 웹 UI, 조작 명령 수신, 카메라 스트리밍, 주행·목·집게·조명 제어를 수행합니다.
 - **`SmoothServo.py` + `RPIservo.py`**: 서보 이동 단계와 실제 PWM 출력을 담당합니다.
 - **`OLED_eyes.py`**: OLED 눈동자 화면을 생성하며, 최종 실행 파일에서 전송 주기를 최적화합니다.
-- **`YOLO_detector.py` + `models/hazard_3class_v1.pt`**: 카메라 프레임의 실제 객체 탐지를 담당합니다.
+- **`YOLO_detector.py` + `models/safety7.pt`**: 카메라 프레임의 실제 객체 탐지를 담당합니다.
 - **`PiVoiceLauncher.py` + `PiVoice.py`**: 별도 음성 실행 환경과 통신하는 구성입니다.
 
 웹 화면은 `GUIServer_mobile.py`에 포함되어 있어, 별도의 `index.html`, CSS, JavaScript 파일이 필요하지 않습니다.
@@ -72,7 +72,7 @@ picar_mobile_github/
 | I2C 버스 | `/dev/i2c-1` |
 | I2C 통신 속도 | `400000` baud (400 kHz) |
 | 웹 서버 | HTTP, 포트 `5000` |
-| AI 모델 | `models/hazard_3class_v1.pt`, 3개 클래스 |
+| AI 모델 | `models/safety7.pt`, 7개 클래스 |
 | YOLO 설정 | 입력 크기 `224`, 탐지 주기 설정 `8`프레임 |
 | 카메라 설정 | `640 × 480`, 목표 `12 FPS` |
 | 주행 속도 설정 | 전후진 `60`, 회전 `50` |
@@ -93,7 +93,7 @@ Python 패키지는 기존 Raspberry Pi 실행 환경을 기준으로 합니다.
 
 `picar_mobile_github/` 안의 `.py` 파일과 `models/` 폴더를 이 경로에 배치합니다. **기존 로봇에 이미 정상 실행 중인 파일이 있다면 백업한 뒤 비교하여 반영하세요.** 별도 Git 저장소나 컴퓨터에서 다운로드한 폴더만으로 다른 환경에서 즉시 실행되는 구성은 아닙니다.
 
-> **경로 주의:** 현재 `GUIServer_mobile.py`의 모델 위치는 `/home/pi/Adeept_PiCar-Pro/Server/models/hazard_3class_v1.pt`로 설정되어 있습니다. 로봇 경로를 변경했다면 코드 내 `YOLO_MODEL_PATH`도 맞춰야 합니다.
+> **경로 주의:** 현재 `GUIServer_mobile.py`의 모델 위치는 `/home/pi/Adeept_PiCar-Pro/Server/models/safety7.pt`로 설정되어 있습니다. 로봇 경로를 변경했다면 코드 내 `YOLO_MODEL_PATH`도 맞춰야 합니다.
 
 ### 5.2 I2C 설정 확인
 
@@ -110,7 +110,7 @@ dtparam=i2c_arm=on,i2c_arm_baudrate=400000
 
 ```bash
 cd ~/Adeept_PiCar-Pro/Server
-ls -lh GUIServer_mobile_final.py models/hazard_3class_v1.pt
+ls -lh GUIServer_mobile_final.py models/safety7.pt
 ~/picar-yolo/bin/python -m py_compile GUIServer_mobile_final.py
 ```
 
@@ -182,12 +182,12 @@ IP 주소는 라즈베리파이에서 `hostname -I` 명령으로 확인할 수 �
 
 ## 8. AI 객체 탐지
 
-- 사용 모델: `models/hazard_3class_v1.pt`
-- 학습 클래스 수: **3개**
+- 사용 모델: `models/safety7.pt`
+- 학습 클래스 수: **7개**
 - 추론 크기: `224`
 - 탐지 주기 설정: `8`프레임
 - 객체 탐지 시 브라우저 영상에 탐지 결과 표시
-- 실제 확인한 사례: **소화기 사진 탐지 성공**
+- 2026-11-09 Safety7 실기 확인: **교통콘(`traffic_cone`) 탐지 성공**
 
 최종 실행본은 탐지 결과가 있을 때 로그를 제한적으로 출력합니다. 같은 객체를 연속으로 인식하더라도 로그를 매 프레임 출력하지 않고, 최대 약 3초 간격으로 출력하므로 **로그에 결과가 없다고 해서 화면 탐지가 실패한 것은 아닙니다.**
 
@@ -196,7 +196,7 @@ IP 주소는 라즈베리파이에서 `hostname -I` 명령으로 확인할 수 �
 [YOLO 인식] 1개: <학습 모델에 등록된 클래스 이름>
 ```
 
-> 소화기 사진을 이용한 실제 인식은 확인했습니다. 나머지 클래스별 정확도, 다양한 조명·거리·각도에서의 성능은 이 문서에서 보장하지 않습니다.
+> 이전 3종 모델의 실기 기록에는 소화기 사진 탐지가 포함됩니다. Safety7에서 확인한 사례는 교통콘입니다.
 
 ## 9. 실제 테스트 결과
 
@@ -228,7 +228,7 @@ IP 주소는 라즈베리파이에서 `hostname -I` 명령으로 확인할 수 �
 | 증상 | 확인할 사항 |
 |---|---|
 | `ModuleNotFoundError` | `~/picar-yolo/bin/python`으로 실행했는지, 필요한 라이브러리가 설치됐는지 확인 |
-| YOLO 모델 파일 오류 | `models/hazard_3class_v1.pt`가 실제 경로에 있는지, 코드의 `YOLO_MODEL_PATH`가 맞는지 확인 |
+| YOLO 모델 파일 오류 | `models/safety7.pt`가 실제 경로에 있는지, 코드의 `YOLO_MODEL_PATH`가 맞는지 확인 |
 | 모바일 페이지 접속 불가 | 라즈베리파이 IP, 같은 네트워크 사용 여부, 포트 `5000`, 서버 실행 로그 확인 |
 | 카메라 화면 없음 | USB 카메라 연결, 장치 인식, 다른 카메라 프로세스 실행 여부 확인 |
 | OLED 표시 오류 | I2C 활성화, 주소 `0x3C`, 연결 상태 확인 |

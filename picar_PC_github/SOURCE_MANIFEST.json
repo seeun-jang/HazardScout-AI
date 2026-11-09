@@ -20,8 +20,8 @@
       "sha256": "93ca94eae9bff0f8210d24da21595a0012a334ce896c4935228694762bee603d"
     },
     "Server/GUIServer_custom.py": {
-      "bytes": 12309,
-      "sha256": "33306f764aa74f44dfd356e399c8868475260bc4ab36d160b76a0819305f5431"
+      "bytes": 12300,
+      "sha256": "c3b44dde457e5844759125363fa692dff2fd6eb0dd5bb076a450564f434be8ba"
     },
     "Server/YOLO_detector.py": {
       "bytes": 4095,
@@ -34,26 +34,18 @@
     "move/fullscreen_gui.py": {
       "bytes": 7217,
       "sha256": "ffbcafe369fda005e1a742d5bd3ee22b27fd731c87efbf840dc6ba783dd8f29f"
-    }
-  },
-  "missing_external_sources": [
-    {
-      "target": "Server/GUIServer_custom_base.py",
-      "branch": "ym",
-      "github_path": "code/GUIServer_custom.py",
-      "git_blob_sha": "a2ecfb05cb79549534bb15460e89f0f4686fdd0b"
     },
-    {
-      "target": "Server/OLED_eyes.py",
-      "branch": "mj",
-      "github_path": "picar_mobile_github/OLED_eyes.py",
-      "git_blob_sha": "6d3b4793e189437db29d116b64cf99645849cdf8"
+    "Server/GUIServer_custom_base.py": {
+      "bytes": 24012,
+      "sha256": "8b8a3bfc33ba250d9e5a7ec37b92a1de78796005934288b99ddf96062c7a118a"
     },
-    {
-      "target": "Server/models/hazard_3class_v1.pt",
-      "branch": "mj",
-      "github_path": "picar_mobile_github/models/hazard_3class_v1.pt",
-      "git_blob_sha": "94498867e7f06d968957b59f8a3369ccbde786b1"
+    "Server/OLED_eyes.py": {
+      "bytes": 9785,
+      "sha256": "4566725a53121d872f8bfcce3f19f1d5e2cb4458290ce84bdb8729fe5ce6d14f"
+    },
+    "Server/models/safety7.pt": {
+      "bytes": 6258794,
+      "sha256": "91e388a76c09f24141ea4a522466ef81bc92a071e7898dfdee0789746928d8b9"
     }
-  ]
+  }
 }
