@@ -67,7 +67,7 @@ JPEG_QUALITY = 60
 # YOLO 설정
 
 # =========================================================
-YOLO_MODEL_PATH = "/home/pi/Adeept_PiCar-Pro/Server/models/hazard_3class_v1.pt"
+YOLO_MODEL_PATH = "/home/pi/Adeept_PiCar-Pro/Server/models/safety7.pt"
 YOLO_CONFIDENCE = 0.35
 # 기존 256 -> 224
 YOLO_IMAGE_SIZE = 224
