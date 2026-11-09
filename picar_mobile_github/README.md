@@ -129,6 +129,19 @@ http://<라즈베리파이-IP>:5000
 
 IP 주소는 라즈베리파이에서 `hostname -I` 명령으로 확인할 수 있습니다. PuTTY에서 실행한 서버는 해당 터미널에서 `Ctrl + C`로 종료합니다. **같은 하드웨어를 제어하는 다른 서버를 동시에 실행하지 마세요.**
 
+### 5.5 모바일 지도 모드
+
+Pi의 `~/hazard_map_80c7951`에 이 패키지의 `hazard_map/` 실행 파일을 배치합니다. 현장 보정값은 Pi의 `robot_config.json`과 `site_map.json`에 유지하세요. 바코드 인식에는 `~/picar-yolo` 환경의 `zxing-cpp`가 필요합니다.
+
+```bash
+cd ~/Adeept_PiCar-Pro/Server
+sudo ~/picar-yolo/bin/python ~/hazard_map_80c7951/run_mobile_map.py
+```
+
+지도는 `http://<Pi-IP>:5001/map`에서 엽니다. 배포 기본값에서 바코드 자동 회피는 켜져 있습니다. Pi에서 이미 설정을 수정했다면 실제 실행값은 Pi의 `robot_config.json`을 따릅니다.
+
+[지도 코드 출처](https://github.com/seeun-jang/HazardScout-AI/tree/80c7951c4c3cd9d40a95cff71a4725dad41eacc9/hazard_map)
+
 ## 6. 모바일 제어 기능
 
 | 조작 영역 | 동작 |

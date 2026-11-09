@@ -1,0 +1,55 @@
+{
+  "_설명": "로봇마다 한 번 재서 맞추는 값. 측정 방법은 README '5. 보정' 참고",
+
+  "motion": {
+    "forward_m_per_sec": 0.30,
+    "turn_m_per_sec": 0.22,
+    "yaw_deg_per_sec": 55.0,
+    "_메모": "서버 주행 속도 60, 회전 속도 50 기준. 실측 전 임시값"
+  },
+
+  "camera": {
+    "width": 640,
+    "height": 480,
+    "focal_px": 530.0,
+    "pan_sign": 1,
+    "_메모": "focal_px는 pi_check_map.py --calibrate 로 측정. pan_sign은 카메라를 오른쪽으로 돌렸을 때 화면 표시 pan이 +가 되도록 1 또는 -1"
+  },
+
+  "barcode": {
+    "bar_width_m": 0.1448,
+    "trigger_distance_m": 0.60,
+    "max_read_distance_m": 1.5,
+    "max_pan_deg": 15,
+    "min_hits": 2,
+    "cooldown_sec": 8.0,
+    "detect_every_n_frames": 3,
+    "auto_avoid": true,
+    "_메모": "bar_width_m은 make_barcodes.py가 출력하는 '막대 부분 폭'. 라벨 크기를 바꾸면 같이 바꿀 것"
+  },
+
+  "avoid": {
+    "stop_sec": 0.4,
+    "back_sec": 0.6,
+    "refresh_sec": 0.25,
+    "auto_resume": false
+  },
+
+  "hazards": {
+    "min_confidence": 0.45,
+    "max_range_m": 3.0,
+    "merge_radius_m": 0.45,
+    "confirm_hits": 3,
+    "forget_sec": 6.0,
+    "classes": {
+      "traffic_cone":      {"height_m": 0.30, "blocks_path": true,  "name_ko": "교통콘"},
+      "fire_extinguisher": {"height_m": 0.40, "blocks_path": false, "name_ko": "소화기"},
+      "safety_helmet":     {"height_m": 0.15, "blocks_path": false, "name_ko": "안전모"},
+      "safety_vest":       {"height_m": 0.60, "blocks_path": false, "name_ko": "안전조끼"},
+      "safety_gloves":     {"height_m": 0.22, "blocks_path": false, "name_ko": "안전장갑"},
+      "earmuffs":          {"height_m": 0.18, "blocks_path": false, "name_ko": "귀덮개"},
+      "safety_goggles":    {"height_m": 0.07, "blocks_path": false, "name_ko": "보안경"}
+    },
+    "_메모": "height_m은 현장에 둘 실물 높이로 바꿀 것. 거리 계산에 직접 쓰임"
+  }
+}
