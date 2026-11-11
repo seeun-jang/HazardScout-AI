@@ -48,20 +48,23 @@ AI 기반 명령 처리 및 관제 기능을 단계적으로 구현하여
 
 ## Development Status
 
-현재 **로봇 이동 제어 기능**을 우선적으로 개발하고 있습니다.
-
-실제 로봇에서 기본 주행 기능을 구현 및 테스트하고 있으며,  
-이후 프로젝트 일정에 따라 센서, 로봇팔 제어, AI 명령 처리,  
-상황판단 및 관제 기능을 단계적으로 통합할 예정입니다.
+PC·모바일 제어, Safety7 탐지, 좌표 매핑·바코드 자동 회피와 음성·텍스트 명령을 통합했습니다. 기본 YOLOv8n을 추가 표시하는 코드도 포함합니다. 두 모델의 Pi 동시 추론 속도와 장시간 운용은 실제 환경에서 확인합니다.
 
 ---
 
 ## Repository Structure
 
-현재 프로젝트 초기 단계로, 구현이 진행된 기능부터 순차적으로 저장소에 추가합니다.
+mj 브랜치는 PC·모바일 실행 코드를 각 폴더에 구성합니다. 실행 방법과 외부 음성 인식 자원은 각 README를 확인하세요.
 
 ```text
 HazardScout-AI/
 ├── README.md
 ├── .gitignore
-└── robot-movement/
+├── picar_PC_github/
+│   ├── Server/
+│   ├── move/
+│   └── hazard_map/
+└── picar_mobile_github/
+    ├── models/
+    └── hazard_map/
+```

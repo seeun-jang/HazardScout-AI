@@ -25,6 +25,10 @@ import RPIservo
 import SmoothServo
 import GUIServer_mobile as server
 from OLED_eyes import OLEDEyes
+from YOLO_overlay import with_yolov8n
+
+# Capture the camera worker before the map launcher wraps it.
+PlainAsyncYOLO = server.AsyncYOLO
 
 
 # Original mj Final hardware settings.
@@ -231,6 +235,7 @@ def main():
     original_set_angle = RPIservo.ServoCtrl.set_angle
     original_oled_class = server.OLEDEyes
     original_yolo_class = server.YOLODetector
+    original_async_yolo = server.AsyncYOLO
     original_a_pan_sign = SmoothServo.NECK_SIGNS["a_pan"]
     original_neck_class = server.SmoothNeck
 
@@ -269,6 +274,10 @@ def main():
         print("[최종] 목 PWM 캐시 준비 완료")
         print("[최종] 원본 YOLO 사용 + 실제 인식 시 로그 출력")
         server.start_voice()
+        server.AsyncYOLO = with_yolov8n(
+            original_async_yolo, PlainAsyncYOLO, server.YOLO_MODEL_PATH,
+            server.YOLO_CONFIDENCE, server.YOLO_IMAGE_SIZE,
+        )
         server.main()
     except KeyboardInterrupt:
         print("\n[최종] 종료 요청")
@@ -277,6 +286,7 @@ def main():
         RPIservo.ServoCtrl.set_angle = original_set_angle
         server.OLEDEyes = original_oled_class
         server.YOLODetector = original_yolo_class
+        server.AsyncYOLO = original_async_yolo
         SmoothServo.NECK_SIGNS["a_pan"] = original_a_pan_sign
         server.SmoothNeck = original_neck_class
         print("[최종] 실행 중 변경한 Python 함수 복원")

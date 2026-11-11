@@ -2,7 +2,7 @@
 
 > **HazardScout-AI | `mj` 브랜치 | Raspberry Pi 4 기반 모바일 제어 모듈**
 >
-> 실제 라즈베리파이 로봇에서 실행·동작을 확인한 코드와 학습 모델만 관리하는 폴더입니다.
+> 모바일 서버 실행 코드와 YOLO 가중치를 관리합니다. Sherpa 실행 파일과 한국어 모델은 Pi에 별도로 설치합니다.
 
 ## 1. 프로젝트 개요
 
@@ -26,7 +26,7 @@
 | 집게 | 잡기·놓기 및 정지 | 부드러운 동작 확인 |
 | OLED | 눈동자 방향·깜빡임·미세 애니메이션 | 정상 출력 |
 | LED 조명 | 기존 로봇 조명 제어 | 기존 로직 유지 |
-| 음성 명령 | 음성 인식 서비스 및 모바일 조작 UI 연동 코드 포함 | **ReSpeaker Lite 실기 동작 별도 검증 필요** |
+| 음성·텍스트 명령 | Sherpa 한국어 인식과 Claude 분석을 기존 제어기에 연결 | 사용자 명령 실행 확인, 마이크·장시간 시험 별도 |
 
 > **검증 범위:** YOLO가 소화기 사진을 인식하는 상황에서 카메라·OLED·목 관절·집게의 동시 동작을 확인했습니다. 모든 환경, 모든 인식 대상, 장시간 운용 또는 음성 기능까지 검증되었다는 의미는 아닙니다.
 
@@ -43,10 +43,13 @@ picar_mobile_github/
 ├── YOLO_detector.py            # YOLO 모델 로드, 추론 및 탐지 결과 표시
 ├── Move.py                     # 바퀴 모터 구동
 ├── Switch.py                   # LED 조명 제어
-├── PiVoice.py                  # 음성 인식 서비스
-├── PiVoiceLauncher.py          # 음성 서비스 실행 및 요청 처리
+├── PiCommandCore.py           # Sherpa 음성 인식 및 Claude 명령 분석
+├── PiCommandService.py        # 명령 API와 기존 제어기 연결
+├── YOLO_overlay.py            # YOLOv8n 추가 영상 표시
+├── hazard_map/                # 좌표 매핑과 바코드 자동 회피
 └── models/
-    └── safety7.pt             # 안전 장비 7종 학습 모델
+    ├── safety7.pt             # 안전 장비 7종 모델
+    └── yolov8n.pt             # 일반 물체 탐지 모델
 ```
 
 ### 주요 파일 관계
@@ -56,7 +59,8 @@ picar_mobile_github/
 - **`SmoothServo.py` + `RPIservo.py`**: 서보 이동 단계와 실제 PWM 출력을 담당합니다.
 - **`OLED_eyes.py`**: OLED 눈동자 화면을 생성하며, 최종 실행 파일에서 전송 주기를 최적화합니다.
 - **`YOLO_detector.py` + `models/safety7.pt`**: 카메라 프레임의 실제 객체 탐지를 담당합니다.
-- **`PiVoiceLauncher.py` + `PiVoice.py`**: 별도 음성 실행 환경과 통신하는 구성입니다.
+- **`PiCommandCore.py` + `PiCommandService.py`**는 음성·텍스트 명령을 분석하고 기존 주행·목·집게 제어기에 전달합니다. 수동 조작은 진행 중인 AI 명령을 취소합니다.
+- **`YOLO_overlay.py` + `models/yolov8n.pt`**는 일반 물체를 16프레임 간격으로 탐지해 파란 박스로 표시합니다. 지도에는 Safety7 결과를 전달합니다.
 
 웹 화면은 `GUIServer_mobile.py`에 포함되어 있어, 별도의 `index.html`, CSS, JavaScript 파일이 필요하지 않습니다.
 
@@ -72,14 +76,14 @@ picar_mobile_github/
 | I2C 버스 | `/dev/i2c-1` |
 | I2C 통신 속도 | `400000` baud (400 kHz) |
 | 웹 서버 | HTTP, 포트 `5000` |
-| AI 모델 | `models/safety7.pt`, 7개 클래스 |
-| YOLO 설정 | 입력 크기 `224`, 탐지 주기 설정 `8`프레임 |
+| AI 모델 | Safety7 7종 + 기본 YOLOv8n |
+| YOLO 설정 | 입력 크기 `224`, Safety7 8프레임·YOLOv8n 16프레임 간격 |
 | 카메라 설정 | `640 × 480`, 목표 `12 FPS` |
 | 주행 속도 설정 | 전후진 `60`, 회전 `50` |
 | Python 실행 환경 | 로봇에서 준비한 `~/picar-yolo/bin/python` |
-| 음성 실행 환경 | `~/picar-voice/bin/python` (음성 기능 사용 시) |
+| 음성 실행 환경 | `~/picar-yolo/bin/python` + Sherpa 공식 ALSA 실행 파일 |
 
-Python 패키지는 기존 Raspberry Pi 실행 환경을 기준으로 합니다. 주요 의존성에는 `ultralytics`, `torch`, `opencv-python`, `picamera2`, `Pillow`, `adafruit-blinka`, `adafruit-circuitpython-pca9685`, `adafruit-circuitpython-motor`, `luma.oled`, `gpiozero` 등이 있습니다. 음성 기능에는 `faster-whisper`, `sounddevice`, `numpy`, `scipy` 등이 별도 환경에서 사용됩니다. **이 저장소에 전체 의존성 잠금 파일이 포함된 것은 아니므로**, 다른 Raspberry Pi에서 재현할 때는 운영체제·하드웨어에 맞게 설치 및 권한을 설정해야 합니다.
+Python 패키지는 기존 Raspberry Pi 실행 환경을 기준으로 합니다. 주요 의존성에는 `ultralytics`, `torch`, `opencv-python`, `picamera2`, `Pillow`, `adafruit-blinka`, `adafruit-circuitpython-pca9685`, `adafruit-circuitpython-motor`, `luma.oled`, `gpiozero` 등이 있습니다. 음성 기능은 공식 Sherpa ALSA 실행 파일과 한국어 ONNX 모델을 사용합니다. **이 저장소에 전체 의존성 잠금 파일이 포함된 것은 아니므로**, 다른 Raspberry Pi에서 재현할 때는 운영체제·하드웨어에 맞게 설치 및 권한을 설정해야 합니다.
 
 ## 5. 라즈베리파이 실행 방법
 
@@ -116,9 +120,36 @@ ls -lh GUIServer_mobile_final.py models/safety7.pt
 
 ### 5.4 모바일 서버 실행
 
+음성·텍스트 명령은 Pi의 ~/.config/hazardscout/claude.key에 저장한 키를 서버 시작 시 읽습니다. 파일 권한은 600으로 설정합니다. 최초 저장 명령은 다음과 같습니다.
+
+```bash
+(
+  set -eu
+  umask 077
+  install -d -m 700 "$HOME/.config/hazardscout"
+  read -rsp 'Claude API 키: ' hazard_key
+  printf '\n'
+  test -n "$hazard_key"
+  printf '%s\n' "$hazard_key" > "$HOME/.config/hazardscout/claude.key"
+  chmod 600 "$HOME/.config/hazardscout/claude.key"
+)
+```
+
+음성 인식은 Pi에 별도로 설치한 자원을 사용합니다.
+
+- 실행 파일 `~/sherpa-stt/sherpa-onnx-v1.12.1-linux-aarch64-shared-cpu/bin/sherpa-onnx-alsa`
+- 한국어 모델 `~/Adeept_PiCar-Pro/Server/models/sherpa-onnx-streaming-zipformer-korean-2024-06-16/`
+- 모델 폴더의 `tokens.txt`, `encoder-epoch-99-avg-1.int8.onnx`, `decoder-epoch-99-avg-1.onnx`, `joiner-epoch-99-avg-1.int8.onnx`
+- ReSpeaker Lite 입력 장치와 Claude API 접속
+
+`PICAR_AI_MOTION=1`은 실제 AI 동작을 켭니다. 이 옵션을 생략하면 AI 명령은 미리보기로 표시됩니다.
+
+
 ```bash
 cd ~/Adeept_PiCar-Pro/Server
-sudo ~/picar-yolo/bin/python GUIServer_mobile_final.py
+ANTHROPIC_API_KEY="$(<"$HOME/.config/hazardscout/claude.key")" \
+  sudo --preserve-env=ANTHROPIC_API_KEY env PICAR_AI_MOTION=1 \
+  ~/picar-yolo/bin/python GUIServer_mobile_final.py
 ```
 
 로봇과 같은 네트워크에 연결한 스마트폰 또는 PC에서 다음 주소로 접속합니다.
@@ -135,7 +166,9 @@ Pi의 `~/hazard_map_80c7951`에 이 패키지의 `hazard_map/` 실행 파일을 
 
 ```bash
 cd ~/Adeept_PiCar-Pro/Server
-sudo ~/picar-yolo/bin/python ~/hazard_map_80c7951/run_mobile_map.py
+ANTHROPIC_API_KEY="$(<"$HOME/.config/hazardscout/claude.key")" \
+  sudo --preserve-env=ANTHROPIC_API_KEY env PICAR_AI_MOTION=1 \
+  ~/picar-yolo/bin/python ~/hazard_map_80c7951/run_mobile_map.py
 ```
 
 지도는 `http://<Pi-IP>:5001/map`에서 엽니다. 배포 기본값에서 바코드 자동 회피는 켜져 있습니다. Pi에서 이미 설정을 수정했다면 실제 실행값은 Pi의 `robot_config.json`을 따릅니다.
@@ -153,7 +186,7 @@ sudo ~/picar-yolo/bin/python ~/hazard_map_80c7951/run_mobile_map.py
 | 집게 | 잡기·놓기·정지 |
 | 영상 | 카메라 스트리밍 및 객체 인식 결과 확인 |
 | 조명 | 로봇 LED 제어 |
-| 음성 버튼 | ReSpeaker Lite 기반 음성 인식 요청 UI (실기 추가 검증 필요) |
+| 음성·텍스트 입력 | 로봇 마이크 6초 수집, 텍스트 전송, AI 중지 |
 
 기본 웹 화면과 제어 요청은 `GUIServer_mobile.py`에서 처리합니다. `GUIServer_mobile_final.py`는 기존 UI를 수정하지 않고 제어 성능과 일부 이동 범위를 조정합니다.
 
@@ -187,9 +220,9 @@ sudo ~/picar-yolo/bin/python ~/hazard_map_80c7951/run_mobile_map.py
 
 | 관절 | 최종 범위 | 비고 |
 |---|---|---|
-| A 목 좌우 (`a_pan`) | `-25° ~ +25°` | 조작 방향 반전 보정 적용 |
-| A 목 상하 (`a_tilt`) | 기존 `±12°` | 기존 설정 유지 |
-| B 목 상하 (`b_tilt`) | `-20° ~ +12°` | 아래쪽만 확장, 위쪽 유지 |
+| A 목 좌우 (`a_pan`) | `-90° ~ +90°` | 수동 조작, 방향 반전 보정 |
+| A 목 상하 (`a_tilt`) | `-80° ~ +80°` | 수동 조작 |
+| B 목 상하 (`b_tilt`) | `-90° ~ +90°` | 수동 조작 |
 
 서보의 이동 단계·속도는 기존 `SmoothServo.py` 설정을 유지합니다. 각도 범위를 더 크게 변경할 경우 관절 걸림, 케이블 장력, 서보 발열 여부를 먼저 점검해야 합니다.
 
@@ -201,6 +234,8 @@ sudo ~/picar-yolo/bin/python ~/hazard_map_80c7951/run_mobile_map.py
 - 탐지 주기 설정: `8`프레임
 - 객체 탐지 시 브라우저 영상에 탐지 결과 표시
 - 2026-11-09 Safety7 실기 확인: **교통콘(`traffic_cone`) 탐지 성공**
+- `models/yolov8n.pt`는 16프레임 간격으로 일반 물체를 추가 탐지해 파란색 박스와 `YOLOv8n` 접두어로 표시합니다. Safety7은 초록색 박스를 사용합니다.
+- 두 모델의 지도 전달 분리와 스레드 종료를 모의 검증했습니다. Pi의 동시 추론 속도는 실기 확인이 필요합니다.
 
 최종 실행본은 탐지 결과가 있을 때 로그를 제한적으로 출력합니다. 같은 객체를 연속으로 인식하더라도 로그를 매 프레임 출력하지 않고, 최대 약 3초 간격으로 출력하므로 **로그에 결과가 없다고 해서 화면 탐지가 실패한 것은 아닙니다.**
 
@@ -231,7 +266,7 @@ sudo ~/picar-yolo/bin/python ~/hazard_map_80c7951/run_mobile_map.py
 ## 10. 주의사항 및 남은 확인 항목
 
 1. **목 B 상하의 미세 진동:** PWM 지연은 크게 줄었으나 약한 떨림이 남아 있습니다. 기계적 유격, 관절 부하, 전원 상태 등 추가 점검 여지가 있으며 원인을 하드웨어로 확정하지 않았습니다.
-2. **음성 인식:** 코드와 웹 UI는 포함되어 있지만 ReSpeaker Lite 입력 장치를 이용한 최종 인식·명령 실행은 아직 별도로 확인해야 합니다.
+2. **음성 인식:** 명령 실행은 사용자 확인을 받았습니다. 마이크 입력과 장시간 연속 동작은 실제 환경에서 확인합니다. AI 주행 속도는 전후진 40·회전 30이며, AI 목 명령은 중앙 기준 ±20도 안에서 처리합니다.
 3. **하드웨어 의존성:** 이 프로젝트는 Raspberry Pi GPIO, 카메라, I2C 및 실제 서보 하드웨어에 의존합니다. 일반 PC에서 실행하면 관련 모듈 또는 장치 오류가 발생할 수 있습니다.
 4. **AI 탐지 한계:** 모델이 인식하지 못하는 물체·상황에 대한 안전한 자동 판단을 보장하지 않습니다. 현재 문서의 테스트는 수동 제어와 객체 탐지 중심입니다.
 5. **전원·기구부 안전:** 서보가 끝부분에서 떨리거나 걸리면 즉시 입력을 중단합니다. 주행 테스트는 장애물 없는 공간에서 실시합니다.
@@ -246,7 +281,7 @@ sudo ~/picar-yolo/bin/python ~/hazard_map_80c7951/run_mobile_map.py
 | 카메라 화면 없음 | USB 카메라 연결, 장치 인식, 다른 카메라 프로세스 실행 여부 확인 |
 | OLED 표시 오류 | I2C 활성화, 주소 `0x3C`, 연결 상태 확인 |
 | 목·집게 동작 오류 | PCA9685 주소 `0x5F`, 연결 상태, 기구부 간섭, 전원 상태 확인 |
-| 음성 인식 실패 | ReSpeaker Lite 입력 장치, USB 데이터 연결, `arecord -l`, 음성 가상환경 확인 |
+| 음성 인식 실패 | `arecord -l`, Sherpa 실행 파일·한국어 모델 경로, API 키 파일 확인 |
 | `ConnectionResetError` | 브라우저 새로고침·연결 종료 시 발생할 수 있음. 반복적 접속 실패가 있는지 별도 확인 |
 
 ## 12. 브랜치 관리 원칙
@@ -255,7 +290,7 @@ sudo ~/picar-yolo/bin/python ~/hazard_map_80c7951/run_mobile_map.py
 
 - 실제 사용한 소스 코드와 학습 모델을 보관합니다.
 - 실험용 `stage*.py`, 임시 백업, 로그, 캐시 파일은 올리지 않습니다.
-- PC GUI 서버는 추후 별도 검증·정리 후 관리합니다.
+- PC GUI 서버는 `picar_PC_github/`에서 관리합니다.
 - `GUIServer_mobile_final.py`를 공식 실행 진입점으로 사용합니다.
 - 팀 프로젝트 전체 소개와 역할 분담은 저장소 최상위 `README.md`에서 관리하며, 이 README는 모바일 모듈의 기술적 설명에 집중합니다.
 

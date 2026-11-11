@@ -4,3 +4,11 @@ __pycache__/
 venv/
 .env
 .vscode/
+
+# Local records and legacy voice files
+/picar_PC_github/SOURCE_MANIFEST.json
+/picar_PC_github/*.txt
+/picar_mobile_github/*.txt
+/picar_PC_github/Server/PiVoice*.py
+/picar_mobile_github/PiVoice*.py
+/picar_mobile_github/models/vosk-model-small-ko-0.22/

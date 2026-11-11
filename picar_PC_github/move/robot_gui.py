@@ -23,6 +23,7 @@ import numpy as np
 import zmq
 from PIL import Image, ImageTk
 from fullscreen_gui import FullscreenGUI
+from PiCommandPanel import attach_command_panel
 
 SERVER_IP = '127.0.0.1'  # Raspberry Pi desktop viewed via TigerVNC
 CONTROL_PORT = 10223
@@ -392,6 +393,8 @@ def stop_all():
 
 
 def on_key_press(event):
+    if isinstance(event.widget, ttk.Entry):
+        return
     key = event.keysym.lower()
     if key in release_jobs:
         try:
@@ -458,6 +461,8 @@ def key_released_later(key):
 
 
 def on_key_release(event):
+    if isinstance(event.widget, ttk.Entry):
+        return
     key = event.keysym.lower()
     if key in release_jobs:
         try:
@@ -629,6 +634,16 @@ tk.Button(toolbar, text='카메라 전체화면  F11', command=fullscreen.open,
           bg=BLUE, fg=WHITE, relief='flat', height=2).pack(side='right', padx=4)
 tk.Button(toolbar, text='종료', command=close_program,
           bg=WHITE, fg=RED, relief='flat', height=2).pack(side='right', padx=4)
+
+def stop_for_text_input():
+    for job in release_jobs.values():
+        root.after_cancel(job)
+    release_jobs.clear()
+    pressed_keys.clear()
+    stop_all()
+
+
+attach_command_panel(root, header, server_ip=SERVER_IP, on_focus=stop_for_text_input)
 
 root.bind('<KeyPress>', on_key_press)
 root.bind('<KeyRelease>', on_key_release)

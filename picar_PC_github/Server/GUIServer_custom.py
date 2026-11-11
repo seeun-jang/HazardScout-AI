@@ -25,6 +25,11 @@ import RPIservo
 import SmoothServo
 import GUIServer_custom_base as pc
 from OLED_eyes import OLEDEyes
+from YOLO_overlay import with_yolov8n
+from PiCommandService import ExistingControls, start_command_service
+
+# Capture the camera worker before the map launcher wraps it.
+PlainAsyncYOLO = pc.AsyncYOLO
 
 # PCA9685 / neck servo settings from the mobile Final implementation.
 PCA_ADDRESS = 0x5F
@@ -201,11 +206,14 @@ def run():
     original_set_angle = RPIservo.ServoCtrl.set_angle
     original_oled = pc.OLEDEyes
     original_yolo = pc.YOLODetector
+    original_async_yolo = pc.AsyncYOLO
     original_robot_ctrl = pc.robot_ctrl
     original_handle_client = pc.handle_client
     original_gripper_start = pc.gripper_start
     original_gripper_stop = pc.gripper_stop
     original_sign = SmoothServo.NECK_SIGNS['a_pan']
+    original_destroy = pc.move.destroy
+    command_service = None
 
     # Avoid repeated I2C/PCA9685 construction for neck channels 1, 2, 3.
     bus = busio.I2C(SCL, SDA)
@@ -271,10 +279,28 @@ def run():
         # All remaining commands use the original PC implementation.
         return original_robot_ctrl(command)
 
+    def route_command(command):
+        if command == 'drive_ping' or command_service is None:
+            return pc_robot_ctrl(command)
+        return command_service.manual(pc_robot_ctrl, command)
+
+    def refresh_ai_watchdog():
+        global last_drive_motion, last_drive_command
+        with drive_lock:
+            last_drive_motion = True
+            last_drive_command = time.monotonic()
+
+    def destroy_with_ai_cleanup():
+        if command_service is not None:
+            command_service.close()
+        original_destroy()
+
     def guarded_handle_client(client_socket, client_address):
         try:
             return original_handle_client(client_socket, client_address)
         finally:
+            if command_service is not None:
+                command_service.cancel()
             if neck_controller is not None:
                 neck_controller.release_all()
             if grip_controller is not None:
@@ -284,7 +310,8 @@ def run():
         RPIservo.ServoCtrl.set_angle = cached_set_angle
         pc.OLEDEyes = FinalPCOLED
         pc.YOLODetector = FinalPCYOLO
-        pc.robot_ctrl = pc_robot_ctrl
+        pc.robot_ctrl = route_command
+        pc.move.destroy = destroy_with_ai_cleanup
         pc.handle_client = guarded_handle_client
         pc.gripper_start = _pc_grip_start
         pc.gripper_stop = _pc_grip_stop
@@ -316,10 +343,27 @@ def run():
         print('PC GUI는 ~/move/robot_gui.py로 실행하세요.')
         print('모바일 서버와 동시에 실행하지 마세요.')
         print('=' * 62)
+        controls = ExistingControls(
+            vars(pc),
+            lambda: (neck_controller, grip_controller),
+            lambda: pc_robot_ctrl('DS'),
+            refresh_ai_watchdog,
+        )
+        try:
+            command_service = start_command_service(controls, local_http=True)
+        except OSError as exc:
+            print('[AI 명령] PC 패널 포트 초기화 실패:', exc, flush=True)
+        pc.AsyncYOLO = with_yolov8n(
+            original_async_yolo, PlainAsyncYOLO, pc.YOLO_MODEL_PATH,
+            pc.YOLO_CONFIDENCE, pc.YOLO_IMAGE_SIZE,
+        )
         pc.main()
     except KeyboardInterrupt:
         print('\n[PC Final] 종료 요청')
     finally:
+        if command_service is not None:
+            command_service.close()
+        pc.move.destroy = original_destroy
         watchdog_stop.set()
         with drive_lock:
             last_drive_motion = False
@@ -330,6 +374,7 @@ def run():
         RPIservo.ServoCtrl.set_angle = original_set_angle
         pc.OLEDEyes = original_oled
         pc.YOLODetector = original_yolo
+        pc.AsyncYOLO = original_async_yolo
         pc.robot_ctrl = original_robot_ctrl
         pc.handle_client = original_handle_client
         pc.gripper_start = original_gripper_start
