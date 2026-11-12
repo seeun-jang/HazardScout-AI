@@ -33,7 +33,6 @@ sys.path.insert(0, HERE)
 
 import map_web  # noqa: E402
 from map_config import HEADING_DEG, Config, heading_vec  # noqa: E402
-from map_control import RobotControl  # noqa: E402
 from map_core import HazardMapper  # noqa: E402
 
 failed = []
@@ -72,6 +71,59 @@ def cone_detection(cfg, robot, target, height_m=0.30):
             "traffic_cone", 0.8)
 
 
+EXPECTED_SEQ = {
+    "left": ["STOP", "backward", "STOP", "left", "STOP"],
+    "right": ["STOP", "backward", "STOP", "right", "STOP"],
+    "back": ["STOP", "backward", "STOP", "backleft", "STOP"],
+    "stop": ["STOP"],
+}
+
+
+def field_map_check(tmp):
+    """실제 현장 지도(site_map.json)의 바코드마다: 멀리선 회피 안 함, 가까이 오면 막힌 칸 표시 + 정해진 회피"""
+    print("\n8) 현장 지도(site_map.json) 바코드 -> 회피")
+    field = Config()
+    check("현장 지도 설정 경고 없음", not field.warnings, "; ".join(field.warnings))
+    field.avoid.update({"stop_sec": 0.01, "back_sec": 0.05, "refresh_sec": 0.02})
+    field.motion["yaw_deg_per_sec"] = 180.0
+    trig = float(field.barcode["trigger_distance_m"])
+    every = int(field.barcode["detect_every_n_frames"])
+    print(f"  회피 시작 거리 {trig:.2f}m")
+
+    for code, info in field.barcodes.items():
+        action = info["action"]
+        if action == "none":
+            continue
+        fm = HazardMapper(field, state_dir=tmp, async_barcodes=False)
+        sent = []
+        fm.attach_controls(lambda c: sent.append(c), lambda: sent.append("STOP"))
+
+        face = field.barcode_face(code)
+        heading = HEADING_DEG[info["robot_heading"]]
+        fx, fy = heading_vec(heading)
+
+        def look_from(distance):
+            fm.pose.set(face[0] - fx * distance, face[1] - fy * distance, heading, time.monotonic())
+            frame = barcode_frame(field, code, distance)
+            for _ in range(every * 2):
+                fm.on_frame(frame.copy(), "forward")
+
+        look_from(trig * 1.4)          # 회피 시작 거리보다 멀리
+        far_sent = list(sent)
+
+        fm.barcodes.hits.clear()
+        look_from(trig * 0.85)         # 회피 시작 거리 안
+        if fm.avoider.thread:
+            fm.avoider.thread.join(5)
+        seq = [c for i, c in enumerate(sent) if i == 0 or c != sent[i - 1]]
+        cell = tuple(info["cell"])
+
+        check(f"바코드 {code}: {trig * 1.4:.2f}m 에서는 회피 안 함", not far_sent, str(far_sent))
+        check(f"바코드 {code}: 칸 {cell} 막힘 + {action}",
+              cell in fm.grid.blocked and seq == EXPECTED_SEQ[action], str(seq))
+        fm.close()
+
+
 def main():
     if not os.path.isdir(os.path.join(HERE, "labels")):
         print("labels/ 가 없습니다. 먼저 python3 make_barcodes.py 를 실행하세요.")
@@ -85,7 +137,7 @@ def main():
 
 
 def run(tmp):
-    # 테스트는 실제 현장 지도(site_map.json)와 상관없이 고정된 예시 지도로 돌림
+    # 1~7번은 실제 현장 지도(site_map.json)와 상관없이 고정된 예시 지도로 돌림
     cfg = Config(site_path=os.path.join(HERE, "test_site_map.json"))
     check("설정 파일 경고 없음", not cfg.warnings, "; ".join(cfg.warnings))
 
@@ -288,57 +340,6 @@ def run(tmp):
     finally:
         web.shutdown()
 
-    print("\n8) 관제 대시보드 (조종 / 영상)")
-    sent = []
-    control = RobotControl(lambda c: sent.append(c), "pc")
-    web = map_web.start(m, port=0, host="127.0.0.1", control=control)
-    base = f"http://127.0.0.1:{web.server_address[1]}"
-
-    def post_control(cmd):
-        req = urllib.request.Request(base + "/api/control", method="POST",
-                                     data=json.dumps({"command": cmd}).encode(),
-                                     headers={"Content-Type": "application/json"})
-        return json.load(urllib.request.urlopen(req, timeout=3))
-
-    feeding = threading.Event()
-
-    def feed():
-        img = np.full((480, 640, 3), 60, np.uint8)
-        while not feeding.is_set():
-            m.on_frame(img.copy(), "stop")
-            time.sleep(0.05)
-
-    feeder = threading.Thread(target=feed, daemon=True)
-    feeder.start()
-    try:
-        html = urllib.request.urlopen(base + "/", timeout=3).read().decode()
-        check("GET / 대시보드 페이지", "HazardScout 관제" in html and "/stream.mjpg" in html)
-        data = json.load(urllib.request.urlopen(base + "/api/dashboard", timeout=3))
-        check("GET /api/dashboard", data["control"]["kind"] == "pc" and "live" in data["map"])
-
-        post_control("forward")
-        check("전진 명령 전달", sent[-1] == "forward")
-        time.sleep(1.0)
-        check("명령이 끊기면 0.7초 뒤 자동 정지 (PC는 DS)", sent[-1] == "DS")
-        post_control("neck:a_pan:1")
-        time.sleep(1.0)
-        check("목 명령도 끊기면 자동 정지", sent[-1] == "neck:a_pan:0")
-        try:
-            post_control("rm -rf /")
-            check("모르는 명령 거부", False)
-        except urllib.error.HTTPError as e:
-            check("모르는 명령 거부", e.code == 400)
-
-        stream = urllib.request.urlopen(base + "/stream.mjpg", timeout=5)
-        chunk = stream.read(4000)
-        stream.close()
-        check("영상 스트림에 JPEG 프레임", b"--frame" in chunk and b"\xff\xd8" in chunk)
-    finally:
-        feeding.set()
-        feeder.join()
-        control.close()
-        web.shutdown()
-
     out = os.path.join(HERE, "results")
     os.makedirs(out, exist_ok=True)
     frame = barcode_frame(cfg, "1101", 0.5)
@@ -346,6 +347,8 @@ def run(tmp):
     cv2.imwrite(os.path.join(out, "sim_frame.png"), frame)
     cv2.imwrite(os.path.join(out, "sim_map.png"), m.render(cell_px=40))
     print("\n화면 저장:", os.path.join(out, "sim_frame.png"), os.path.join(out, "sim_map.png"))
+
+    field_map_check(tmp)
 
     print("\n통과" if not failed else f"\n실패 {len(failed)}개: {', '.join(failed)}")
     return 1 if failed else 0

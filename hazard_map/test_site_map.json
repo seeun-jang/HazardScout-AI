@@ -1,0 +1,18 @@
+{
+  "_설명": {
+    "용도": "test_map.py 전용 예시 지도. 실제 현장 지도(site_map.json)를 바꿔도 테스트 기준이 흔들리지 않게 따로 둠. 현장 지도 바코드 확인은 test_map.py 8번 항목에서 함"
+  },
+
+  "cell_size_m": 0.3,
+  "grid_w": 12,
+  "grid_h": 8,
+  "start_cell": [1, 6],
+  "start_heading": "N",
+
+  "barcodes": {
+    "1100": {"cell": [1, 1], "robot_heading": "N", "action": "right", "note": "복도 끝 막힘"},
+    "1101": {"cell": [8, 2], "robot_heading": "E", "action": "right", "note": "창고 앞 막힘"},
+    "1102": {"cell": [7, 6], "robot_heading": "S", "action": "back",  "note": "막다른 길"},
+    "1103": {"cell": [4, 4], "robot_heading": "W", "action": "left",  "note": "낙하물 구역"}
+  }
+}

@@ -60,9 +60,13 @@ class Config:
 
         self.motion = robot["motion"]
         self.camera = robot["camera"]
-        self.barcode = robot["barcode"]
+        self.barcode = dict(robot["barcode"])
         self.avoid = robot["avoid"]
         self.hazards = robot["hazards"]
+
+        # 현장마다 다른 회피 시작 거리 (좁은 트랙 등). 있으면 robot_config.json 값 대신 사용
+        if site.get("trigger_distance_m") is not None:
+            self.barcode["trigger_distance_m"] = float(site["trigger_distance_m"])
 
         self.warnings = []
         self._validate()
