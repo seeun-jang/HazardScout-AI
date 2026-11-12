@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090d12">
+  <meta name="description" content="HazardScout-AI 노트북 환경카메라 관제 대시보드">
+  <title>HAZARDSCOUT / Mission Control</title>
+  <link rel="stylesheet" href="/static/style.css?v=3">
+  <script src="/static/app.js?v=3" defer></script>
+</head>
+<body>
+  <!-- Offline-capable icon sprite; no third-party fonts or JS are required. -->
+  <svg class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="ic-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+    <symbol id="ic-cam" viewBox="0 0 24 24"><path d="M15 10l5-3v10l-5-3"/><rect x="2.5" y="5" width="13" height="14" rx="2"/><circle cx="9" cy="12" r="3"/></symbol>
+    <symbol id="ic-shield" viewBox="0 0 24 24"><path d="M12 2.5 20 6v5c0 5-3.4 8.4-8 10.5C7.4 19.4 4 16 4 11V6l8-3.5Z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="ic-history" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 2.6-6.4L3 8"/><path d="M3 3v5h5M12 7v5l3.5 2"/></symbol>
+    <symbol id="ic-edit" viewBox="0 0 24 24"><path d="M4 20h16M5 15l10-10a2.5 2.5 0 0 1 3.5 3.5l-10 10-4 1Z"/></symbol>
+    <symbol id="ic-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="ic-alert" viewBox="0 0 24 24"><path d="m12 3 10 18H2L12 3Z"/><path d="M12 9v5M12 18h.01"/></symbol>
+    <symbol id="ic-check" viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></symbol>
+    <symbol id="ic-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+    <symbol id="ic-play" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7V5Z"/></symbol>
+    <symbol id="ic-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1.5"/></symbol>
+    <symbol id="ic-scan" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="ic-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5h.01"/></symbol>
+    <symbol id="ic-chevron" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+    <symbol id="ic-settings" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2" fill="#10151d"/><circle cx="16" cy="12" r="2" fill="#10151d"/><circle cx="10" cy="18" r="2" fill="#10151d"/></symbol>
+  </svg>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="대시보드 메뉴">
+      <div class="brand">
+        <div class="brand-logo" aria-hidden="true"><span>H</span><span class="brand-cut"></span></div>
+        <div class="brand-text"><strong>HAZARDSCOUT</strong><span>MISSION CONTROL <em>v3.0</em></span></div>
+      </div>
+      <div class="side-label">WORKSPACE</div>
+      <nav class="nav-group" aria-label="기능 이동">
+        <a class="nav-link active" href="#overview"><svg><use href="#ic-grid"/></svg><span>종합 관제</span><span class="nav-arrow">01</span></a>
+        <a class="nav-link" href="#camera"><svg><use href="#ic-cam"/></svg><span>환경 카메라</span><span class="nav-arrow">02</span></a>
+        <a class="nav-link" href="#alerts"><svg><use href="#ic-shield"/></svg><span>위험 감지 / 확인</span><span class="nav-count" id="sidebar-pending">0</span></a>
+        <a class="nav-link" href="#report"><svg><use href="#ic-edit"/></svg><span>순찰 보고서</span></a>
+        <a class="nav-link" href="#history"><svg><use href="#ic-history"/></svg><span>순찰 이력</span></a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-hardware">
+          <span class="side-label">SYSTEM HEALTH</span>
+          <div><span class="health-dot" id="side-cam-dot"></span><span>환경카메라</span><strong id="side-cam">대기</strong></div>
+          <div><span class="health-dot" id="side-model-dot"></span><span>YOLO 모델</span><strong id="side-model">확인 중</strong></div>
+          <div><span class="health-dot good"></span><span>노트북 서버</span><strong>연결됨</strong></div>
+        </div>
+        <div class="sidebar-caption">PMPH · HAZARDSCOUT AI<br>Environmental observation system</div>
+      </div>
+    </aside>
+
+    <div class="main-shell" id="overview">
+      <header class="topbar">
+        <div class="breadcrumb">PROJECT / HAZARDSCOUT <svg><use href="#ic-chevron"/></svg> <strong>관제 대시보드</strong></div>
+        <div class="top-actions"><div class="system-live"><span></span> LOCAL SYSTEM ACTIVE</div><time id="clock">--:--:--</time><div class="avatar" title="관제 관리자">HS</div></div>
+      </header>
+      <main>
+        <div class="page-intro"><div><div class="eyebrow"><span class="eyebrow-mark"></span> ENVIRONMENT INTELLIGENCE / OPERATIONS</div><h1>환경 관제 대시보드<span class="version">/ COMMAND CENTER</span></h1><p>고정형 환경카메라 감시 · 자율 순찰 현황 · AI 객체 인식 및 관리자 확인</p></div><span class="date-badge" id="today-date">2026. 11. 12</span></div>
+        <div class="demo-banner" id="demo-banner" hidden><svg><use href="#ic-info"/></svg><div><strong>DEMONSTRATION MODE</strong><span>실제 카메라나 YOLO 추론이 아닌 현장 사진·가상 UNKNOWN 이벤트로 동작을 시험하고 있습니다. 데이터는 별도 DB에 저장됩니다.</span></div></div>
+        <section class="mission-panel" aria-label="현재 임무 상태">
+          <div class="mission-bg"></div>
+          <div class="mission-main"><div class="mission-kicker"><span class="orbit"></span><span id="mission-kicker">MISSION READY</span></div><h2 id="main-status">순찰을 시작하십시오.</h2><p id="main-subtitle">카메라와 기준 화면을 확인한 뒤 순찰을 시작할 수 있습니다.</p><div class="mission-actions"><a class="button button-inverse" href="#camera"><svg><use href="#ic-cam"/></svg>카메라 관제 열기 <svg class="arrow-icon"><use href="#ic-arrow"/></svg></a><span id="mission-hint" class="mission-hint">SYSTEM STANDBY</span></div></div>
+          <div class="mission-counter"><div class="mission-counter-top"><svg><use href="#ic-clock"/></svg> 작업 시작 예정</div><strong id="countdown">--:--</strong><div id="countdown-sub">시작 시각을 설정하세요</div><div class="counter-progress"><span id="counter-line"></span></div></div>
+        </section>
+
+        <section class="kpi-grid" aria-label="실시간 현황">
+          <article class="kpi"><div class="kpi-top"><span>01 / CAMERA STATUS</span><svg><use href="#ic-cam"/></svg></div><strong id="kpi-camera">연결 대기</strong><div id="kpi-camera-sub">카메라 소스 미확인</div><span class="kpi-indicator" id="kpi-camera-indicator"></span></article>
+          <article class="kpi"><div class="kpi-top"><span>02 / PATROL SESSION</span><svg><use href="#ic-scan"/></svg></div><strong id="patrol-state">대기 중</strong><div id="kpi-patrol-sub">순찰을 시작해 주세요</div><span class="kpi-indicator"></span></article>
+          <article class="kpi"><div class="kpi-top"><span>03 / YOLO DETECTION</span><svg><use href="#ic-grid"/></svg></div><strong id="kpi-known">—</strong><div>현재 프레임에서 탐지된 객체</div><span class="kpi-indicator"></span></article>
+          <article class="kpi critical-kpi" id="kpi-alert-card"><div class="kpi-top"><span>04 / REVIEW REQUIRED</span><svg><use href="#ic-alert"/></svg></div><strong id="pending-total">0 <small>건</small></strong><div id="kpi-alert-sub">미확인 경고 없음</div><span class="kpi-indicator"></span></article>
+        </section>
+
+        <div class="primary-grid">
+          <section class="panel camera-panel" id="camera">
+            <div class="panel-header"><div><div class="overline">MONITORING / 01</div><h3>환경카메라 실시간 관제</h3></div><div class="panel-tools"><span class="status-chip" id="camera-pill"><span class="status-dot"></span> CAMERA OFFLINE</span></div></div>
+            <div class="video-stage" id="video-stage">
+              <img id="camera-feed" src="/video" alt="환경카메라 실시간 영상" hidden>
+              <div class="offline-placeholder" id="offline-placeholder"><div class="radar"><svg><use href="#ic-cam"/></svg><span></span></div><strong>CAMERA SIGNAL LOST</strong><span>카메라 연결을 기다리고 있습니다.</span><small>USB 연결 후 CAMERA_SOURCE를 확인하세요.</small></div>
+              <div class="viewfinder-lines" aria-hidden="true"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i></div>
+              <div class="video-topline"><span>CH 01 <b>/</b> OVERHEAD CAMERA</span><span id="feed-mode">NO SIGNAL</span></div>
+              <div class="video-bottomline"><span class="video-live" id="feed-live"><i></i><span>STANDBY</span></span><span id="frame-legend"><i class="dot green"></i> KNOWN <i class="dot red"></i> UNKNOWN</span></div>
+            </div>
+            <div class="video-stats"><div><span class="data-label">REFERENCE</span><strong id="reference-status">미설정</strong></div><div><span class="data-label">DETECTIONS</span><strong id="object-count">KNOWN 0 · UNKNOWN 0</strong></div><div><span class="data-label">MODEL</span><strong id="model-short">확인 중</strong></div></div>
+            <div class="camera-controls"><button id="reference-btn" class="button button-outline"><svg><use href="#ic-scan"/></svg> 기준 화면 저장</button><button id="start-btn" class="button button-white"><svg><use href="#ic-play"/></svg> 순찰 시작</button><button id="finish-btn" class="button button-outline" disabled><svg><use href="#ic-stop"/></svg> 순찰 종료 보고</button><button id="demo-unknown-btn" class="button button-danger" hidden><svg><use href="#ic-alert"/></svg> UNKNOWN 시뮬레이션</button></div>
+            <div class="panel-note"><svg><use href="#ic-info"/></svg><span>빨간 <strong>UNKNOWN</strong> 박스는 위험 확정이 아닌 <strong>관리자 확인 요청</strong>입니다. 설치 전에는 기준 화면을 초기화하지 마세요.</span></div>
+          </section>
+          <div class="right-stack">
+            <section class="panel review-panel" id="alerts"><div class="panel-header"><div><div class="overline">SAFETY PROTOCOL / 02</div><h3>관리자 확인 센터</h3></div><span class="alert-counter" id="review-label">0 PENDING</span></div><div class="review-banner" id="urgent-alert"><div class="review-symbol"><svg><use href="#ic-shield"/></svg></div><div><strong>모든 구역 정상</strong><span>현재 확인 대기 중인 UNKNOWN이 없습니다.</span></div></div><div class="subheading"><span>최근 탐지 및 확인 내역</span><span id="alert-count">0 EVENTS</span></div><div id="alerts-list" class="alerts-list"><div class="empty-state">아직 기록된 알림이 없습니다.</div></div></section>
+            <section class="panel schedule-panel" id="schedule"><div class="panel-header"><div><div class="overline">SCHEDULE / 03</div><h3>작업 시작 예약</h3></div><svg class="header-icon"><use href="#ic-clock"/></svg></div><form id="schedule-form"><label for="worktime">현장 작업 시작 시각</label><div class="schedule-form-row"><input id="worktime" type="datetime-local" required><button type="submit" class="button button-white">시간 저장</button></div></form><p id="schedule-hint" class="muted-copy">작업 시작 시각이 등록되면 카운트다운이 표시됩니다.</p><div class="step-list"><div><b>01</b><span>장비 및 기준 화면 확인</span><i id="step-reference"></i></div><div><b>02</b><span>환경카메라 상태 확인</span><i id="step-camera"></i></div><div><b>03</b><span>순찰 진행 및 기록</span><i id="step-patrol"></i></div><div><b>04</b><span>관리자 확인 후 작업 개시</span><i id="step-review"></i></div></div></section>
+          </div>
+        </div>
+        <div class="secondary-grid">
+          <section class="panel report-panel" id="report"><div class="panel-header"><div><div class="overline">PATROL LOG / 04</div><h3>순찰 완료 보고서</h3></div><span class="report-tag" id="report-tag">PATROL STANDBY</span></div><p class="panel-description">순찰을 마친 뒤 구역별 특이사항을 기록하세요. 미확인 물체는 관리자 확인 대기 알림으로 자동 등록됩니다.</p><label for="patrol-note" class="input-label">현장 특이사항 <small>/ 최대 1,000자</small></label><textarea id="patrol-note" rows="5" maxlength="1000" placeholder="예: A구역에서 확인되지 않은 물체 발견함. 작업 전 관리자 확인 부탁드립니다."></textarea><div class="report-meta"><label for="patrol-zone">발견 구역</label><select id="patrol-zone"><option>A구역</option><option>B구역</option><option>C구역</option></select><label class="manual-review"><input type="checkbox" id="manual-review"><span>관리자 확인 요청</span></label><span id="note-count">0 / 1000</span></div><button id="submit-report-btn" class="button button-white report-submit" disabled><svg><use href="#ic-check"/></svg> 순찰 완료 및 보고서 저장 <svg class="arrow-icon"><use href="#ic-arrow"/></svg></button></section>
+          <section class="panel history-panel" id="history"><div class="panel-header"><div><div class="overline">MISSION HISTORY / 05</div><h3>순찰 이력</h3></div><span class="history-count" id="history-count">0 ROUNDS</span></div><div id="patrols-list" class="history-list"><div class="empty-state">순찰을 완료하면 이곳에 기록됩니다.</div></div><div class="history-footer"><svg><use href="#ic-history"/></svg> 모든 결과는 노트북의 SQLite에 로컬 저장됩니다.</div></section>
+        </div>
+        <footer><span>HAZARDSCOUT — AUTONOMOUS SAFETY MONITORING</span><span>PMPH TEAM / LAPTOP CONTROL SERVER <i></i> 2026</span></footer>
+      </main>
+    </div>
+  </div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <dialog id="review-dialog" aria-labelledby="review-title"><form method="dialog" id="review-form"><div class="dialog-eyebrow">SAFETY REVIEW / AUTHORIZATION REQUIRED</div><div class="dialog-mark"><svg><use href="#ic-alert"/></svg></div><h3 id="review-title">관리자 확인 처리</h3><p id="review-info">현장에서 미확인 물체를 점검한 뒤 확인 완료 또는 오탐을 선택하세요.</p><label for="admin-pin">관리자 PIN</label><input id="admin-pin" type="password" autocomplete="off" placeholder="관리자 PIN 입력" required><div class="dialog-actions"><button value="cancel" class="button button-outline">취소</button><button type="button" id="false-alarm-btn" class="button button-outline">오탐 처리</button><button type="button" id="confirmed-btn" class="button button-white">확인 완료</button></div></form></dialog>
+</body>
+</html>

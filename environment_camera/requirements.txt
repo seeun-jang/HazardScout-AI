@@ -1,0 +1,4 @@
+# Python 3.11 recommended. On first run Ultralytics may download yolov8n.pt.
+numpy>=1.26,<3
+opencv-python>=4.9,<5
+ultralytics>=8.3,<9

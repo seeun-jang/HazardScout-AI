@@ -1,0 +1,21 @@
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Local settings
+.env
+
+# Runtime data
+data/
+runs/
+robot_training/runs/
+
+# Training artifacts
+robot_training/external/
+robot_training/models/*.pt
+
+# Downloaded model
+yolov8n.pt
+

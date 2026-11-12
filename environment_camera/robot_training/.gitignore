@@ -1,0 +1,11 @@
+# Keep photos, imported sources, training artifacts and model weights OUT of GitHub.
+starter/images/
+starter/preview_*.jpg
+external/*
+!external/README.md
+dataset/
+runs/
+results/
+models/*.pt
+__pycache__/
+.pytest_cache/
