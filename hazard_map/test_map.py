@@ -33,6 +33,7 @@ sys.path.insert(0, HERE)
 
 import map_web  # noqa: E402
 from map_config import HEADING_DEG, Config, heading_vec  # noqa: E402
+from map_control import RobotControl  # noqa: E402
 from map_core import HazardMapper  # noqa: E402
 
 failed = []
@@ -84,7 +85,8 @@ def main():
 
 
 def run(tmp):
-    cfg = Config()
+    # 테스트는 실제 현장 지도(site_map.json)와 상관없이 고정된 예시 지도로 돌림
+    cfg = Config(site_path=os.path.join(HERE, "test_site_map.json"))
     check("설정 파일 경고 없음", not cfg.warnings, "; ".join(cfg.warnings))
 
     # 테스트에서는 회피 동작 시간을 짧게
@@ -284,6 +286,57 @@ def run(tmp):
         except urllib.error.HTTPError as e:
             check("다른 사이트에서 온 초기화 요청 거부", e.code == 403)
     finally:
+        web.shutdown()
+
+    print("\n8) 관제 대시보드 (조종 / 영상)")
+    sent = []
+    control = RobotControl(lambda c: sent.append(c), "pc")
+    web = map_web.start(m, port=0, host="127.0.0.1", control=control)
+    base = f"http://127.0.0.1:{web.server_address[1]}"
+
+    def post_control(cmd):
+        req = urllib.request.Request(base + "/api/control", method="POST",
+                                     data=json.dumps({"command": cmd}).encode(),
+                                     headers={"Content-Type": "application/json"})
+        return json.load(urllib.request.urlopen(req, timeout=3))
+
+    feeding = threading.Event()
+
+    def feed():
+        img = np.full((480, 640, 3), 60, np.uint8)
+        while not feeding.is_set():
+            m.on_frame(img.copy(), "stop")
+            time.sleep(0.05)
+
+    feeder = threading.Thread(target=feed, daemon=True)
+    feeder.start()
+    try:
+        html = urllib.request.urlopen(base + "/", timeout=3).read().decode()
+        check("GET / 대시보드 페이지", "HazardScout 관제" in html and "/stream.mjpg" in html)
+        data = json.load(urllib.request.urlopen(base + "/api/dashboard", timeout=3))
+        check("GET /api/dashboard", data["control"]["kind"] == "pc" and "live" in data["map"])
+
+        post_control("forward")
+        check("전진 명령 전달", sent[-1] == "forward")
+        time.sleep(1.0)
+        check("명령이 끊기면 0.7초 뒤 자동 정지 (PC는 DS)", sent[-1] == "DS")
+        post_control("neck:a_pan:1")
+        time.sleep(1.0)
+        check("목 명령도 끊기면 자동 정지", sent[-1] == "neck:a_pan:0")
+        try:
+            post_control("rm -rf /")
+            check("모르는 명령 거부", False)
+        except urllib.error.HTTPError as e:
+            check("모르는 명령 거부", e.code == 400)
+
+        stream = urllib.request.urlopen(base + "/stream.mjpg", timeout=5)
+        chunk = stream.read(4000)
+        stream.close()
+        check("영상 스트림에 JPEG 프레임", b"--frame" in chunk and b"\xff\xd8" in chunk)
+    finally:
+        feeding.set()
+        feeder.join()
+        control.close()
         web.shutdown()
 
     out = os.path.join(HERE, "results")

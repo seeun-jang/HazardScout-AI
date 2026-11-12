@@ -8,19 +8,59 @@
     "barcodes.cell": "바코드가 붙은 '막힌 칸'",
     "barcodes.robot_heading": "로봇이 이 바코드를 정면으로 볼 때 바라보는 방향",
     "barcodes.action": "left(왼쪽) / right(오른쪽) / back(유턴) / stop(정지) / none(막힌 곳 아님, 위치 보정만)",
-    "바코드 번호": "숫자 4자리. 바코드가 짧아져 멀리서도 읽힘"
+    "바코드 번호": "숫자 4자리. 바코드가 짧아져 멀리서도 읽힘",
+    "현장": "2층 트랙 매트 중 오른쪽 고리 트랙(게이트, 횡단보도 있는 고리)만 사용. 위쪽(N)=파란 소파 쪽, 아래쪽(S)=START 글자 쪽. 매트 360cm x 약 480cm 가정",
+    "trigger_distance_m": "(선택) 이 현장에서만 회피 시작 거리를 robot_config.json 대신 이 값으로. 트랙이 좁아서 0.35m",
+    "track": "(선택) 대시보드 지도에 그릴 트랙 그림(흰 선, 노란 표시를 m 단위 다각형으로 저장한 파일)"
   },
-
-  "cell_size_m": 0.3,
-  "grid_w": 12,
-  "grid_h": 8,
-  "start_cell": [1, 6],
-  "start_heading": "N",
-
+  "cell_size_m": 0.15,
+  "grid_w": 32,
+  "grid_h": 24,
+  "trigger_distance_m": 0.35,
+  "start_cell": [
+    22,
+    3
+  ],
+  "start_heading": "E",
   "barcodes": {
-    "1100": {"cell": [1, 1], "robot_heading": "N", "action": "right", "note": "복도 끝 막힘"},
-    "1101": {"cell": [8, 2], "robot_heading": "E", "action": "right", "note": "창고 앞 막힘"},
-    "1102": {"cell": [7, 6], "robot_heading": "S", "action": "back",  "note": "막다른 길"},
-    "1103": {"cell": [4, 4], "robot_heading": "W", "action": "left",  "note": "낙하물 구역"}
+    "1100": {
+      "cell": [
+        31,
+        3
+      ],
+      "robot_heading": "E",
+      "action": "right",
+      "note": "오른쪽 위 모서리, 위 차로 끝"
+    },
+    "1101": {
+      "cell": [
+        29,
+        15
+      ],
+      "robot_heading": "S",
+      "action": "right",
+      "note": "오른쪽 아래 모서리, 오른쪽 차로 끝"
+    },
+    "1102": {
+      "cell": [
+        13,
+        13
+      ],
+      "robot_heading": "W",
+      "action": "right",
+      "note": "왼쪽 아래 모서리, 아래 차로 끝 (파란 표지판 자리 근처)"
+    },
+    "1103": {
+      "cell": [
+        16,
+        1
+      ],
+      "robot_heading": "N",
+      "action": "right",
+      "note": "왼쪽 위 모서리, 왼쪽 차로 끝"
+    }
+  },
+  "track": {
+    "file": "sites/2f_track.json"
   }
 }
