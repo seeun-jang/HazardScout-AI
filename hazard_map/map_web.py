@@ -15,6 +15,7 @@ map_web.py
 - POST /api/robot      : {"command": "forward" | "backward" | "left" | "right" | "stop"
                                      | "neck:a_pan|a_tilt|b_tilt:-1|0|1"}
                          누르고 있는 동안 0.25초마다 다시 보냄. 0.7초 동안 안 오면 자동 정지
+                         같은 주행 명령의 반복은 로봇에 다시 보내지 않음 (바코드 회피가 취소되지 않게)
 """
 
 import json
@@ -574,9 +575,17 @@ class RobotRemote:
         command = str(command or "").strip()
         if command in DRIVE_COMMANDS:
             with self.lock:
+                repeat = self.drive == command
                 self.drive = command
                 self.drive_seen = time.monotonic()
-            self._send(command)
+            if not repeat:
+                self._send(command)
+            elif self.kind() == "pc":
+                # 누르고 있는 동안의 반복 신호. PC GUI 와 같이 drive_ping 만 보내서
+                # 1.2초 안전정지만 막고, 바코드 회피는 취소하지 않는다
+                self._send("drive_ping")
+            # 모바일 서버는 방향이 바뀔 때만 명령을 받으므로 반복은 보내지 않음
+            # (같은 명령을 다시 보내면 진행 중인 바코드 회피가 취소됨)
         elif command == "stop":
             with self.lock:
                 self.drive = None
