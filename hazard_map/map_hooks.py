@@ -50,6 +50,11 @@ def install(base, kind, mapper):
     original_async = base.AsyncYOLO
     state = {"ctrl_installed": False, "errors": 0}
 
+    # 지도 웹(5001)의 조작 버튼용. 부를 때마다 base.robot_ctrl 을 새로 찾으므로
+    # Final 파일이 바꾼 함수, 회피 중단이 들어간 guarded_ctrl 을 그대로 거친다
+    mapper.robot_kind = kind
+    mapper.user_command = lambda command: base.robot_ctrl(command)
+
     def install_controls():
         if state["ctrl_installed"]:
             return

@@ -12,10 +12,14 @@ map_web.py
 - POST /api/map/reset  : 지도 초기화 (로봇을 출발 칸에 다시 놓은 뒤)
 - POST /api/map/goal   : {"cell": [x, y]} 목표 칸 지정 -> 막힌 칸을 피한 경로 표시
                          {"cell": null} 목표 해제
+- POST /api/robot      : {"command": "forward" | "backward" | "left" | "right" | "stop"
+                                     | "neck:a_pan|a_tilt|b_tilt:-1|0|1"}
+                         누르고 있는 동안 0.25초마다 다시 보냄. 0.7초 동안 안 오면 자동 정지
 """
 
 import json
 import threading
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import cv2
@@ -73,7 +77,7 @@ MAP_HTML = r"""<!doctype html>
   h1 small { font-size:11px; font-weight:700; letter-spacing:1.5px; color:#8293a6; margin-left:12px; }
   .intro p { margin:0; font-size:11px; color:#74869b; text-align:right; max-width:420px; line-height:1.6; }
 
-  .layout { display:grid; grid-template-columns:minmax(0,1fr) 360px; gap:16px; align-items:start; }
+  .layout { display:grid; grid-template-columns:minmax(0,1fr) 380px; gap:16px; align-items:start; }
   .panel { background:var(--panel); border:1px solid var(--stroke); border-radius:11px; padding:15px 16px; box-shadow:0 8px 24px #24365208; min-width:0; }
   .panel-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; }
   .overline { color:#7d8ea3; font-size:9px; letter-spacing:2px; font-weight:850; margin-bottom:6px; }
@@ -125,6 +129,30 @@ MAP_HTML = r"""<!doctype html>
   .badge { font-size:9px; font-weight:850; color:var(--red); border:1px solid #f3c3ca; background:var(--red-soft); border-radius:4px; padding:2px 6px; margin-left:6px; }
   .ev-time { flex:none; font-size:10px; font-weight:750; color:#6a7f99; background:#f1f5fa; border-radius:4px; padding:3px 6px; font-variant-numeric:tabular-nums; }
 
+  .cam-stage { position:relative; aspect-ratio:4/3; background:#0b1118; border:1px solid #1f2b38; border-radius:7px; overflow:hidden; }
+  .cam-stage img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; display:block; }
+  .cam-off { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:16px; text-align:center; color:#9fb0c3; font-size:11px; line-height:1.6; background:#0b1118; }
+  .cam-off strong { color:#e3ebf3; font-size:11px; letter-spacing:1.6px; }
+  .cam-label { position:absolute; left:10px; top:10px; font-size:9px; font-weight:800; letter-spacing:1.1px; color:#eef4f8; background:#08111dcc; padding:5px 7px; border-radius:3px; }
+  .cam-label b { color:#ff6b76; }
+  .cam-foot { display:flex; justify-content:space-between; align-items:center; margin-top:9px; font-size:10px; color:#7f91a6; }
+  .cam-foot a { color:var(--accent); font-weight:800; text-decoration:none; }
+  .ctl-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .ctl-label { font-size:10px; font-weight:850; letter-spacing:1.2px; color:#7d8ea3; margin-bottom:8px; }
+  .pad { display:grid; grid-template-columns:repeat(3, 44px); grid-template-rows:repeat(3, 44px); gap:6px; justify-content:center; }
+  .pad button, .bcol button { border:1px solid #d5dfeb; background:#f7f9fc; color:#24405f; border-radius:8px; font-size:16px; font-weight:900; touch-action:none; user-select:none; -webkit-user-select:none; transition:background .1s, transform .1s; }
+  .pad button:hover, .bcol button:hover { background:#eef3fa; }
+  .pad button.on, .bcol button.on { background:var(--accent); border-color:var(--accent); color:#fff; transform:scale(.96); }
+  .pad .stop { background:#fff3f4; border-color:#f3c3ca; color:var(--red); font-size:13px; }
+  .pad .stop:hover { background:#ffe8eb; }
+  .pad .blank { visibility:hidden; }
+  .neck-wrap { display:flex; gap:8px; justify-content:center; }
+  .bcol { display:grid; grid-template-rows:44px 44px; gap:6px; align-content:center; }
+  .bcol button { width:40px; font-size:12px; }
+  .bcol span { font-size:9px; font-weight:850; color:#7d8ea3; text-align:center; letter-spacing:1px; }
+  .ctl-foot { display:flex; justify-content:space-between; gap:10px; margin-top:12px; padding-top:10px; border-top:1px solid var(--line); font-size:10px; color:#7f91a6; }
+  .ctl-foot b { color:#1d3150; }
+  .ctl-off { opacity:.45; pointer-events:none; }
   footer { display:flex; justify-content:space-between; gap:16px; margin-top:16px; padding-top:14px; border-top:1px solid #e3e9f0; font-size:9px; color:#8494a6; letter-spacing:.9px; font-weight:750; }
 
   @media (max-width:1100px) { .layout { grid-template-columns:1fr; } .crumb { display:none; } }
@@ -179,6 +207,67 @@ MAP_HTML = r"""<!doctype html>
     </section>
 
     <aside class="side">
+      <section class="panel">
+        <div class="panel-head">
+          <div><div class="overline">ROBOT CAMERA / 00</div><h3>로봇 카메라</h3></div>
+          <span class="chip" id="camChip"><span class="dot"></span><span id="camText">연결 중</span></span>
+        </div>
+        <div class="cam-stage">
+          <img id="robotCam" alt="로봇 카메라 영상">
+          <span class="cam-label"><b>●</b> CH 02 / ROBOT CAM</span>
+          <div class="cam-off" id="camOff">
+            <strong>NO ROBOT VIDEO</strong>
+            <span>로봇 영상은 모바일 모드(run_mobile_map.py)로 서버를 켜면 나옵니다.</span>
+            <span>PC 모드에서는 TigerVNC 조작 화면에서 보세요.</span>
+          </div>
+        </div>
+        <div class="cam-foot"><span>YOLO 박스와 미니맵이 함께 표시됩니다</span><a id="camOpen" target="_blank" rel="noopener">크게 보기 ↗</a></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div><div class="overline">ROBOT CONTROL / 01</div><h3>로봇 조작</h3></div>
+          <span class="chip" id="ctlChip"><span class="dot"></span><span id="ctlText">확인 중</span></span>
+        </div>
+        <div class="ctl-grid" id="ctlBody">
+          <div>
+            <div class="ctl-label">주행 · 누르는 동안</div>
+            <div class="pad">
+              <button class="blank" tabindex="-1"></button>
+              <button data-drive="forward" title="전진 (↑ / W)">▲</button>
+              <button class="blank" tabindex="-1"></button>
+              <button data-drive="left" title="좌회전 (← / A)">◀</button>
+              <button class="stop" id="stopBtn" title="정지 (Space)">■</button>
+              <button data-drive="right" title="우회전 (→ / D)">▶</button>
+              <button class="blank" tabindex="-1"></button>
+              <button data-drive="backward" title="후진 (↓ / S)">▼</button>
+              <button class="blank" tabindex="-1"></button>
+            </div>
+          </div>
+          <div>
+            <div class="ctl-label">카메라 목 · A / B</div>
+            <div class="neck-wrap">
+              <div class="pad">
+                <button class="blank" tabindex="-1"></button>
+                <button data-neck="a_tilt:1" title="A 위 (I)">▲</button>
+                <button class="blank" tabindex="-1"></button>
+                <button data-neck="a_pan:-1" title="A 왼쪽 (J)">◀</button>
+                <button class="blank" tabindex="-1"></button>
+                <button data-neck="a_pan:1" title="A 오른쪽 (L)">▶</button>
+                <button class="blank" tabindex="-1"></button>
+                <button data-neck="a_tilt:-1" title="A 아래 (K)">▼</button>
+                <button class="blank" tabindex="-1"></button>
+              </div>
+              <div class="bcol">
+                <button data-neck="b_tilt:1" title="B 위 (U)">B▲</button>
+                <button data-neck="b_tilt:-1" title="B 아래 (O)">B▼</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ctl-foot"><span>키보드: 방향키·WASD 주행 / IJKL 목 A / U·O 목 B / Space 정지</span><span id="ctlMsg"><b>대기</b></span></div>
+      </section>
+
       <div class="kpis">
         <div class="kpi blue"><div class="k">ROBOT CELL</div><strong id="kCell">-</strong><div class="s" id="kPos">위치</div></div>
         <div class="kpi"><div class="k">HEADING</div><strong id="kHead">-</strong><div class="s" id="kMotion">상태</div></div>
@@ -320,6 +409,10 @@ function render(d) {
     `<div class="status-row"><span>카메라 좌우</span><b class="${Math.abs(pan) > 15 ? 'warn-text' : ''}">${pan > 0 ? '+' : ''}${pan}°${Math.abs(pan) > 15 ? ' · 회피 안 함' : ''}</b></div>` +
     `<div class="status-row"><span>목표</span>${goal}</div>`;
   document.getElementById('avoid').hidden = !r.avoiding;
+  const c = d.control || {}, ok = !!c.available;
+  document.getElementById('ctlBody').classList.toggle('ctl-off', !ok);
+  document.getElementById('ctlChip').className = ok ? 'chip ok' : 'chip bad';
+  document.getElementById('ctlText').textContent = ok ? (c.kind === 'pc' ? 'PC 서버 연결' : '모바일 서버 연결') : '조작 불가';
 
   const hz = document.getElementById('hazards');
   document.getElementById('hazCount').textContent = d.hazards.length;
@@ -369,6 +462,75 @@ document.getElementById('reset').onclick = () => {
   if (confirm('로봇을 출발 칸에 다시 놓았나요? 지도 기록을 모두 지웁니다.')) post('/api/map/reset');
 };
 window.addEventListener('resize', () => last && draw(last));
+
+// 로봇 카메라: 모바일 서버(5000번)의 /video_feed 를 그대로 보여줌. 영상이 없으면 안내 표시 후 다시 시도
+const CAM_URL = `http://${location.hostname}:5000/video_feed`;
+const cam = document.getElementById('robotCam');
+document.getElementById('camOpen').href = CAM_URL;
+let camTries = 0;
+function camStart() { cam.src = CAM_URL + '?t=' + Date.now(); }
+function camCheck() {
+  const live = cam.complete !== undefined && cam.naturalWidth > 0;
+  document.getElementById('camOff').hidden = live;
+  document.getElementById('camChip').className = live ? 'chip ok' : 'chip bad';
+  document.getElementById('camText').textContent = live ? 'LIVE' : '영상 없음';
+  if (!live && ++camTries % 3 === 0) camStart();
+}
+cam.addEventListener('error', () => { cam.removeAttribute('src'); });
+camStart(); setInterval(camCheck, 2000);
+
+// 로봇 조작: 누르는 동안 0.25초마다 다시 보냄. 떼면 정지. 서버는 0.7초 동안 신호가 없으면 스스로 정지
+const NAME = {forward:'전진', backward:'후진', left:'좌회전', right:'우회전', stop:'정지'};
+const ctl = {drive:null, neck:{}, timer:null};
+function ctlMsg(t, bad) { document.getElementById('ctlMsg').innerHTML = bad ? `<b class="warn-text">${esc(t)}</b>` : `<b>${esc(t)}</b>`; }
+async function robot(cmd) {
+  try {
+    const r = await fetch('/api/robot', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({command:cmd}), cache:'no-store', keepalive:true});
+    if (!r.ok) { const j = await r.json().catch(() => ({})); ctlMsg(j.error || ('오류 ' + r.status), true); }
+  } catch (e) { ctlMsg('연결 끊김', true); }
+}
+function holding() { return ctl.drive || Object.values(ctl.neck).some(Boolean); }
+function beat() {
+  if (!ctl.timer) ctl.timer = setInterval(() => {
+    if (ctl.drive) robot(ctl.drive);
+    for (const [a, d] of Object.entries(ctl.neck)) if (d) robot(`neck:${a}:${d}`);
+    if (!holding()) { clearInterval(ctl.timer); ctl.timer = null; }
+  }, 250);
+}
+function mark(sel, on) { document.querySelectorAll(sel).forEach(b => b.classList.toggle('on', on)); }
+function driveStart(cmd) { if (ctl.drive === cmd) return; ctl.drive = cmd; robot(cmd); mark('[data-drive]', false); mark(`[data-drive="${cmd}"]`, true); ctlMsg(NAME[cmd]); beat(); }
+function driveStop() { if (ctl.drive === null) return; ctl.drive = null; robot('stop'); mark('[data-drive]', false); ctlMsg('정지'); }
+function neckStart(axis, dir) { if (ctl.neck[axis] === dir) return; ctl.neck[axis] = dir; robot(`neck:${axis}:${dir}`); mark(`[data-neck^="${axis}:"]`, false); mark(`[data-neck="${axis}:${dir}"]`, true); ctlMsg(`목 ${axis.startsWith('b') ? 'B' : 'A'} 이동`); beat(); }
+function neckStop(axis) { if (!ctl.neck[axis]) return; mark(`[data-neck^="${axis}:"]`, false); ctl.neck[axis] = 0; robot(`neck:${axis}:0`); }
+function stopAll() { driveStop(); Object.keys(ctl.neck).forEach(neckStop); }
+
+function holdButton(btn, start, end) {
+  btn.addEventListener('pointerdown', e => { e.preventDefault(); try { btn.setPointerCapture(e.pointerId); } catch (_) {} start(); });
+  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(t => btn.addEventListener(t, end));
+  btn.addEventListener('contextmenu', e => e.preventDefault());
+}
+document.querySelectorAll('[data-drive]').forEach(b => holdButton(b, () => driveStart(b.dataset.drive), driveStop));
+document.querySelectorAll('[data-neck]').forEach(b => {
+  const [axis, dir] = b.dataset.neck.split(':');
+  holdButton(b, () => neckStart(axis, dir), () => neckStop(axis));
+});
+document.getElementById('stopBtn').addEventListener('click', () => { stopAll(); robot('stop'); ctlMsg('정지'); });
+
+const KEY_DRIVE = {ArrowUp:'forward', KeyW:'forward', ArrowDown:'backward', KeyS:'backward', ArrowLeft:'left', KeyA:'left', ArrowRight:'right', KeyD:'right'};
+const KEY_NECK = {KeyI:['a_tilt','1'], KeyK:['a_tilt','-1'], KeyJ:['a_pan','-1'], KeyL:['a_pan','1'], KeyU:['b_tilt','1'], KeyO:['b_tilt','-1']};
+window.addEventListener('keydown', e => {
+  if (e.repeat || e.target.closest('input, textarea, select')) return;
+  if (KEY_DRIVE[e.code]) { e.preventDefault(); driveStart(KEY_DRIVE[e.code]); }
+  else if (KEY_NECK[e.code]) { e.preventDefault(); neckStart(...KEY_NECK[e.code]); }
+  else if (e.code === 'Space') { e.preventDefault(); stopAll(); robot('stop'); ctlMsg('정지'); }
+});
+window.addEventListener('keyup', e => {
+  if (KEY_DRIVE[e.code] && ctl.drive === KEY_DRIVE[e.code]) driveStop();
+  else if (KEY_NECK[e.code]) neckStop(KEY_NECK[e.code][0]);
+});
+window.addEventListener('blur', stopAll);
+document.addEventListener('visibilitychange', () => { if (document.hidden) stopAll(); });
+window.addEventListener('pagehide', stopAll);
 const tick = () => { document.getElementById('clock').textContent = hms(new Date()); };
 tick(); setInterval(tick, 1000);
 poll(); setInterval(poll, 1000);
@@ -378,7 +540,73 @@ poll(); setInterval(poll, 1000);
 """
 
 
+DRIVE_COMMANDS = {"forward", "backward", "left", "right", "backleft", "backright"}
+NECK_AXES = {"a_pan", "a_tilt", "b_tilt"}
+STOP_COMMAND = {"pc": "DS", "mobile": "stop_move"}
+HOLD_TIMEOUT = 0.7      # 이 시간 동안 '누르는 중' 신호가 없으면 정지 (탭 닫힘, 와이파이 끊김 대비)
+
+
+class RobotRemote:
+    """지도 웹의 조작 버튼 -> 로봇 서버 robot_ctrl (map_hooks 가 mapper.user_command 로 연결)"""
+
+    def __init__(self, mapper):
+        self.mapper = mapper
+        self.lock = threading.Lock()
+        self.drive = None
+        self.drive_seen = 0.0
+        threading.Thread(target=self._watch, daemon=True, name="MapRemoteWatch").start()
+
+    def available(self):
+        return callable(getattr(self.mapper, "user_command", None))
+
+    def kind(self):
+        return getattr(self.mapper, "robot_kind", None)
+
+    def _send(self, command):
+        self.mapper.user_command(command)
+
+    def _stop(self):
+        self._send(STOP_COMMAND.get(self.kind(), "stop_move"))
+
+    def handle(self, command):
+        if not self.available():
+            raise RuntimeError("로봇 서버와 연결되지 않았습니다")
+        command = str(command or "").strip()
+        if command in DRIVE_COMMANDS:
+            with self.lock:
+                self.drive = command
+                self.drive_seen = time.monotonic()
+            self._send(command)
+        elif command == "stop":
+            with self.lock:
+                self.drive = None
+            self._stop()
+        elif command.startswith("neck:"):
+            parts = command.split(":")
+            if len(parts) != 3 or parts[1] not in NECK_AXES or parts[2] not in ("-1", "0", "1"):
+                raise ValueError("목 명령 형식 오류")
+            self._send(command)
+        else:
+            raise ValueError("알 수 없는 명령: " + command)
+
+    def _watch(self):
+        while True:
+            time.sleep(0.1)
+            with self.lock:
+                expired = self.drive is not None and time.monotonic() - self.drive_seen > HOLD_TIMEOUT
+                if expired:
+                    self.drive = None
+            if expired:
+                try:
+                    self._stop()
+                    print("[지도 조작] 조작 신호 끊김 -> 정지", flush=True)
+                except Exception as e:
+                    print("[지도 조작] 정지 실패:", repr(e), flush=True)
+
+
 def make_handler(mapper):
+    remote = RobotRemote(mapper)
+
     class MapHandler(BaseHTTPRequestHandler):
         protocol_version = "HTTP/1.1"
 
@@ -403,7 +631,9 @@ def make_handler(mapper):
             if path in ("/", "/map"):
                 self._send(MAP_HTML.encode("utf-8"), "text/html; charset=utf-8")
             elif path == "/api/map":
-                self._json(mapper.to_dict())
+                data = mapper.to_dict()
+                data["control"] = {"available": remote.available(), "kind": remote.kind()}
+                self._json(data)
             elif path == "/map.png":
                 ok, png = cv2.imencode(".png", mapper.render(cell_px=40))
                 if ok:
@@ -435,6 +665,14 @@ def make_handler(mapper):
             elif path == "/api/map/goal":
                 goal = mapper.set_goal(body.get("cell"))
                 self._json({"status": "ok", "goal": list(goal) if goal else None})
+            elif path == "/api/robot":
+                try:
+                    remote.handle(body.get("command"))
+                    self._json({"status": "ok"})
+                except ValueError as e:
+                    self._json({"status": "error", "error": str(e)}, 400)
+                except Exception as e:
+                    self._json({"status": "error", "error": str(e)}, 503)
             else:
                 self._json({"status": "error", "error": "없는 주소"}, 404)
 
